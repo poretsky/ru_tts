@@ -1,0 +1,151 @@
+ru-tts (5.0) unstable; urgency=medium
+
+  * Licensed under MIT License.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 12 Jul 2021 18:56:22 +0300
+
+ru-tts (4.5) unstable; urgency=low
+
+  * Shared library API restriction. Only explicitly declared entry is
+    exported.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sun, 25 Oct 2020 15:13:24 +0300
+
+ru-tts (4.4) unstable; urgency=low
+
+  * Fixed reading numbers just after plus sign.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 19 Dec 2016 04:49:37 +0300
+
+ru-tts (4.3) unstable; urgency=low
+
+  * Fixed reading of extremely big numbers.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sun, 20 Nov 2016 21:50:34 +0300
+
+ru-tts (4.2) unstable; urgency=low
+
+  * Fixed speaking when input does not end by newline character.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Thu, 12 May 2016 22:44:19 +0300
+
+ru-tts (4.1) unstable; urgency=low
+
+  * Fixed pronunciation in some special cases.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Wed, 10 Feb 2016 21:24:35 +0300
+
+ru-tts (4.0) unstable; urgency=low
+
+  * Totally revised and rewritten TTS library. Now it is thread-safe and
+    built natively for each architecture.
+  * Added an alternative embedded voice.
+  * Minor pronunciation fixes.
+  * Script ru_speak now uses play utility from the sox package.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sun, 31 Jan 2016 17:22:45 +0300
+
+ru-tts (3.9) unstable; urgency=low
+
+  * Fixed arithmetic overflow occurred in some circumstances.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Wed, 16 Dec 2015 18:59:27 +0300
+
+ru-tts (3.8) unstable; urgency=low
+
+  * Fixed last word transcription in an accented text.
+  * Fixed segmentation failure occurred in some circumstances.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 07 Dec 2015 22:21:27 +0300
+
+ru-tts (3.7) unstable; urgency=low
+
+  * Non-static data moved to the bss section.
+  * Increased shared library version.
+  * Properly restricted shared library dependency.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 07 Dec 2015 02:35:20 +0300
+
+ru-tts (3.6) unstable; urgency=low
+
+  * Fixed reading numbers with leading zeros as well as the ones
+    consisting of zeros only.
+  * Fixed side effect of numbers presence in an accented text.
+  * Dropped explicit termination character requirement for library call.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sat, 05 Dec 2015 12:24:30 +0300
+
+ru-tts (3.5) unstable; urgency=low
+
+  * Passing user data pointer to a callback function.
+  * Additional clarifications in manuals.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 11 Mar 2013 21:32:34 +0400
+
+ru-tts (3.4) unstable; urgency=low
+
+  * Fixed build dependencies for clean amd64 environment.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Thu, 04 Oct 2012 00:45:47 +0400
+
+ru-tts (3.3) unstable; urgency=low
+
+  * Fixed build dependencies for amd64 environment.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Wed, 03 Oct 2012 23:55:28 +0400
+
+ru-tts (3.2) unstable; urgency=low
+
+  * Fixed per environment build.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Wed, 03 Oct 2012 22:43:55 +0400
+
+ru-tts (3.1) unstable; urgency=low
+
+  * Added postinst script that generates ru_RU.koi8r locale if
+    necessary.
+  * Building and running in x86_64 environment.
+  * Don't require locale if it is not actually needed.
+  * Raise an error when ru_RU.koi8r locale is required but not
+    available.
+  * Return failure code when unknown option is specified.
+  * Updated packaging standards compliance.
+  * Updated rulex dependency.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sun, 23 Sep 2012 16:11:05 +0400
+
+ru-tts (3.0) unstable; urgency=low
+
+  * Split off the library containing all TTS specific functionality.
+  * Use the rulex library for pronunciation guessing instead of the
+    local modules.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Fri, 24 Feb 2012 07:16:15 +0400
+
+ru-tts (2.1) unstable; urgency=low
+
+  * Speech rate tuning now affects gaps between words as well, so quick
+    speech sounds more smoothly.
+  * More strict command line parameters parsing and default values
+    revision.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sat, 27 Feb 2010 00:58:18 +0300
+
+ru-tts (2.0) unstable; urgency=low
+
+  * Switch to the new lexical database structure implementing some rules
+    and implicit form construction mechanism.
+  * Use default version of the Berkeley database support library instead
+    of the explicit one.
+  * Increased speech rate.
+  * Switch ru_speak from sox to aplay.
+  * Separate description in Russian.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Thu, 11 Feb 2010 01:48:35 +0300
+
+ru-tts (1.1) unstable; urgency=low
+
+  * Packaged for Debian.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sat, 24 Dec 2005 23:01:07 +0300
+

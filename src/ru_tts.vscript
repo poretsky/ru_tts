@@ -1,0 +1,4 @@
+RU_TTS_2 {
+  global: ru_tts_transfer;
+  local: *;
+};

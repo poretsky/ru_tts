@@ -1,0 +1,55 @@
+                             JNI binding
+
+To make shared library issue command:
+
+make jni
+
+Properly installed Android NDK is necessary. The result will be created
+in libs subdirectory.
+
+Java class should be implemented like follows:
+
+package tts.synth;
+
+class RussianVoiceEngine {
+
+    int audioBufferSize;
+
+    // Speech parameters:
+    //
+    // The value of speechRate and pitch should be within [0..250] boundaries.
+    // All other values will be reduced to this interval.
+    int speechRate;
+    int pitch;
+
+    // If this is true, the alternative voice will be used.
+    boolean altVoice;
+
+    // If this is false the produced speech will be monotone.
+    boolean applyIntonation;
+
+    RussianVoiceEngine() {
+        // Actually the buffer size may be arbitrary.
+        audioBufferSize = 4096;
+
+        // Initial speech parameters setup:
+        speechRate = 150;
+        pitch = 50;
+altVoice = false;
+        applyIntonation = true;
+
+        // Load the library
+        System.loadLibrary("ruvoicesynth");
+    }
+
+    // Synthesize speech for provided UTF8 string.
+    native void speak(String text);
+
+    // This callback method receives audio data as raw linear signed 8-bit
+    // 10 kHz sound stream chunk. If it returns true,
+    // speech is stopped immediately.
+    boolean speechCallback(byte[] audioBuffer) {
+        // Sound stream playback implementation
+    }
+
+}

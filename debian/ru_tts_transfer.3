@@ -1,0 +1,56 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.TH RU_TTS_TRANSFER 3 "January 25, 2016"
+.SH NAME
+ru_tts_transfer \- transfer specified Russian text to speech
+.SH SYNOPSIS
+.nf
+.B #include <ru_tts.h>
+.sp
+.B typedef int (*ru_tts_callback)(void *buffer, size_t size, void *user_data);
+.sp
+.BI "void ru_tts_transfer(char *" text ", void *" wave_buffer \
+", size_t " wave_buffer_size ", ru_tts_callback " wave_consumer \
+", void *" user_data \
+", int " voice ", int "rate ", int " pitch \
+", int " intonation);
+.fi
+.SH DESCRIPTION
+The
+.BR ru_tts_transfer ()
+function transfers text pointed by
+.I text
+argument into digitized sound in the raw linear signed 8-bit 10 kHz
+format. The source text should be represented by zero-terminated
+string containing Russian text in \fBkoi8\-r\fP charset. The resulting
+data are fed to the callback function referenced by
+.I wave_consumer
+argument chunk by chunk via buffer specified by
+.I wave_buffer
+and
+.I wave_buffer_size
+arguments. The
+.I user_data
+argument is passed to the callback as a pointer to any additional data
+specified by user.
+.PP
+The other arguments specify various speech parameters. if
+.I voice
+is non-zero, the alternative voice will be used instead of the default
+one. The reasonable values of
+.I rate
+and
+.I pitch
+are from 0 through 250. All other values are reduced to this
+interval. The greater rate value implies faster speech. The greater
+value of pitch causes higher pitched voice. The argument
+.I intonation
+is treated as a boolean value. If it is zero the produced speech will
+be monotone.
+.PP
+It is suggested that the user provided callback function takes further
+responsibility on the generated data. It may play it immediately or
+store somewhere or do whatever it is designed for. This function
+should return 0 in usual circumstances. Non-zero return value causes
+immediate transfer stop.
+.SH AUTHOR
+Igor B. Poretsky <poretsky@mlbox.ru>.

@@ -1,0 +1,61 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.TH RU_TTS 1 "May 17, 2005"
+.SH NAME
+ru_tts \- software Russian TTS engine
+.SH SYNOPSIS
+.B ru_tts
+.RI [ options ]
+.br
+.B ru_speak
+.RI [ options ]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B ru-tts
+and
+.B ru_speak
+commands.
+.PP
+\fBru-tts\fP is a program that takes Russian text in \fBkoi8\-r\fP
+charset on it's standard input and produces digital sound stream in
+the raw linear signed 8-bit 10 kHz format on the standard output.
+.PP
+\fBru-speak\fP is a simple wrapper around \fBru-tts\fP. It takes
+Russian text on it's standard input, convert it into the spoken speech
+and plays produced sound via \fBplay\fP utility from the \fBsox\fP
+package.
+.SH OPTIONS
+Both programs recognize the same set of options.
+.TP
+.B \-h
+.br
+Show summary of options.
+.TP
+.B \-p pitch
+Set voice pitch. The value must be between 0 and 1. Greater value
+implies higher pitch.
+.TP
+.B \-r rate
+Set speech rate. The value must be between 0 and 1. Greater value
+implies slower speech.
+.TP
+.B \-m
+.br
+Absolutely monotone speech without intonations.
+.TP
+.B \-v file
+Use external voice from given file instead of internal one by
+default.
+.TP
+.B \-s path
+Points location of stress and pronunciation dictionary to use. You may
+use pronunciation dictionary shipped with the package \fBrulex\fP here.
+.TP
+.B \-l file
+Save words that were not found in the dictionary in specified file. It
+is useful for dictionary developing.
+.SH SEE ALSO
+.BR sox (1),
+.BR aplay (1),
+.BR lexholder-ru (1).
+.SH AUTHOR
+Igor B. Poretsky <poretsky@mlbox.ru>.

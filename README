@@ -1,0 +1,30 @@
+		      Russian speech synthesizer
+
+Ru_tts is a software Russian speech synthesis engine. It reads Russian
+text in koi8-r from the standard input, performs TTS transformation and
+writes the result to the standard output as raw linear signed 8-bit 10
+kHz sound stream, which can be played by any appropriate sound player,
+such as Sox, for instance. A simple example of such usage you can find
+in the script ru_speak, provided with this package.
+
+Ru_tts accepts following command line switches:
+
+-h -- A brief usage description.
+
+-p <pitch> -- Voice pitch setting. The value must be within 0..1
+ interval. 0 means bass, 1 -- treble.
+
+-r <rate> -- Set speech rate. Allowed values are within 0..1
+ interval. Greater value means slower speech.
+
+-m -- Monotone speech.
+
+-a -- Use an alternative (female) voice.
+
+-s <stress_dictionary> -- Use dictionary for stressing and better
+		       pronunciation.
+
+-l <log_file> -- Store all unknown words in the specified file. This
+		       switch is intended mainly for dictionary
+		       debugging and is meaningful only in conjunction
+		       with the -s switch.
