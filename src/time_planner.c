@@ -113,7 +113,7 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
 
             if (found)
               {
-                uint8_t values[MAX(rows, 9)];
+                uint8_t *values = malloc(MAX(rows, 9) + sizeof(uint8_t));
                 uint8_t restart = 0;
                 uint8_t setcase = 0;
                 uint8_t tmp = 0;
@@ -124,6 +124,8 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
                 uint8_t ndx2 =1;
                 uint8_t item;
 
+                if (!values)
+                    return rc;
                 memset(values, 0, MAX(rows, 9));
                 if (k > 3)
                   k = 0;
@@ -252,6 +254,7 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
                       }
                   }
                 rc = 1;
+                free(values);
                 break;
               }
             else

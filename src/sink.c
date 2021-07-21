@@ -64,7 +64,7 @@ void sink_put(sink_t *consumer, int8_t byte)
  */
 void sink_write(sink_t *consumer, const uint8_t *block, size_t size)
 {
-  memcpy(consumer->buffer + consumer->buffer_offset, block, size);
+  memcpy((uint8_t *)consumer->buffer + consumer->buffer_offset, block, size);
   consumer->buffer_offset += size;
   if (consumer->buffer_offset >= consumer->bufsize)
     sink_flush(consumer);
