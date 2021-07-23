@@ -64,20 +64,20 @@ static double getval(char *s)
 static void usage(const char* name)
 {
   fprintf(stderr, "Usage:\n");
-  fprintf(stderr, "%s [-s stress_db [-l logfile]] [-r rate] [-p pitch] [-m] [-a]\n", name);
+  fprintf(stderr, "%s [-s stress_db [-l logfile]] [-r rate] [-p pitch] [-g gaplen] [-m] [-a]\n", name);
   fprintf(stderr, "All numeric values must be from 0.0 to 1.0\n");
 }
 
 int main(int argc, char **argv)
 {
-  int r = 120, p = 50, intonation = 1, voice = 0;
+  int r = 120, p = 50, g = 80, intonation = 1, voice = 0;
   size_t size = 64;
   char c, *s, *text, *input;
   void *wave;
   FILE *slog = NULL;
   RULEXDB *db = NULL;
 
-  while ((c = getopt(argc, argv, "s:l:r:p:mah")) != -1)
+  while ((c = getopt(argc, argv, "s:l:r:p:g:mah")) != -1)
     {
       switch (c)
         {
@@ -100,6 +100,9 @@ int main(int argc, char **argv)
             break;
           case 'p':
             p = rint(getval(optarg) * 250.0);
+            break;
+          case 'g':
+            g = rint(getval(optarg) * 100.0);
             break;
           case 'h':
             usage(argv[0]);
@@ -178,10 +181,10 @@ int main(int argc, char **argv)
                     }
                 }
               *t = 0;
-              ru_tts_transfer(stressed, wave, WAVE_SIZE, wave_consumer, NULL, voice, 250 - r, p, intonation);
+              ru_tts_transfer(stressed, wave, WAVE_SIZE, wave_consumer, NULL, voice, 250 - r, p, g, intonation);
               free(stressed);
             }
-          else ru_tts_transfer(text, wave, WAVE_SIZE, wave_consumer, NULL, voice, 250 - r, p, intonation);
+          else ru_tts_transfer(text, wave, WAVE_SIZE, wave_consumer, NULL, voice, 250 - r, p, g, intonation);
           s = text;
         }
       else

@@ -47,12 +47,17 @@ typedef int (*ru_tts_callback)(void *buffer, size_t size, void *user_data);
  *
  * The value of rate and pitch should be within [0..250] boundaries.
  * All other values will be reduced to this interval.
+ *
+ * The gaplen value specifies relative interphrase gap duration.
+ * It must be within [0..100] range. All other values
+ * will be reduced to this interval.
+ *
  * The last argument is treated as a logical value.
  * If it is zero the produced speech will be monotone.
  */
 extern void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_size,
                             ru_tts_callback wave_consumer, void *user_data,
-                            int voice, int rate, int pitch, int intonation);
+                            int voice, int rate, int pitch, int gap_factor, int intonation);
 
 END_C_DECLS
 

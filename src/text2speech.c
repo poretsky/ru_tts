@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "ru_tts.h"
 #include "sink.h"
@@ -63,12 +64,17 @@ static int synth_function(void *buffer, size_t length, void *user_data)
  *
  * The value of rate and pitch should be within [0..250] boundaries.
  * All other values will be reduced to this interval.
+ *
+ * The gaplen value specifies relative interphrase gap duration.
+ * It must be within [0..100] range. All other values
+ * will be reduced to this interval.
+ *
  * The last argument is treated as a logical value.
  * If it is zero the produced speech will be monotone.
  */
 void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_size,
                      ru_tts_callback consumer, void *user_data,
-                     int voice, int rate, int pitch, int intonation)
+                     int voice, int rate, int pitch, int gap_factor, int intonation)
 {
   ttscb_t ttscb;
   sink_t transcription_consumer;
@@ -76,6 +82,8 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
 
   if (transcription_buffer)
     {
+      int gaplen = (1000 - (rate << 2)) >> 2;
+
       sink_setup(&(ttscb.wave_consumer), wave_buffer, wave_buffer_size, consumer, user_data);
       sink_setup(&transcription_consumer, transcription_buffer, TRANSCRIPTION_MAXLEN, synth_function, &ttscb);
       transcription_consumer.custom_reset = transcription_init;
@@ -88,28 +96,32 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
         {
           ttscb.rate_factor = 125;
           ttscb.stretch = 10;
-          ttscb.gaplen = 200;
+          gaplen = 250;
         }
       else if (rate > 250)
         {
           ttscb.rate_factor = 0;
           ttscb.stretch = 4;
-          ttscb.gaplen = 12;
+          gaplen = 0;
+        }
+      else if (rate < 125)
+        {
+          ttscb.rate_factor = 125 - rate;
+          ttscb.stretch = 10;
         }
       else
         {
-          if (rate < 125)
-            {
-              ttscb.rate_factor = 125 - rate;
-              ttscb.stretch = 10;
-            }
-          else
-            {
-              ttscb.rate_factor = 250 - rate;
-              ttscb.stretch = 4;
-            }
-          ttscb.gaplen = (800 - (rate * 3)) >> 2;
+          ttscb.rate_factor = 250 - rate;
+          ttscb.stretch = 4;
         }
+      gaplen *= gap_factor;
+      gaplen += 50;
+      gaplen /= 100;
+      if (gaplen < 0)
+        ttscb.gaplen = 0;
+      else if (gaplen > 250)
+        ttscb.gaplen = 250;
+      else ttscb.gaplen = (uint8_t)gaplen ;
 
       /* Adjust voice pitch */
       if (pitch < 0)

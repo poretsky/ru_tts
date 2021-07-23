@@ -17,6 +17,10 @@ Ru_tts accepts following command line switches:
 -r <rate> -- Set speech rate. Allowed values are within 0..1
              interval. Greater value means slower speech.
 
+-g <gaplen> -- Set relative gap duration between phrases.
+               Allowed values are from 0 to 1.
+               Greater value implies longer gaps.
+
 -m -- Monotone speech.
 
 -a -- Use an alternative (female) voice.
