@@ -80,34 +80,34 @@ int main(int argc, char **argv)
   while ((c = getopt(argc, argv, "s:l:r:p:mah")) != -1)
     {
       switch (c)
-	{
-	  case 's':
-	    db = rulexdb_open(optarg, RULEXDB_SEARCH);
-	    if (!db) perror(optarg);
-	    break;
-	  case 'l':
-	    slog = fopen(optarg, "a");
-	    if (!slog) perror(optarg);
-	    break;
-	  case 'm':
-	    intonation = 0;
-	    break;
+        {
+          case 's':
+            db = rulexdb_open(optarg, RULEXDB_SEARCH);
+            if (!db) perror(optarg);
+            break;
+          case 'l':
+            slog = fopen(optarg, "a");
+            if (!slog) perror(optarg);
+            break;
+          case 'm':
+            intonation = 0;
+            break;
         case 'a':
           voice = 1;
           break;
-	  case 'r':
-	    r = rint(getval(optarg) * 250.0);
-	    break;
-	  case 'p':
+          case 'r':
+            r = rint(getval(optarg) * 250.0);
+            break;
+          case 'p':
             p = rint(getval(optarg) * 250.0);
-	    break;
-	  case 'h':
+            break;
+          case 'h':
             usage(argv[0]);
             return EXIT_SUCCESS;
-	  default:
+          default:
             usage(argv[0]);
-	    return EXIT_FAILURE;
-	}
+            return EXIT_FAILURE;
+        }
     }
 
   /* Set locale if necessary */
@@ -132,63 +132,63 @@ int main(int argc, char **argv)
         strcpy(s, "\n");
       s = text + strlen(text) - 1;
       if (*s == '\n')
-	{
-	  for (*s-- = 0; *text; s--)
-	    {
-	      if (*s == ' ') *s = 0;
-	      else break;
-	    }
-	  if (db)
-	    {
-	      char *stressed = xmalloc(strlen(text) << 1);
-	      char *t;
-	      unsigned int n;
-	      for (s = text; *s; s++)
-		if (isupper(*s))
-		  *s = tolower(*s);
-	      s = text;
-	      t = stressed;
-	      while (*s)
-		{
-		  if ((n = strcspn(s, symbols)))
-		    {
-		      strncpy(t, s, n);
-		      s += n;
-		      t += n;
-		    }
-		  if ((n = strspn(s, symbols)))
-		    {
-		      if ((n <= RULEXDB_MAX_KEY_SIZE) && (n <= strspn(s, alphabet)))
-			{
-			  char *key = xmalloc(RULEXDB_BUFSIZE);
-			  strncpy(key, s, n);
-			  key[n] = 0;
-			  if (rulexdb_search(db, key, t, 0)
-			      == RULEXDB_SPECIAL)
-			    if (slog) (void)fprintf(slog, "%s\n", key);
-			  free(key);
-			}
-		      else
-			{
-			  strncpy(t, s, n);
-			  t[n] = 0;
-			}
-		      s += n;
-		      t += strlen(t);
-		    }
-		}
-	      *t = 0;
-	      ru_tts_transfer(stressed, wave, WAVE_SIZE, wave_consumer, NULL, voice, 250 - r, p, intonation);
-	      free(stressed);
-	    }
-	  else ru_tts_transfer(text, wave, WAVE_SIZE, wave_consumer, NULL, voice, 250 - r, p, intonation);
-	  s = text;
-	}
+        {
+          for (*s-- = 0; *text; s--)
+            {
+              if (*s == ' ') *s = 0;
+              else break;
+            }
+          if (db)
+            {
+              char *stressed = xmalloc(strlen(text) << 1);
+              char *t;
+              unsigned int n;
+              for (s = text; *s; s++)
+                if (isupper(*s))
+                  *s = tolower(*s);
+              s = text;
+              t = stressed;
+              while (*s)
+                {
+                  if ((n = strcspn(s, symbols)))
+                    {
+                      strncpy(t, s, n);
+                      s += n;
+                      t += n;
+                    }
+                  if ((n = strspn(s, symbols)))
+                    {
+                      if ((n <= RULEXDB_MAX_KEY_SIZE) && (n <= strspn(s, alphabet)))
+                        {
+                          char *key = xmalloc(RULEXDB_BUFSIZE);
+                          strncpy(key, s, n);
+                          key[n] = 0;
+                          if (rulexdb_search(db, key, t, 0)
+                              == RULEXDB_SPECIAL)
+                            if (slog) (void)fprintf(slog, "%s\n", key);
+                          free(key);
+                        }
+                      else
+                        {
+                          strncpy(t, s, n);
+                          t[n] = 0;
+                        }
+                      s += n;
+                      t += strlen(t);
+                    }
+                }
+              *t = 0;
+              ru_tts_transfer(stressed, wave, WAVE_SIZE, wave_consumer, NULL, voice, 250 - r, p, intonation);
+              free(stressed);
+            }
+          else ru_tts_transfer(text, wave, WAVE_SIZE, wave_consumer, NULL, voice, 250 - r, p, intonation);
+          s = text;
+        }
       else
-	{
-	  text = xrealloc(text, size <<= 1);
-	  s = text + strlen(text);
-	}
+        {
+          text = xrealloc(text, size <<= 1);
+          s = text + strlen(text);
+        }
     }
   while (input);
 
