@@ -42,7 +42,11 @@ and
 .I pitch
 are from 0 through 250. All other values are reduced to this
 interval. The greater rate value implies faster speech. The greater
-value of pitch causes higher pitched voice. The argument
+value of pitch causes higher pitched voice. The
+.I gaplen
+argument specifies relative interphrase gap duration. Its value
+should be from 0 through 100. Any other value will be reduced
+to this range. Greater value implies longer gaps. The argument
 .I intonation
 is treated as a boolean value. If it is zero the produced speech will
 be monotone.

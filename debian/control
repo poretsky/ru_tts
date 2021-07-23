@@ -19,7 +19,7 @@ Description: software Russian TTS engine
  It doesn't actually play this sound. You should use
  some player for it like sox for example.
 
-Package: librutts2
+Package: librutts5
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -36,7 +36,7 @@ Description: software Russian TTS engine
 Package: librutts-dev
 Section: libdevel
 Architecture: any
-Depends: librutts2 (= ${binary:Version}), ${misc:Depends}
+Depends: librutts5 (= ${binary:Version}), ${misc:Depends}
 Description: software Russian TTS engine
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset as an input
