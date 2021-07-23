@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 	  case 'm':
 	    intonation = 0;
 	    break;
-        case 'f':
+        case 'a':
           voice = 1;
           break;
 	  case 'r':
