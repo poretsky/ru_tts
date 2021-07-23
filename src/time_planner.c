@@ -125,7 +125,7 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
                 uint8_t item;
 
                 if (!values)
-                    return rc;
+                  return rc;
                 memset(values, 0, MAX(rows, 9));
                 if (k > 3)
                   k = 0;
