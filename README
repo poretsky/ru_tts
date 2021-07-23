@@ -12,19 +12,19 @@ Ru_tts accepts following command line switches:
 -h -- A brief usage description.
 
 -p <pitch> -- Voice pitch setting. The value must be within 0..1
- interval. 0 means bass, 1 -- treble.
+              interval. 0 means bass, 1 -- treble.
 
 -r <rate> -- Set speech rate. Allowed values are within 0..1
- interval. Greater value means slower speech.
+             interval. Greater value means slower speech.
 
 -m -- Monotone speech.
 
 -a -- Use an alternative (female) voice.
 
 -s <stress_dictionary> -- Use dictionary for stressing and better
-                       pronunciation.
+                          pronunciation.
 
 -l <log_file> -- Store all unknown words in the specified file. This
-                       switch is intended mainly for dictionary
-                       debugging and is meaningful only in conjunction
-                       with the -s switch.
+                 switch is intended mainly for dictionary
+                 debugging and is meaningful only in conjunction
+                 with the -s switch.
