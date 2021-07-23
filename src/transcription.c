@@ -23,6 +23,9 @@
 
 /* Local macros */
 #define PAIR(a, b) ((((uint16_t)(a)) << 8) | (((uint16_t)(b)) & 0xFF))
++#ifdef _MSC_VER
++#define strdup(p) _strdup(p)
++#endif
 
 
 /* Local data */
