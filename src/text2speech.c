@@ -10,7 +10,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "ru_tts.h"
 #include "sink.h"
