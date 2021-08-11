@@ -70,18 +70,11 @@ static void usage(const char* name)
 
 int main(int argc, char **argv)
 {
-  ru_tts_conf_t tts_params;
   size_t size = 64;
   char c, *s, *text, *input;
   void *wave;
   FILE *slog = NULL;
   RULEXDB *db = NULL;
-
-  tts_params.speech_rate = 130;
-  tts_params.voice_pitch = 50;
-  tts_params.gap_factor = 80;
-  tts_params.intonation = 1;
-  tts_params.alternative_voice = 0;
 
   while ((c = getopt(argc, argv, "s:l:r:p:g:mah")) != -1)
     {
@@ -96,19 +89,19 @@ int main(int argc, char **argv)
             if (!slog) perror(optarg);
             break;
           case 'm':
-            tts_params.intonation = 0;
+            ru_tts_config.intonation = 0;
             break;
           case 'a':
-            tts_params.alternative_voice = 1;
+            ru_tts_config.alternative_voice = 1;
             break;
           case 'r':
-            tts_params.speech_rate = 250 - rint(getval(optarg) * 250.0);
+            ru_tts_config.speech_rate = 250 - rint(getval(optarg) * 250.0);
             break;
           case 'p':
-            tts_params.voice_pitch = rint(getval(optarg) * 250.0);
+            ru_tts_config.voice_pitch = rint(getval(optarg) * 250.0);
             break;
           case 'g':
-            tts_params.gap_factor = rint(getval(optarg) * 100.0);
+            ru_tts_config.gap_factor = rint(getval(optarg) * 100.0);
             break;
           case 'h':
             usage(argv[0]);
@@ -187,10 +180,10 @@ int main(int argc, char **argv)
                     }
                 }
               *t = 0;
-              ru_tts_transfer(stressed, wave, WAVE_SIZE, wave_consumer, NULL, &tts_params);
+              ru_tts_transfer(stressed, wave, WAVE_SIZE, wave_consumer, NULL);
               free(stressed);
             }
-          else ru_tts_transfer(text, wave, WAVE_SIZE, wave_consumer, NULL, &tts_params);
+          else ru_tts_transfer(text, wave, WAVE_SIZE, wave_consumer, NULL);
           s = text;
         }
       else

@@ -40,7 +40,9 @@ typedef struct
   int intonation; /* Treated as a logical value.
                      If it is zero the produced speech will be monotone. */
 } ru_tts_conf_t;
- 
+
+extern ru_tts_conf_t ru_tts_config;
+
 /*
  * Perform TTS transformation for specified text.
  *
@@ -50,13 +52,10 @@ typedef struct
  * by the library for delivering produced wave data
  * chunk by chunk to the consumer specified by the fourth argument.
  * Non-zero return value of the consumer causes immediate speech termination.
- * The next argument points to any additional user data passed to the consumer.
- *
- * The last argument points to a structure containing TTS parameters.
+ * The last argument points to any additional user data passed to the consumer.
  */
 extern void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_size,
-                            ru_tts_callback wave_consumer, void *user_data,
-                            const ru_tts_conf_t *params);
+                            ru_tts_callback wave_consumer, void *user_data);
 
 END_C_DECLS
 
