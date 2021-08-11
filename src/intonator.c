@@ -244,7 +244,7 @@ static const uint8_t intonations[][NSTAGES][2] =
       { 70, 50 },
       { 50, 20 },
       { 20, 0 }
-    },
+    }
   };
 
 
