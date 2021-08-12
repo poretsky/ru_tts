@@ -36,7 +36,7 @@ ru_tts: ru_tts.o librutts.la
 librutts.la: synth.lo sink.lo transcription.lo text2speech.lo \
 	 utterance.lo time_planner.lo speechrate_control.lo \
 	 intonator.lo soundproducer.lo numerics.lo male.lo female.lo
-	libtool --mode=link ${CC} ${LFLAGS} ${solib_LFLAGS} -o $@ $^ -rpath ${libdir} -version-info 5:0:0
+	libtool --mode=link ${CC} ${LFLAGS} ${solib_LFLAGS} -o $@ $^ -rpath ${libdir} -version-info 5:1:0
 
 %.lo:%.c
 	libtool --mode=compile ${CC} -c ${CFLAGS} $<

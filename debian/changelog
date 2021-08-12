@@ -1,3 +1,9 @@
+ru-tts (5.1.1) unstable; urgency=medium
+
+  * Man page fix.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Thu, 12 Aug 2021 11:26:34 +0300
+
 ru-tts (5.1) unstable; urgency=medium
 
   * Alternative voice switch fix.
