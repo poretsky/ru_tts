@@ -434,23 +434,23 @@ void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
           uint8_t k = soundscript->sounds[i].stage;
           if ((prevk != ((uint16_t)k)) && (soundscript->voice->sound_lengths[j] < VOICE_THRESHOLD))
             {
-              int32_t q = 0;
-              uint8_t tone1 = eval_tone(intonations[clause_type][k][0], mintone, maxtone);
-              uint8_t tone2 = eval_tone(intonations[clause_type][k][1], mintone, maxtone) - tone1;
+              int q = 0;
+              int tone1 = eval_tone(intonations[clause_type][k][0], mintone, maxtone);
+              int tone2 = eval_tone(intonations[clause_type][k][1], mintone, maxtone) - tone1;
               soundscript->icb[k].period = 1;
               soundscript->icb[k].count = 1;
               if (tone2)
                 {
-                  int32_t t;
-                  int32_t r;
-                  int8_t tone3 = tone2;
+                  int t;
+                  int r;
+                  int tone3 = tone2;
                   tone2 = tone1;
                   tone1 += tone3 >> 1;
-                  t = ((((uint32_t)(coef[k])) * 10) + (tone1 >> 1)) / ((uint32_t)tone1);
+                  t = (coef[k] * 10 + (tone1 >> 1)) / tone1;
                   if (!t)
                     t++;
-                  q = ((int32_t)tone3) / t;
-                  r = ((int32_t)tone3) % t;
+                  q = tone3 / t;
+                  r = tone3 % t;
                   if (q)
                     {
                       if (r < 0)
@@ -471,7 +471,7 @@ void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
                       q = (r < 0) ? -1 : 1;
                       if (r < 0)
                         r = -r;
-                      t = (((uint32_t)t) + (r >> 1)) / r;
+                      t = (t + (r >> 1)) / r;
                       t &= 0xFF;
                       soundscript->icb[k].period = t;
                       soundscript->icb[k].count = t;
