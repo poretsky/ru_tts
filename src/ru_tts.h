@@ -37,8 +37,8 @@ typedef struct
   int speech_rate; /* must be within [0..250] boundaries. */
   int voice_pitch; /* must be within [0..250] boundaries. */
   int gap_factor; /* must be within [0..100] boundaries. */
-  int intonation; /* Treated as a logical value.
-                     If it is zero the produced speech will be monotone. */
+  int intonation; /* must be within [0..100] boundaries.
+                     Greater values imply more expressive speech. */
 } ru_tts_conf_t;
 
 extern ru_tts_conf_t ru_tts_config;

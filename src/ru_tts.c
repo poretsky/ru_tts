@@ -64,7 +64,7 @@ static double getval(char *s)
 static void usage(const char* name)
 {
   fprintf(stderr, "Usage:\n");
-  fprintf(stderr, "%s [-s stress_db [-l logfile]] [-r rate] [-p pitch] [-g gaplen] [-m] [-a]\n", name);
+  fprintf(stderr, "%s [-s stress_db [-l logfile]] [-r rate] [-p pitch] [-g gaplen] [-e expressiveness] [-a]\n", name);
   fprintf(stderr, "All numeric values must be from 0.0 to 1.0\n");
 }
 
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
   FILE *slog = NULL;
   RULEXDB *db = NULL;
 
-  while ((c = getopt(argc, argv, "s:l:r:p:g:mah")) != -1)
+  while ((c = getopt(argc, argv, "s:l:r:p:g:e:ah")) != -1)
     {
       switch (c)
         {
@@ -87,9 +87,6 @@ int main(int argc, char **argv)
           case 'l':
             slog = fopen(optarg, "a");
             if (!slog) perror(optarg);
-            break;
-          case 'm':
-            ru_tts_config.intonation = 0;
             break;
           case 'a':
             ru_tts_config.alternative_voice = 1;
@@ -102,6 +99,9 @@ int main(int argc, char **argv)
             break;
           case 'g':
             ru_tts_config.gap_factor = rint(getval(optarg) * 100.0);
+            break;
+          case 'e':
+            ru_tts_config.intonation = rint(getval(optarg) * 100.0);
             break;
           case 'h':
             usage(argv[0]);
