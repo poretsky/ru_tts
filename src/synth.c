@@ -226,7 +226,7 @@ void synth(uint8_t *transcription, ttscb_t *ttscb)
             {
               if (flags & 1)
                 {
-                  *sptr = 44;
+                  *sptr = 50;
                   synth_chunk(transcription, ttscb, 0);
                   tptr = transcription_advance(transcription, tptr);
                   count = 0;
@@ -285,7 +285,7 @@ void synth(uint8_t *transcription, ttscb_t *ttscb)
               break;
           if ((k > perspective) && !test_list(next, seqlist1))
             {
-              *sptr = 44;
+              *sptr = 50;
               synth_chunk(transcription, ttscb, 0);
               tptr = transcription_advance(transcription, sptr + 1) - 1;
               count = 0;
