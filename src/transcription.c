@@ -489,11 +489,12 @@ void process_text(const char *text, sink_t *consumer)
           if (IS_DIGIT(c))
             {
               process_number(&input, consumer);
-              if (!check_clause_termination(&input, consumer))
-                sink_flush(consumer);
-              transcription->flags |= CLAUSE_START;
+              if (check_clause_termination(&input, consumer))
+                transcription->flags |= CLAUSE_START;
+              else sink_put(consumer, 43);
               last_char = 0;
-              input.start--;
+              if (input.start[0] != ' ')
+                input.start--;
               continue;
             }
 
