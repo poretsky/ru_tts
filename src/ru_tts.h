@@ -34,10 +34,10 @@ typedef struct
   int alternative_voice; /* Non-zero value means that
                             the alternative voice should be used
                             instead of the default one */
-  int speech_rate; /* must be within [0..250] boundaries. */
-  int voice_pitch; /* must be within [0..250] boundaries. */
-  int gap_factor; /* must be within [0..100] boundaries. */
-  int intonation; /* must be within [0..100] boundaries.
+  int speech_rate; /* Reasonable value range is [35..225]. */
+  int voice_pitch; /* Reasonable value range is [50..300]. */
+  int gap_factor; /* Reasonable value range is [0..125]. */
+  int intonation; /* Reasonable value range is [0..140].
                      Greater values imply more expressive speech. */
 } ru_tts_conf_t;
 

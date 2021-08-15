@@ -22,10 +22,10 @@
 ru_tts_conf_t ru_tts_config =
   {
     .alternative_voice = 0,
-    .speech_rate = 130,
-    .voice_pitch = 50,
-    .gap_factor = 80,
-    .intonation = 80
+    .speech_rate = 100,
+    .voice_pitch = 100,
+    .gap_factor = 100,
+    .intonation = 100
   };
 
 
@@ -79,7 +79,7 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
 
   if (transcription_buffer)
     {
-      int gaplen = (1000 - (ru_tts_config.speech_rate << 2)) >> 2;
+      int gaplen = (900 - (ru_tts_config.speech_rate << 2)) >> 2;
 
       sink_setup(&(ttscb.wave_consumer), wave_buffer, wave_buffer_size, consumer, user_data);
       sink_setup(&transcription_consumer, transcription_buffer, TRANSCRIPTION_MAXLEN, synth_function, &ttscb);
@@ -89,30 +89,30 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
       ttscb.voice = ru_tts_config.alternative_voice ? &female : &male;
 
       /* Adjust speech rate */
-      if (ru_tts_config.speech_rate < 0)
+      if (ru_tts_config.speech_rate < 38)
         {
           ttscb.rate_factor = 125;
           ttscb.stretch = 10;
-          gaplen = 250;
+          gaplen = 188;
         }
-      else if (ru_tts_config.speech_rate > 250)
+      else if (ru_tts_config.speech_rate > 225)
         {
           ttscb.rate_factor = 0;
           ttscb.stretch = 4;
           gaplen = 0;
         }
-      else if (ru_tts_config.speech_rate < 125)
+      else if (ru_tts_config.speech_rate < 100)
         {
-          ttscb.rate_factor = 125 - ru_tts_config.speech_rate;
+          ttscb.rate_factor = 199 - (ru_tts_config.speech_rate << 1);
           ttscb.stretch = 10;
         }
       else
         {
-          ttscb.rate_factor = 250 - ru_tts_config.speech_rate;
+          ttscb.rate_factor = 225 - ru_tts_config.speech_rate;
           ttscb.stretch = 4;
         }
+      gaplen += 12;
       gaplen *= ru_tts_config.gap_factor;
-      gaplen += 50;
       gaplen /= 100;
       if (gaplen < 0)
         ttscb.gaplen = 0;
@@ -121,18 +121,18 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
       else ttscb.gaplen = (uint8_t)gaplen ;
 
       /* Adjust voice pitch */
-      if (ru_tts_config.voice_pitch < 0)
+      if (ru_tts_config.voice_pitch < 50)
         ttscb.mintone = 50;
-      else if (ru_tts_config.voice_pitch > 250)
+      else if (ru_tts_config.voice_pitch > 300)
         ttscb.mintone = 300;
-      else ttscb.mintone = (uint16_t) (ru_tts_config.voice_pitch + 50);
+      else ttscb.mintone = (uint16_t) ru_tts_config.voice_pitch;
+      ttscb.maxtone = ttscb.mintone;
 
       /* Adjust intonation */
-      if (ru_tts_config.intonation < 0)
-        ttscb.maxtone = ttscb.mintone;
-      else if (ru_tts_config.intonation > 100)
-        ttscb.maxtone = ttscb.mintone << 1;
-      else ttscb.maxtone = ttscb.mintone * (ru_tts_config.intonation + 100) / 100;
+      if (ru_tts_config.intonation > 0)
+        ttscb.maxtone += (ru_tts_config.intonation < 140) ?
+          (((ttscb.mintone >> 1) + 25) * ru_tts_config.intonation / 100) :
+          (ttscb.mintone * 7 / 10 + 35);
 
       /* Process text */
       process_text(text, &transcription_consumer);

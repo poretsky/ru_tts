@@ -53,19 +53,16 @@ static void *xmalloc(unsigned int n)
   return xrealloc(u, n);
 }
 
-static double getval(char *s)
+static int getval(void)
 {
-  double val = atof(s);
-  if ((val >= 0.0) && (val <= 1.0)) return val;
-  fprintf(stderr, "Illegal option value\n");
-  exit(EXIT_FAILURE);
+  return rint(atof(optarg) * 100.0);
 }
 
 static void usage(const char* name)
 {
   fprintf(stderr, "Usage:\n");
   fprintf(stderr, "%s [-s stress_db [-l logfile]] [-r rate] [-p pitch] [-g gaplen] [-e expressiveness] [-a]\n", name);
-  fprintf(stderr, "All numeric values must be from 0.0 to 1.0\n");
+  fprintf(stderr, "Numeric parameters (rate, pitch, gaplen, expressiveness) are 1.0 by default.\n");
 }
 
 int main(int argc, char **argv)
@@ -92,16 +89,16 @@ int main(int argc, char **argv)
             ru_tts_config.alternative_voice = 1;
             break;
           case 'r':
-            ru_tts_config.speech_rate = 250 - rint(getval(optarg) * 250.0);
+            ru_tts_config.speech_rate = getval();
             break;
           case 'p':
-            ru_tts_config.voice_pitch = rint(getval(optarg) * 250.0);
+            ru_tts_config.voice_pitch = getval();
             break;
           case 'g':
-            ru_tts_config.gap_factor = rint(getval(optarg) * 100.0);
+            ru_tts_config.gap_factor = getval();
             break;
           case 'e':
-            ru_tts_config.intonation = rint(getval(optarg) * 100.0);
+            ru_tts_config.intonation = getval();
             break;
           case 'h':
             usage(argv[0]);
