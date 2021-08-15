@@ -85,9 +85,6 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
       sink_setup(&transcription_consumer, transcription_buffer, TRANSCRIPTION_MAXLEN, synth_function, &ttscb);
       transcription_consumer.custom_reset = transcription_init;
 
-      /* Choose voice */
-      ttscb.voice = ru_tts_config.alternative_voice ? &female : &male;
-
       /* Adjust speech rate */
       if (ru_tts_config.speech_rate < 38)
         {
@@ -133,6 +130,15 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
         ttscb.maxtone += (ru_tts_config.intonation < 140) ?
           (((ttscb.mintone >> 1) + 25) * ru_tts_config.intonation / 100) :
           (ttscb.mintone * 7 / 10 + 35);
+
+      /* Choose voice */
+      if (ru_tts_config.alternative_voice)
+        {
+          ttscb.voice = &female;
+          ttscb.mintone <<= 1;
+          ttscb.maxtone <<= 1;
+        }
+      else ttscb.voice = &male;
 
       /* Process text */
       process_text(text, &transcription_consumer);
