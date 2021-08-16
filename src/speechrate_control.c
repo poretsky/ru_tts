@@ -12,11 +12,7 @@
 #include <string.h>
 
 #include "soundscript.h"
-#include "time_planner.h"
-
-
-/* Number of time plan rows */
-#define DRAFT_ROWS (sizeof(elements) / 6)
+#include "timing.h"
 
 
 /* Local static data */
@@ -117,59 +113,48 @@ static const uint8_t elements[][6] =
 /* Global functions */
 
 /*
- * Examine phonetic transcription and apply speechrate parameters
- * to the corresponding soundscript.
+ * Apply speechrate parameters to the soundscript
+ * according to specified timing data.
  */
-void apply_speechrate(uint8_t *transcription, soundscript_t *script,
-                      uint8_t rate_factor, uint8_t stretch, uint8_t gaplen)
+void apply_speechrate(soundscript_t *script, timing_t *timing, time_plan_ptr_t draft)
 {
-  time_plan_ptr_t draft = malloc(sizeof(*draft) * DRAFT_ROWS);
+  uint16_t i;
+  uint8_t n = 1;
 
-  if (draft)
+  for (i = 0; i < script->length; i++)
     {
-      memset(draft, 0, sizeof(*draft) * DRAFT_ROWS);
-      if (plan_time(transcription, draft, DRAFT_ROWS))
+      uint8_t j = script->sounds[i].id;
+      if (j < 189)
         {
-          uint16_t i;
-          uint8_t n = 1;
-
-          for (i = 0; i < script->length; i++)
+          if ((draft[1][n] != 4) || (script->sounds[i].stage != 3))
             {
-              uint8_t j = script->sounds[i].id;
-              if (j < 189)
-                {
-                  if ((draft[1][n] != 4) || (script->sounds[i].stage != 3))
-                    {
-                      uint32_t s = 0;
-                      uint8_t k;
-                      for (k = 0; k < DRAFT_ROWS; k++)
-                        s += elements[k][draft[k][n]];
-                      s *= top[j] - bottom[j];
-                      s *= rate_factor;
-                      s += 7000;
-                      s /= 14000;
-                      s += bottom[j];
-                      s *= stretch;
-                      if ((draft[1][n] == 5) && (script->sounds[i].stage == 2))
-                        s += s >> 1;
-                      script->sounds[i].duration = (uint16_t)s;
-                    }
-                  else script->sounds[i].duration = 0;
-                  if (script->sounds[i].stage >= script->sounds[i + 1].stage)
-                    if (draft[1][n++] == 5)
-                      {
-                        while ((++i) < script->length)
-                          {
-                            script->sounds[i].duration = 0;
-                            if (script->sounds[i].stage >= script->sounds[i + 1].stage)
-                              break;
-                          }
-                        n++;
-                      }
-                }
-              else script->sounds[i].duration = ((uint16_t)gaplen) * ((uint16_t)top[j]);
+              uint32_t s = 0;
+              uint8_t k;
+              for (k = 0; k < TIME_PLAN_ROWS; k++)
+                s += elements[k][draft[k][n]];
+              s *= top[j] - bottom[j];
+              s *= timing->rate_factor;
+              s += 7000;
+              s /= 14000;
+              s += bottom[j];
+              s *= timing->stretch;
+              if ((draft[1][n] == 5) && (script->sounds[i].stage == 2))
+                s += s >> 1;
+              script->sounds[i].duration = (uint16_t)s;
             }
+          else script->sounds[i].duration = 0;
+          if (script->sounds[i].stage >= script->sounds[i + 1].stage)
+            if (draft[1][n++] == 5)
+              {
+                while ((++i) < script->length)
+                  {
+                    script->sounds[i].duration = 0;
+                    if (script->sounds[i].stage >= script->sounds[i + 1].stage)
+                      break;
+                  }
+                n++;
+              }
         }
-      free(draft);
+      else script->sounds[i].duration = ((uint16_t)(timing->gaplen)) * ((uint16_t)top[j]);
     }
 }

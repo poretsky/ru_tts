@@ -88,34 +88,34 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
       /* Adjust speech rate */
       if (ru_tts_config.speech_rate < 38)
         {
-          ttscb.rate_factor = 125;
-          ttscb.stretch = 10;
+          ttscb.timing.rate_factor = 125;
+          ttscb.timing.stretch = 10;
           gaplen = 188;
         }
       else if (ru_tts_config.speech_rate > 225)
         {
-          ttscb.rate_factor = 0;
-          ttscb.stretch = 4;
+          ttscb.timing.rate_factor = 0;
+          ttscb.timing.stretch = 4;
           gaplen = 0;
         }
       else if (ru_tts_config.speech_rate < 100)
         {
-          ttscb.rate_factor = 199 - (ru_tts_config.speech_rate << 1);
-          ttscb.stretch = 10;
+          ttscb.timing.rate_factor = 199 - (ru_tts_config.speech_rate << 1);
+          ttscb.timing.stretch = 10;
         }
       else
         {
-          ttscb.rate_factor = 225 - ru_tts_config.speech_rate;
-          ttscb.stretch = 4;
+          ttscb.timing.rate_factor = 225 - ru_tts_config.speech_rate;
+          ttscb.timing.stretch = 4;
         }
       gaplen += 12;
       gaplen *= ru_tts_config.gap_factor;
       gaplen /= 100;
       if (gaplen < 0)
-        ttscb.gaplen = 0;
+        ttscb.timing.gaplen = 0;
       else if (gaplen > 250)
-        ttscb.gaplen = 250;
-      else ttscb.gaplen = (uint8_t)gaplen ;
+        ttscb.timing.gaplen = 250;
+      else ttscb.timing.gaplen = (uint8_t)gaplen ;
 
       /* Adjust voice pitch */
       if (ru_tts_config.voice_pitch < 50)

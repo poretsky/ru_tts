@@ -17,6 +17,7 @@
 #include "soundscript.h"
 #include "voice.h"
 #include "sink.h"
+#include "timing.h"
 
 
 /* TTS control data structure */
@@ -27,9 +28,7 @@ typedef struct
   const voice_t *voice;
 
   /* Speechrate parameters */
-  uint8_t rate_factor;
-  uint8_t stretch;
-  uint8_t gaplen;
+  timing_t timing;
 
   /* Intonation control */
   uint16_t mintone;
@@ -46,13 +45,6 @@ extern const voice_t female;
 
 /* Build utterance according to phonetic transcription */
 extern void build_utterance(uint8_t *transcription, soundscript_t *script);
-
-/*
- * Examine phonetic transcription and apply speechrate parameters
- * to the corresponding soundscript.
- */
-extern void apply_speechrate(uint8_t *transcription, soundscript_t *script,
-                             uint8_t rate_factor, uint8_t stretch, uint8_t gaplen);
 
 /* Apply intonation parameters to the sound script */
 extern void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,

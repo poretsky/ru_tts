@@ -11,13 +11,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "time_planner.h"
+#include "timing.h"
 #include "transcription.h"
 
 
 /* Local macros */
 #define MIN(x, y) ((x < y) ? x : y)
-#define MAX(x, y) ((x > y) ? x : y)
 #define DISCRIMINANT(x, y) ((x != y) ? ((x != 1) ? 3 : 2) : 1)
 
 
@@ -90,18 +89,26 @@ static void next_iteration(workspace_t *scratch)
  *
  * Returns non-zero value if the draft is successively filled.
  */
-int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
+time_plan_ptr_t plan_time(uint8_t *transcription)
 {
-  int rc = 0;
-  workspace_t *scratch = malloc(sizeof(workspace_t));
+  time_plan_ptr_t draft;
+  workspace_t *scratch;
   uint16_t i;
   uint8_t check_prev_trigger = 0;
   uint8_t check_prev = 0;
   uint8_t skip_itercount = 1;
   uint8_t nitems = 0;
 
+  draft = calloc(TIME_PLAN_ROWS, sizeof(*draft));
+  if (!draft)
+    return NULL;
+
+  scratch = malloc(sizeof(workspace_t));
   if (!scratch)
-    return rc;
+    {
+      free(draft);
+      return NULL;
+    }
   memset(scratch, 0, sizeof(workspace_t));
 
   for (i = TRANSCRIPTION_START; i < TRANSCRIPTION_BUFFER_SIZE; i++)
@@ -113,7 +120,7 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
 
             if (found)
               {
-                uint8_t *values = malloc(MAX(rows, 9) + sizeof(uint8_t));
+                uint8_t values[TIME_PLAN_ROWS];
                 uint8_t restart = 0;
                 uint8_t setcase = 0;
                 uint8_t tmp = 0;
@@ -124,9 +131,7 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
                 uint8_t ndx2 =1;
                 uint8_t item;
 
-                if (!values)
-                  return rc;
-                memset(values, 0, MAX(rows, 9));
+                memset(values, 0, TIME_PLAN_ROWS);
                 if (k > 3)
                   k = 0;
                 values[8] = k + 1;
@@ -235,7 +240,7 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
                                   }
                                 values[4] = scratch->area[0][scratch->ndx1];
                                 values[5] = scratch->area[1][scratch->ndx2];
-                                for (k = 2; k < rows; k++)
+                                for (k = 2; k < TIME_PLAN_ROWS; k++)
                                   draft[k][m] = values[k] ? (values[k] - 1) : 0;
                                 if ((phoncode_prev > 5) &&
                                     (phoncode_prev < 43) &&
@@ -253,9 +258,8 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
                           }
                       }
                   }
-                rc = 1;
-                free(values);
-                break;
+                free(scratch);
+                return draft;
               }
             else
               {
@@ -325,5 +329,6 @@ int plan_time(uint8_t *transcription, time_plan_ptr_t draft, size_t rows)
       }
 
   free(scratch);
-  return rc;
+  free(draft);
+  return NULL;
 }

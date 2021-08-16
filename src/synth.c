@@ -14,6 +14,7 @@
 #include "synth.h"
 #include "soundscript.h"
 #include "transcription.h"
+#include "timing.h"
 
 
 /* Local data */
@@ -196,10 +197,16 @@ static void synth_chunk(uint8_t *transcription, ttscb_t *ttscb, uint8_t clause_t
   soundscript_t *soundscript = malloc(sizeof(soundscript_t));
   if (soundscript)
     {
+      time_plan_ptr_t draft;
       memset(soundscript, 0, sizeof(soundscript_t));
       soundscript->voice = ttscb->voice;
       build_utterance(transcription, soundscript);
-      apply_speechrate(transcription, soundscript, ttscb->rate_factor, ttscb->stretch, ttscb->gaplen);
+      draft = plan_time(transcription);
+      if (draft)
+        {
+          apply_speechrate(soundscript, &(ttscb->timing), draft);
+          free(draft);
+        }
       apply_intonation(transcription, soundscript, ttscb->mintone, ttscb->maxtone, clause_type);
       make_sound(soundscript, &(ttscb->wave_consumer));
       free(soundscript);
