@@ -45,7 +45,7 @@ librutts.la: synth.lo sink.lo transcription.lo text2speech.lo \
 	${CC} -c ${CFLAGS} $<
 
 ru_tts.o: ru_tts.c ru_tts.h
-synth.lo: synth.c synth.h transcription.h soundscript.h timing.h
+synth.lo: synth.c synth.h transcription.h soundscript.h timing.h ru_tts.h
 numerics.lo: numerics.c numerics.h transcription.h sink.h synth.h ru_tts.h
 transcription.lo: transcription.c transcription.h numerics.h sink.h
 utterance.lo: utterance.c soundscript.h transcription.h

@@ -25,7 +25,6 @@ typedef struct
 {
   transcription_state_t transcription_state;
   sink_t wave_consumer;
-  const voice_t *voice;
   int flags;
 
   /* Speechrate parameters */

@@ -21,7 +21,6 @@
 
 ru_tts_conf_t ru_tts_config =
   {
-    .alternative_voice = 0,
     .speech_rate = 100,
     .voice_pitch = 100,
     .gap_factor = 100,
@@ -134,14 +133,12 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
           (((ttscb.mintone >> 1) + 25) * ru_tts_config.intonation / 100) :
           (ttscb.mintone * 7 / 10 + 35);
 
-      /* Choose voice */
-      if (ru_tts_config.alternative_voice)
+      /* Respect voice */
+      if (ru_tts_config.flags & USE_ALTERNATIVE_VOICE)
         {
-          ttscb.voice = &female;
           ttscb.mintone <<= 1;
           ttscb.maxtone <<= 1;
         }
-      else ttscb.voice = &male;
 
       /* Process text */
       process_text(text, &transcription_consumer);

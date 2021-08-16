@@ -15,6 +15,7 @@
 #include "soundscript.h"
 #include "transcription.h"
 #include "timing.h"
+#include "ru_tts.h"
 
 
 /* Local data */
@@ -199,7 +200,7 @@ static void synth_chunk(uint8_t *transcription, ttscb_t *ttscb, uint8_t clause_t
     {
       time_plan_ptr_t draft;
       memset(soundscript, 0, sizeof(soundscript_t));
-      soundscript->voice = ttscb->voice;
+      soundscript->voice = (ttscb->flags & USE_ALTERNATIVE_VOICE) ? &female : &male;
       build_utterance(transcription, soundscript);
       draft = plan_time(transcription);
       if (draft)

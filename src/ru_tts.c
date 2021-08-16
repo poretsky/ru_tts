@@ -86,7 +86,7 @@ int main(int argc, char **argv)
             if (!slog) perror(optarg);
             break;
           case 'a':
-            ru_tts_config.alternative_voice = 1;
+            ru_tts_config.flags |= USE_ALTERNATIVE_VOICE;
             break;
           case 'r':
             ru_tts_config.speech_rate = getval();

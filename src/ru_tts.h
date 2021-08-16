@@ -16,6 +16,7 @@
 /* common flags */
 #define DEC_SEP_POINT 1 /* Use point as a decimal separator */
 #define DEC_SEP_COMMA 2 /* Use comma as a decimal separator */
+#define USE_ALTERNATIVE_VOICE 4
 
 
 /* BEGIN_C_DECLS should be used at the beginning of C declarations,
@@ -37,9 +38,6 @@ typedef int (*ru_tts_callback)(void *buffer, size_t size, void *user_data);
 
 typedef struct
 {
-  int alternative_voice; /* Non-zero value means that
-                            the alternative voice should be used
-                            instead of the default one */
   int speech_rate; /* Reasonable value range is [35..225]. */
   int voice_pitch; /* Reasonable value range is [50..300]. */
   int gap_factor; /* Reasonable value range is [0..125]. */
