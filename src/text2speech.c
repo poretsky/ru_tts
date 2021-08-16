@@ -25,7 +25,8 @@ ru_tts_conf_t ru_tts_config =
     .speech_rate = 100,
     .voice_pitch = 100,
     .gap_factor = 100,
-    .intonation = 100
+    .intonation = 100,
+    .flags = DEC_SEP_POINT | DEC_SEP_COMMA
   };
 
 
@@ -73,17 +74,19 @@ static int synth_function(void *buffer, size_t length, void *user_data)
 void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_size,
                      ru_tts_callback consumer, void *user_data)
 {
-  ttscb_t ttscb;
-  sink_t transcription_consumer;
   uint8_t *transcription_buffer = malloc(TRANSCRIPTION_BUFFER_SIZE);
 
   if (transcription_buffer)
     {
       int gaplen = (900 - (ru_tts_config.speech_rate << 2)) >> 2;
+      ttscb_t ttscb;
+      sink_t transcription_consumer;
 
+      /* Initialize data structures */
       sink_setup(&(ttscb.wave_consumer), wave_buffer, wave_buffer_size, consumer, user_data);
       sink_setup(&transcription_consumer, transcription_buffer, TRANSCRIPTION_MAXLEN, synth_function, &ttscb);
       transcription_consumer.custom_reset = transcription_init;
+      ttscb.flags = ru_tts_config.flags;
 
       /* Adjust speech rate */
       if (ru_tts_config.speech_rate < 38)

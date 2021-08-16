@@ -61,7 +61,7 @@ static int getval(void)
 static void usage(const char* name)
 {
   fprintf(stderr, "Usage:\n");
-  fprintf(stderr, "%s [-s stress_db [-l logfile]] [-r rate] [-p pitch] [-g gaplen] [-e expressiveness] [-a]\n", name);
+  fprintf(stderr, "%s [-s stress_db [-l logfile]] [-r rate] [-p pitch] [-g gaplen] [-e expressiveness] [-d[.][,][-]] [-a]\n", name);
   fprintf(stderr, "Numeric parameters (rate, pitch, gaplen, expressiveness) are 1.0 by default.\n");
 }
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
   FILE *slog = NULL;
   RULEXDB *db = NULL;
 
-  while ((c = getopt(argc, argv, "s:l:r:p:g:e:ah")) != -1)
+  while ((c = getopt(argc, argv, "s:l:r:p:g:e:d:ah")) != -1)
     {
       switch (c)
         {
@@ -99,6 +99,13 @@ int main(int argc, char **argv)
             break;
           case 'e':
             ru_tts_config.intonation = getval();
+            break;
+          case 'd':
+            ru_tts_config.flags &= ~(DEC_SEP_POINT | DEC_SEP_COMMA);
+            if (strchr(optarg, '.'))
+              ru_tts_config.flags |= DEC_SEP_POINT;
+            if (strchr(optarg, ','))
+              ru_tts_config.flags |= DEC_SEP_COMMA;
             break;
           case 'h':
             usage(argv[0]);

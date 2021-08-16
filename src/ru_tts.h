@@ -12,6 +12,12 @@
 
 #include <stdlib.h>
 
+
+/* common flags */
+#define DEC_SEP_POINT 1 /* Use point as a decimal separator */
+#define DEC_SEP_COMMA 2 /* Use comma as a decimal separator */
+
+
 /* BEGIN_C_DECLS should be used at the beginning of C declarations,
    so that C++ compilers don't mangle their names.  Use END_C_DECLS at
    the end of C declarations. */
@@ -39,6 +45,7 @@ typedef struct
   int gap_factor; /* Reasonable value range is [0..125]. */
   int intonation; /* Reasonable value range is [0..140].
                      Greater values imply more expressive speech. */
+  int flags;
 } ru_tts_conf_t;
 
 extern ru_tts_conf_t ru_tts_config;

@@ -13,6 +13,8 @@
 #include "numerics.h"
 #include "transcription.h"
 #include "sink.h"
+#include "synth.h"
+#include "ru_tts.h"
 
 
 /* Local constants */
@@ -129,6 +131,14 @@ static void transcribe_digit(sink_t *consumer, char digit, char following)
     sink_put(consumer, 43);
 }
 
+/* Return true if specified character may be treated as decimal point. */
+static int check_dec_point(sink_t *consumer, char c)
+{
+  int flags = ((ttscb_t *) (consumer->user_data))->flags;
+  return ((flags & DEC_SEP_POINT) && (c == '.')) ||
+    ((flags & DEC_SEP_COMMA) && (c == ','));
+}
+
 
 /* Global functions */
 
@@ -221,7 +231,7 @@ void process_number(input_t *input, sink_t *consumer)
                                 transcribe_digit(consumer, c, s[0]);
                               else sink_write(consumer, one_int, 6);
                             }
-                          else if ((s >= input->end) || (s[1] != '.') || !IS_DIGIT(s[2]))
+                          else if ((s >= input->end) || !check_dec_point(consumer, s[1]) || !IS_DIGIT(s[2]))
                             transcribe_digit(consumer, c, s[0]);
                           else sink_write(consumer, one_int, 14);
                           break;
@@ -242,7 +252,7 @@ void process_number(input_t *input, sink_t *consumer)
                             }
                           else if ((triplets == 1) ||
                                    ((flags & NUMBER_FRACTION) && (s == (input->start - 1))) ||
-                                   ((s[1] == '.') && IS_DIGIT(s[2])))
+                                   (check_dec_point(consumer, s[1]) && IS_DIGIT(s[2])))
                             {
                               sink_write(consumer, two_e, 5);
                               break;
@@ -319,7 +329,7 @@ void process_number(input_t *input, sink_t *consumer)
           put_transcription(consumer, suffixes, (nc != 1) ? 0 : 1);
           break;
         }
-      else if (((input->start + 1) < input->end) && (input->start[0] == '.') && IS_DIGIT(input->start[1]))
+      else if (((input->start + 1) < input->end) && check_dec_point(consumer, input->start[0]) && IS_DIGIT(input->start[1]))
         {
           flags |= NUMBER_FRACTION;
           sink_put(consumer, 43);

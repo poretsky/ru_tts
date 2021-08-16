@@ -46,7 +46,7 @@ librutts.la: synth.lo sink.lo transcription.lo text2speech.lo \
 
 ru_tts.o: ru_tts.c ru_tts.h
 synth.lo: synth.c synth.h transcription.h soundscript.h timing.h
-numerics.lo: numerics.c numerics.h transcription.h sink.h
+numerics.lo: numerics.c numerics.h transcription.h sink.h synth.h ru_tts.h
 transcription.lo: transcription.c transcription.h numerics.h sink.h
 utterance.lo: utterance.c soundscript.h transcription.h
 time_planner.lo: time_planner.c timing.h transcription.h
