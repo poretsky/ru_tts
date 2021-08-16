@@ -24,8 +24,7 @@ typedef uint8_t (*time_plan_ptr_t)[100];
 
 typedef struct
 {
-  uint8_t rate_factor;
-  uint8_t stretch;
+  uint16_t rate_factor;
   uint8_t gaplen;
 } timing_t;
 

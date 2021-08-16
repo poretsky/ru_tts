@@ -134,10 +134,8 @@ void apply_speechrate(soundscript_t *script, timing_t *timing, time_plan_ptr_t d
                 s += elements[k][draft[k][n]];
               s *= top[j] - bottom[j];
               s *= timing->rate_factor;
-              s += 7000;
-              s /= 14000;
-              s += bottom[j];
-              s *= timing->stretch;
+              s += (((uint32_t) bottom[j]) << 14) + 2048;
+              s >>= 12;
               if ((draft[1][n] == 5) && (script->sounds[i].stage == 2))
                 s += s >> 1;
               script->sounds[i].duration = (uint16_t)s;
