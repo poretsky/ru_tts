@@ -25,8 +25,25 @@
 
 #define WAVE_SIZE 4096
 
+/* Acceptable character codes */
+static const char symbols[] =
+  {
+    '+', '=',
+    0xC1, 0xC2, 0xD7, /* –∞, –±, –≤, */
+    0xC7, 0xC4, 0xC5, /* –≥, –¥, –µ, */
+    0xA3, 0xD6, 0xDA, /* —ë, –∂, –∑, */
+    0xC9, 0xCA, 0xCB, /* –∏, –π, –∫, */
+    0xCC, 0xCD, 0xCE, /* –ª, –º, –Ω, */
+    0xCF, 0xD0, 0xD2, /* –æ, –ø, —Ä, */
+    0xD3, 0xD4, 0xD5, /* —Å, —Ç, —É, */
+    0xC6, 0xC8, 0xC3, /* —Ñ, —Ö, —Ü, */
+    0xDE, 0xDB, 0xDD, /* —á, —à, —â, */
+    0xDF, 0xD9, 0xD8, /* —ä, —ã, —å, */
+    0xDC, 0xC0, 0xD1, /* —ç, —é, —è, */
+    0
+  };
+
 static const char *charset = "ru_RU.koi8r";
-static const char *symbols = "+=¡¬◊«ƒ≈£÷⁄… ÀÃÕŒœ–“”‘’∆»√ﬁ€›ﬂŸÿ‹¿—";
 static const char *alphabet;
 
 static int wave_consumer(void *buffer, size_t size, void *user_data)
