@@ -30,9 +30,8 @@ typedef struct
   /* Speechrate parameters */
   timing_t timing;
 
-  /* Intonation control */
-  uint16_t mintone;
-  uint16_t maxtone;
+  /* Pitch and intonation control */
+  modulation_t modulation;
 } ttscb_t;
 
 
@@ -46,9 +45,15 @@ extern const voice_t female;
 /* Build utterance according to phonetic transcription */
 extern void build_utterance(uint8_t *transcription, soundscript_t *script);
 
+/*
+ * Setup modulation parameters according to specified voice pitch
+ * and intonation level expressed as a percentage of the default values.
+ */
+extern void modulation_setup(modulation_t *modulation, int voice_pitch, int intonation);
+
 /* Apply intonation parameters to the sound script */
 extern void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
-                             uint16_t mintone, uint16_t maxtone, uint8_t clause_type);
+                             modulation_t *modulation, uint8_t clause_type);
 
 /* Generate sound stream and feed it to the specified sink */
 extern void make_sound(soundscript_t *script, sink_t *consumer);

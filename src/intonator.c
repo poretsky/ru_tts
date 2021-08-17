@@ -280,9 +280,9 @@ static int search_breakpoint(uint8_t *transcription, int start_index)
   return -1;
 }
 
-static unsigned int eval_tone(unsigned int x, uint16_t mintone, uint16_t maxtone)
+static unsigned int eval_tone(unsigned int x, unsigned int pitch_factor, modulation_t *modulation)
 {
-  return 10000 / ((maxtone - mintone) * x / 100 + mintone);
+  return pitch_factor / ((modulation->maxtone - modulation->mintone) * x / 100 + modulation->mintone);
 }
 
 /* Returns index where process was stopped */
@@ -301,11 +301,32 @@ static uint16_t setstage(soundscript_t *script, uint16_t start_index, uint8_t va
 }
 
 
-/* Global entry point */
+/* Global entry points */
+
+/*
+ * Setup modulation parameters according to specified voice pitch
+ * and intonation level expressed as a percentage of the default values.
+ */
+void modulation_setup(modulation_t *modulation, int voice_pitch, int intonation)
+{
+  /* Adjust voice pitch */
+  if (voice_pitch < 50)
+    modulation->mintone = 50;
+  else if (voice_pitch > 300)
+    modulation->mintone = 300;
+  else modulation->mintone = (uint16_t) voice_pitch;
+  modulation->maxtone = modulation->mintone;
+
+  /* Adjust intonation */
+  if (intonation > 0)
+    modulation->maxtone += (intonation < 140) ?
+      (((modulation->mintone >> 1) + 25) * intonation / 100) :
+      (modulation->mintone * 7 / 10 + 35);
+}
 
 /* Apply intonation parameters to the sound script */
 void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
-                      uint16_t mintone, uint16_t maxtone, uint8_t clause_type)
+                      modulation_t *modulation, uint8_t clause_type)
 {
   uint16_t i = TRANSCRIPTION_START;
   uint16_t nspeechmarks = 0;
@@ -435,8 +456,8 @@ void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
           if ((prevk != ((uint16_t)k)) && (soundscript->voice->sound_lengths[j] < VOICE_THRESHOLD))
             {
               int q = 0;
-              int tone1 = eval_tone(intonations[clause_type][k][0], mintone, maxtone);
-              int tone2 = eval_tone(intonations[clause_type][k][1], mintone, maxtone) - tone1;
+              int tone1 = eval_tone(intonations[clause_type][k][0], soundscript->voice->pitch_factor, modulation);
+              int tone2 = eval_tone(intonations[clause_type][k][1], soundscript->voice->pitch_factor, modulation) - tone1;
               soundscript->icb[k].period = 1;
               soundscript->icb[k].count = 1;
               if (tone2)

@@ -208,7 +208,7 @@ static void synth_chunk(uint8_t *transcription, ttscb_t *ttscb, uint8_t clause_t
           apply_speechrate(soundscript, &(ttscb->timing), draft);
           free(draft);
         }
-      apply_intonation(transcription, soundscript, ttscb->mintone, ttscb->maxtone, clause_type);
+      apply_intonation(transcription, soundscript, &(ttscb->modulation), clause_type);
       make_sound(soundscript, &(ttscb->wave_consumer));
       free(soundscript);
     }

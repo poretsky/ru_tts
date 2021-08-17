@@ -14,6 +14,8 @@
 
 const voice_t female =
   {
+    5000, /* Pitch factor */
+
     /* Sound offsets */
     {
       0, 51, 102,

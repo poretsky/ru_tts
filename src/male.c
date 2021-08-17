@@ -14,6 +14,8 @@
 
 const voice_t male =
   {
+    10000, /* Pitch factor */
+
     /* Sound offsets */
     {
       0, 101, 202,

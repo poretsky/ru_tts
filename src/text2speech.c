@@ -89,26 +89,8 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
       /* Adjust speech rate */
       timing_setup(&(ttscb.timing), ru_tts_config.speech_rate, ru_tts_config.gap_factor);
 
-      /* Adjust voice pitch */
-      if (ru_tts_config.voice_pitch < 50)
-        ttscb.mintone = 50;
-      else if (ru_tts_config.voice_pitch > 300)
-        ttscb.mintone = 300;
-      else ttscb.mintone = (uint16_t) ru_tts_config.voice_pitch;
-      ttscb.maxtone = ttscb.mintone;
-
-      /* Adjust intonation */
-      if (ru_tts_config.intonation > 0)
-        ttscb.maxtone += (ru_tts_config.intonation < 140) ?
-          (((ttscb.mintone >> 1) + 25) * ru_tts_config.intonation / 100) :
-          (ttscb.mintone * 7 / 10 + 35);
-
-      /* Respect voice */
-      if (ru_tts_config.flags & USE_ALTERNATIVE_VOICE)
-        {
-          ttscb.mintone <<= 1;
-          ttscb.maxtone <<= 1;
-        }
+      /* Adjust voice pitch and intonation */
+      modulation_setup(&(ttscb.modulation), ru_tts_config.voice_pitch, ru_tts_config.intonation);
 
       /* Process text */
       process_text(text, &transcription_consumer);
