@@ -21,9 +21,9 @@
 /* Voice data structure */
 typedef struct
 {
-  uint16_t sound_offsets[VOICE_DIMENSION]; /* voice_data1 */
-  uint16_t sound_lengths[VOICE_DIMENSION]; /* voice_data2 */
-  int8_t samples[]; /* voice_data3 */
+  uint16_t sound_offsets[VOICE_DIMENSION];
+  uint16_t sound_lengths[VOICE_DIMENSION];
+  int8_t samples[];
 } voice_t;
 
 #endif
