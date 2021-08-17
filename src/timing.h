@@ -25,9 +25,16 @@ typedef uint8_t (*time_plan_ptr_t)[100];
 typedef struct
 {
   uint16_t rate_factor;
-  uint8_t gaplen;
+  uint8_t gap_factor;
 } timing_t;
 
+
+/*
+ * Initial timing setup for specified speech rate and relative
+ * interclause gap duration expressed as a percentage
+ * of the default value.
+ */
+extern void timing_setup(timing_t *timing, int speech_rate, int gap_factor);
 
 /*
  * Build timing draft for specified phonetic transcription.

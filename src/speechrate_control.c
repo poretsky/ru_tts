@@ -113,6 +113,24 @@ static const uint8_t elements[][6] =
 /* Global functions */
 
 /*
+ * Initial timing setup for specified speech rate and relative
+ * interclause gap duration expressed as a percentage
+ * of the default value.
+ */
+void timing_setup(timing_t *timing, int speech_rate, int gap_factor)
+{
+  int stretch;
+
+  if (speech_rate < 40)
+    stretch = 500;
+  else if (speech_rate > 250)
+    stretch = 80;
+  else stretch = 20000 / speech_rate;
+  timing->rate_factor = stretch - 80;
+  timing->gap_factor = (uint8_t) (stretch * (gap_factor << 1) / 500);
+}
+
+/*
  * Apply speechrate parameters to the soundscript
  * according to specified timing data.
  */
@@ -153,6 +171,6 @@ void apply_speechrate(soundscript_t *script, timing_t *timing, time_plan_ptr_t d
                 n++;
               }
         }
-      else script->sounds[i].duration = ((uint16_t)(timing->gaplen)) * ((uint16_t)top[j]);
+      else script->sounds[i].duration = ((uint16_t)(timing->gap_factor)) * ((uint16_t)top[j]);
     }
 }

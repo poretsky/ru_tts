@@ -77,7 +77,6 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
 
   if (transcription_buffer)
     {
-      int stretch;
       ttscb_t ttscb;
       sink_t transcription_consumer;
 
@@ -88,13 +87,7 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
       ttscb.flags = ru_tts_config.flags;
 
       /* Adjust speech rate */
-      if (ru_tts_config.speech_rate < 40)
-        stretch = 500;
-      else if (ru_tts_config.speech_rate > 250)
-        stretch = 80;
-      else stretch = 20000 / ru_tts_config.speech_rate;
-      ttscb.timing.rate_factor = stretch - 80;
-      ttscb.timing.gaplen = (uint8_t) (stretch * (ru_tts_config.gap_factor << 1) / 500);
+      timing_setup(&(ttscb.timing), ru_tts_config.speech_rate, ru_tts_config.gap_factor);
 
       /* Adjust voice pitch */
       if (ru_tts_config.voice_pitch < 50)
