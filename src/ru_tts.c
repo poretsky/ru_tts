@@ -73,7 +73,15 @@ static void *xmalloc(unsigned int n)
 
 static int getval(const char *s)
 {
-  return rint(atof(s) * 100.0);
+  char *t;
+  double value = strtod(s, &t);
+  if ((s == t) || (value < 0.0))
+    {
+      fprintf(stderr, "Illegal option value \"%s\"\n", s);
+      fprintf(stderr, "Must be a positive number\n");
+      exit(EXIT_FAILURE);
+    }
+  return rint(value * 100.0);
 }
 
 static void usage(const char* name)
@@ -147,15 +155,26 @@ int main(int argc, char **argv)
             break;
           case 'd':
             ru_tts_config.flags &= ~(DEC_SEP_POINT | DEC_SEP_COMMA);
-            if (strchr(optarg, '.'))
-              ru_tts_config.flags |= DEC_SEP_POINT;
-            if (strchr(optarg, ','))
-              ru_tts_config.flags |= DEC_SEP_COMMA;
+            switch (*optarg)
+              {
+              case '.':
+                ru_tts_config.flags |= DEC_SEP_POINT;
+                break;
+              case ',':
+                ru_tts_config.flags |= DEC_SEP_COMMA;
+              case '-':
+                break;
+              default:
+                fprintf(stderr, "Invalid option \"-d%s\"\n\n", optarg);
+                usage(argv[0]);
+                return EXIT_FAILURE;
+              }
             break;
           case 'h':
             usage(argv[0]);
             return EXIT_SUCCESS;
           default:
+            fprintf(stderr, "\n");
             usage(argv[0]);
             return EXIT_FAILURE;
         }
