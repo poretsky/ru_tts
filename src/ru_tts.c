@@ -60,6 +60,7 @@ static const char *help_msg =
   "-s path -- Pronunciation dictionary location.\n"
   "-l path -- Log unknown words in specified file\n"
   "           (does matter only in conjunction with pronunciation dictionary).\n"
+  "-v -- Print name and version on stderr and exit.\n"
   "-h -- Get this help.\n\n"
 
   "All numeric parameters must be positive numbers. Default value is 1.0.\n\n"
@@ -128,7 +129,7 @@ int main(int argc, char **argv)
   FILE *slog = NULL;
   RULEXDB *db = NULL;
 
-  while ((c = getopt(argc, argv, "s:l:r:p:g:e:d:ah")) != -1)
+  while ((c = getopt(argc, argv, "s:l:r:p:g:e:d:ahv")) != -1)
     {
       switch (c)
         {
@@ -201,6 +202,9 @@ int main(int argc, char **argv)
             break;
           case 'h':
             usage(argv[0]);
+            return EXIT_SUCCESS;
+          case 'v':
+            fprintf(stderr, "%s version 6.0\n\n", argv[0]);
             return EXIT_SUCCESS;
           default:
             fprintf(stderr, "\n");
