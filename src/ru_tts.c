@@ -43,6 +43,7 @@ static const char symbols[] =
     0
   };
 
+static const char *clause_separators = ",.;:?!-";
 static const char *charset = "ru_RU.koi8r";
 static const char *alphabet;
 
@@ -70,9 +71,9 @@ static void *xmalloc(unsigned int n)
   return xrealloc(u, n);
 }
 
-static int getval(void)
+static int getval(const char *s)
 {
-  return rint(atof(optarg) * 100.0);
+  return rint(atof(s) * 100.0);
 }
 
 static void usage(const char* name)
@@ -106,16 +107,43 @@ int main(int argc, char **argv)
             ru_tts_config.flags |= USE_ALTERNATIVE_VOICE;
             break;
           case 'r':
-            ru_tts_config.speech_rate = getval();
+            ru_tts_config.speech_rate = getval(optarg);
             break;
           case 'p':
-            ru_tts_config.voice_pitch = getval();
+            ru_tts_config.voice_pitch = getval(optarg);
             break;
           case 'g':
-            ru_tts_config.gap_factor = getval();
+            if (strchr(clause_separators, *optarg))
+              switch (*optarg)
+                {
+                case ',':
+                  ru_tts_config.comma_gap_factor = getval(optarg + 1);
+                  break;
+                case '.':
+                  ru_tts_config.dot_gap_factor = getval(optarg + 1);
+                  break;
+                case ';':
+                  ru_tts_config.semicolon_gap_factor = getval(optarg + 1);
+                  break;
+                case ':':
+                  ru_tts_config.colon_gap_factor = getval(optarg + 1);
+                  break;
+                case '?':
+                  ru_tts_config.question_gap_factor = getval(optarg + 1);
+                  break;
+                case '!':
+                  ru_tts_config.exclamation_gap_factor = getval(optarg + 1);
+                  break;
+                case '-':
+                  ru_tts_config.intonational_gap_factor = getval(optarg + 1);
+                  break;
+                default:
+                  break;
+                }
+            else ru_tts_config.general_gap_factor = getval(optarg);
             break;
           case 'e':
-            ru_tts_config.intonation = getval();
+            ru_tts_config.intonation = getval(optarg);
             break;
           case 'd':
             ru_tts_config.flags &= ~(DEC_SEP_POINT | DEC_SEP_COMMA);

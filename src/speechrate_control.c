@@ -13,6 +13,7 @@
 
 #include "soundscript.h"
 #include "timing.h"
+#include "transcription.h"
 
 
 /* Local static data */
@@ -119,7 +120,7 @@ static const uint8_t elements[][6] =
  */
 void timing_setup(timing_t *timing, int speech_rate, int gap_factor)
 {
-  int stretch;
+  int stretch, i;
 
   if (speech_rate < 40)
     stretch = 500;
@@ -128,6 +129,27 @@ void timing_setup(timing_t *timing, int speech_rate, int gap_factor)
   else stretch = 20000 / speech_rate;
   timing->rate_factor = stretch - 80;
   timing->gap_factor = (uint8_t) (stretch * (gap_factor << 1) / 500);
+  for (i = 0; i < CLAUSE_SEPARATORS; i++)
+    timing->gaplen[i] = top[i + 191];
+}
+
+/*
+ * Adjust gap duration for specified separator
+ * applying a percentage factor.
+ */
+void adjust_gaplen(timing_t *timing, char separator, int gap_factor)
+{
+  char *s = memchr(punctuations, separator, CLAUSE_SEPARATORS);
+  if (s)
+    {
+      int i = s - punctuations;
+      int gaplen = top[i + 191] * gap_factor / 100;
+      if (gaplen < 0)
+        timing->gaplen[i] = 0;
+      else if (gaplen > 150)
+        timing->gaplen[i] = 150;
+      else timing->gaplen[i] = (uint8_t) gaplen;
+    }
 }
 
 /*
@@ -171,6 +193,11 @@ void apply_speechrate(soundscript_t *script, timing_t *timing, time_plan_ptr_t d
                 n++;
               }
         }
-      else script->sounds[i].duration = ((uint16_t)(timing->gap_factor)) * ((uint16_t)top[j]);
+      else
+        {
+          int k = j - 191;
+          uint8_t gaplen = ((k >= 0) && (k < CLAUSE_SEPARATORS)) ? timing->gaplen[k] : top[j];
+          script->sounds[i].duration = ((uint16_t)(timing->gap_factor)) * ((uint16_t)gaplen);
+        }
     }
 }

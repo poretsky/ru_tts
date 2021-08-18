@@ -28,10 +28,11 @@
 #endif
 
 
-/* Local data */
-
 /* Main punctuations */
-static const char *punctuations = ",.;:?!-";
+const char *punctuations = ",.;:?!-";
+
+
+/* Local data */
 
 /* Special symbols */
 static const char *symbols = " ,.;:?!()-+=\"$%&*";

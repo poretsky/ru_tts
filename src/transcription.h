@@ -43,7 +43,7 @@ typedef struct
 
 
 /* Shared data */
-extern size_t stop_index;
+extern const char *punctuations;
 
 
 /* Common functions */

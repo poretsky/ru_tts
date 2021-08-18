@@ -19,6 +19,10 @@
 /* Number of time plan rows */
 #define TIME_PLAN_ROWS 9
 
+/* Number of punctuations treated as clause separators */
+#define CLAUSE_SEPARATORS 7
+
+
 /* Time plan pointer definition */
 typedef uint8_t (*time_plan_ptr_t)[100];
 
@@ -26,6 +30,7 @@ typedef struct
 {
   uint16_t rate_factor;
   uint8_t gap_factor;
+  uint8_t gaplen[CLAUSE_SEPARATORS];
 } timing_t;
 
 
@@ -35,6 +40,12 @@ typedef struct
  * of the default value.
  */
 extern void timing_setup(timing_t *timing, int speech_rate, int gap_factor);
+
+/*
+ * Adjust gap duration for specified separator
+ * applying a percentage factor.
+ */
+extern void adjust_gaplen(timing_t *timing, char separator, int gap_factor);
 
 /*
  * Build timing draft for specified phonetic transcription.

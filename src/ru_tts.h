@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 
-/* common flags */
+/* TTS control flags */
 #define DEC_SEP_POINT 1 /* Use point as a decimal separator */
 #define DEC_SEP_COMMA 2 /* Use comma as a decimal separator */
 #define USE_ALTERNATIVE_VOICE 4
@@ -34,18 +34,31 @@
 
 BEGIN_C_DECLS
 
+/* Callback function to utilize generated sound */
 typedef int (*ru_tts_callback)(void *buffer, size_t size, void *user_data);
 
+/* Speech parameters */
 typedef struct
 {
   int speech_rate; /* Reasonable value range is [40..250]. */
   int voice_pitch; /* Reasonable value range is [50..300]. */
-  int gap_factor; /* Reasonable value range is [0..x].
-                     Upper boundary depends on speech rate.
-                     At the minimum speech rate it is 1.25.
-                     Quicker speech allows to use greater values. */
   int intonation; /* Reasonable value range is [0..140].
                      Greater values imply more expressive speech. */
+
+  /* Interclause gap durations adjustment */
+  int general_gap_factor; /* Reasonable value range is [0..x].
+                             Upper boundary depends on speech rate.
+                             At the minimum speech rate it is 1.25.
+                             Quicker speech allows to use greater values. */
+  int comma_gap_factor; /* Reasonable value range is [0..750] */
+  int dot_gap_factor; /* Reasonable value range is [0..500] */
+  int semicolon_gap_factor; /* Reasonable value range is [0..600] */
+  int colon_gap_factor; /* Reasonable value range is [0..600] */
+  int question_gap_factor; /* Reasonable value range is [0..375] */
+  int exclamation_gap_factor; /* Reasonable value range is [0..300] */
+  int intonational_gap_factor; /* Reasonable value range is [0..1000] */
+
+  /* Combination of TTS control flags */
   int flags;
 } ru_tts_conf_t;
 

@@ -23,8 +23,15 @@ ru_tts_conf_t ru_tts_config =
   {
     .speech_rate = 100,
     .voice_pitch = 100,
-    .gap_factor = 100,
     .intonation = 100,
+    .general_gap_factor = 100,
+    .comma_gap_factor = 100,
+    .dot_gap_factor = 100,
+    .semicolon_gap_factor = 100,
+    .colon_gap_factor = 100,
+    .question_gap_factor = 100,
+    .exclamation_gap_factor = 100,
+    .intonational_gap_factor = 100,
     .flags = DEC_SEP_POINT | DEC_SEP_COMMA
   };
 
@@ -87,7 +94,14 @@ void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_siz
       ttscb.flags = ru_tts_config.flags;
 
       /* Adjust speech rate */
-      timing_setup(&(ttscb.timing), ru_tts_config.speech_rate, ru_tts_config.gap_factor);
+      timing_setup(&(ttscb.timing), ru_tts_config.speech_rate, ru_tts_config.general_gap_factor);
+      adjust_gaplen(&(ttscb.timing), ',', ru_tts_config.comma_gap_factor);
+      adjust_gaplen(&(ttscb.timing), '.', ru_tts_config.dot_gap_factor);
+      adjust_gaplen(&(ttscb.timing), ';', ru_tts_config.semicolon_gap_factor);
+      adjust_gaplen(&(ttscb.timing), ':', ru_tts_config.colon_gap_factor);
+      adjust_gaplen(&(ttscb.timing), '?', ru_tts_config.question_gap_factor);
+      adjust_gaplen(&(ttscb.timing), '!', ru_tts_config.exclamation_gap_factor);
+      adjust_gaplen(&(ttscb.timing), '-', ru_tts_config.intonational_gap_factor);
 
       /* Adjust voice pitch and intonation */
       modulation_setup(&(ttscb.modulation), ru_tts_config.voice_pitch, ru_tts_config.intonation);

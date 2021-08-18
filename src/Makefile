@@ -50,7 +50,7 @@ numerics.lo: numerics.c numerics.h transcription.h sink.h synth.h ru_tts.h
 transcription.lo: transcription.c transcription.h numerics.h sink.h
 utterance.lo: utterance.c soundscript.h transcription.h
 time_planner.lo: time_planner.c timing.h transcription.h
-speechrate_control.lo: speechrate_control.c timing.h soundscript.h
+speechrate_control.lo: speechrate_control.c timing.h soundscript.h transcription.h
 intonator.lo: intonator.c transcription.h soundscript.h voice.h
 soundproducer.lo: soundproducer.c sink.h soundscript.h voice.h
 sink.lo: sink.c sink.h ru_tts.h
