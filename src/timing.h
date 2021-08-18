@@ -11,20 +11,11 @@
 #define RU_TTS_TIMING_H
 
 #include <stdint.h>
-#include <stdlib.h>
 
-#include "soundscript.h"
-
-
-/* Number of time plan rows */
-#define TIME_PLAN_ROWS 9
 
 /* Number of punctuations treated as clause separators */
 #define CLAUSE_SEPARATORS 7
 
-
-/* Time plan pointer definition */
-typedef uint8_t (*time_plan_ptr_t)[100];
 
 typedef struct
 {
@@ -46,23 +37,5 @@ extern void timing_setup(timing_t *timing, int speech_rate, int gap_factor);
  * applying a percentage factor.
  */
 extern void adjust_gaplen(timing_t *timing, char separator, int gap_factor);
-
-/*
- * Build timing draft for specified phonetic transcription.
- *
- * This draft is used for speechrate applying.
- *
- * Returns pointer to the time draft or NULL when failure.
- *
- * This procedure allocates memory, thus, the non-null pointer returned
- * must be finally passed to free().
- */
-extern time_plan_ptr_t plan_time(uint8_t *transcription);
-
-/*
- * Apply speechrate parameters to the soundscript
- * according to specified timing data.
- */
-extern void apply_speechrate(soundscript_t *script, timing_t *timing, time_plan_ptr_t draft);
 
 #endif

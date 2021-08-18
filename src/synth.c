@@ -14,7 +14,6 @@
 #include "synth.h"
 #include "soundscript.h"
 #include "transcription.h"
-#include "timing.h"
 #include "ru_tts.h"
 
 
@@ -214,11 +213,8 @@ static void synth_chunk(uint8_t *transcription, ttscb_t *ttscb, uint8_t clause_t
     }
 }
 
-
-/* Global entry point */
-
 /* Synthesize speech chunk by chunk for specified phonetic transcription */
-void synth(uint8_t *transcription, ttscb_t *ttscb)
+static void synth(uint8_t *transcription, ttscb_t *ttscb)
 {
   uint8_t *tptr;
   uint8_t *sptr = transcription + TRANSCRIPTION_START;
@@ -303,4 +299,33 @@ void synth(uint8_t *transcription, ttscb_t *ttscb)
           sptr = tptr;
         }
     }
+}
+
+
+/* Global entry point */
+
+/*
+ * Transcription callback function.
+ *
+ * Finalizes provided transcription and performs speech synthesis for it.
+ *
+ * The buffer pointed by the first argument should contain a transcription
+ * of length specified by the second argument. The last argument
+ * should point to the corresponding ttscb structure.
+ */
+int synth_function(void *buffer, size_t length, void *user_data)
+{
+  ttscb_t *ttscb = user_data;
+  if (length > TRANSCRIPTION_START)
+    {
+      if (ttscb->transcription_state.flags & CLAUSE_DONE)
+        ttscb->transcription_state.flags &= ~CLAUSE_DONE;
+      else
+        {
+          ((uint8_t *)buffer)[length] = 50;
+          ttscb->transcription_state.clause_type = 0;
+        }
+      synth(buffer, ttscb);
+    }
+  return ttscb->wave_consumer.status;
 }

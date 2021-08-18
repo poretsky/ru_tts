@@ -10,9 +10,6 @@
 #ifndef RU_TTS_NUMERICS_H
 #define RU_TTS_NUMERICS_H
 
-#include <stdint.h>
-#include <stdlib.h>
-
 #include "transcription.h"
 #include "sink.h"
 

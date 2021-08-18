@@ -13,7 +13,7 @@
 
 #include "transcription.h"
 #include "soundscript.h"
-#include "voice.h"
+#include "modulation.h"
 
 
 /* Static data */

@@ -13,8 +13,7 @@
 #include <stdint.h>
 
 
-/* Constant values */
-#define VOICE_THRESHOLD 105
+/* Number of voice samples */
 #define VOICE_DIMENSION 201
 
 
@@ -26,12 +25,5 @@ typedef struct
   uint16_t sound_lengths[VOICE_DIMENSION];
   int8_t samples[];
 } voice_t;
-
-/* Pitch and intonation control data */
-typedef struct
-{
-  uint16_t mintone;
-  uint16_t maxtone;
-} modulation_t;
 
 #endif

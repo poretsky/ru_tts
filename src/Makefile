@@ -45,15 +45,15 @@ librutts.la: synth.lo sink.lo transcription.lo text2speech.lo \
 	${CC} -c ${CFLAGS} $<
 
 ru_tts.o: ru_tts.c ru_tts.h
-synth.lo: synth.c synth.h transcription.h soundscript.h timing.h ru_tts.h
+synth.lo: synth.c synth.h transcription.h soundscript.h ru_tts.h
 numerics.lo: numerics.c numerics.h transcription.h sink.h synth.h ru_tts.h
 transcription.lo: transcription.c transcription.h numerics.h sink.h
 utterance.lo: utterance.c soundscript.h transcription.h
-time_planner.lo: time_planner.c timing.h transcription.h
+time_planner.lo: time_planner.c soundscript.h transcription.h
 speechrate_control.lo: speechrate_control.c timing.h soundscript.h transcription.h
-intonator.lo: intonator.c transcription.h soundscript.h voice.h
+intonator.lo: intonator.c transcription.h soundscript.h modulation.h
 soundproducer.lo: soundproducer.c sink.h soundscript.h voice.h
 sink.lo: sink.c sink.h ru_tts.h
 male.lo: male.c voice.h
 female.lo: female.c voice.h
-text2speech.lo: text2speech.c ru_tts.h sink.h transcription.h synth.h
+text2speech.lo: text2speech.c ru_tts.h sink.h transcription.h synth.h timing.h modulation.h

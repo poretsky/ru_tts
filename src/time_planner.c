@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "timing.h"
+#include "soundscript.h"
 #include "transcription.h"
 
 

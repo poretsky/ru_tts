@@ -266,6 +266,14 @@ static uint8_t correct_consonant(uint8_t idx, char following)
     hard_consonant_phs[idx] : 9;
 }
 
+/* Transcription cycle initialization actions */
+static void transcription_init(sink_t *consumer)
+{
+  uint8_t *buffer = consumer->buffer;
+  memset(buffer, 43, TRANSCRIPTION_BUFFER_SIZE);
+  consumer->buffer_offset = TRANSCRIPTION_START;
+}
+
 
 /* Common functions */
 
@@ -288,6 +296,7 @@ void process_text(const char *text, sink_t *consumer)
   char *s;
   int accented = 0;
 
+  consumer->custom_reset = transcription_init;
   input.text = strdup(text);
   if (!input.text)
     return;

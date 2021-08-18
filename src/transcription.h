@@ -11,7 +11,6 @@
 #define RU_TTS_TRANSCRIPTION_H
 
 #include <stdint.h>
-#include <stdlib.h>
 
 #include "sink.h"
 
