@@ -54,7 +54,7 @@ static int synth_function(void *buffer, size_t length, void *user_data)
         ttscb->transcription_state.flags &= ~CLAUSE_DONE;
       else
         {
-          ((uint8_t *)buffer)[length] = 44;
+          ((uint8_t *)buffer)[length] = 50;
           ttscb->transcription_state.clause_type = 0;
         }
       synth(buffer, ttscb);
