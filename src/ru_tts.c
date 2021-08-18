@@ -43,6 +43,35 @@ static const char symbols[] =
     0
   };
 
+static const char *help_msg =
+  "Speech control options:\n"
+  "-r value -- Speech rate factor.\n"
+  "-p value -- Voice pitch factor.\n"
+  "-e value -- Generated speech emotionality factor.\n"
+  "-g value -- Interclause gaps duration factor.\n"
+  "-a -- Use alternative (female) voice.\n\n"
+
+  "Numbers treatment control options:\n"
+  "-d. -- Only point should be treated as decimal separator.\n"
+  "-d, -- Only comma should be treated as decimal separator.\n"
+  "-d- -- Disable decimal separators treating.\n\n"
+
+  "Other options:\n"
+  "-s path -- Pronunciation dictionary location.\n"
+  "-l path -- Log unknown words in specified file\n"
+  "           (does matter only in conjunction with pronunciation dictionary).\n"
+  "-h -- Get this help.\n\n"
+
+  "All numeric parameters must be positive numbers. Default value is 1.0.\n\n"
+
+  "A value for -g option may be prepended by one of the following\n"
+  "punctuations: ',', '.', ';', ':', '?', '!'. In this case the factor\n"
+  "will be applied only to the gaps implied by that punctuation.\n"
+  "If the value is prepended by symbol '-', it will be used for\n"
+  "intonational gaps not caused by any punctuation.\n"
+  "Otherwise all interclause gaps will be affected.\n"
+  "Use this option several times to adjust various gaps.\n";
+
 static const char *clause_separators = ",.;:?!-";
 static const char *charset = "ru_RU.koi8r";
 static const char *alphabet;
@@ -87,8 +116,8 @@ static int getval(const char *s)
 static void usage(const char* name)
 {
   fprintf(stderr, "Usage:\n");
-  fprintf(stderr, "%s [-s stress_db [-l logfile]] [-r rate] [-p pitch] [-g gaplen] [-e expressiveness] [-d[.][,][-]] [-a]\n", name);
-  fprintf(stderr, "Numeric parameters (rate, pitch, gaplen, expressiveness) are 1.0 by default.\n");
+  fprintf(stderr, "%s [options]\n\n", name);
+  fprintf(stderr, "%s\n", help_msg);
 }
 
 int main(int argc, char **argv)
