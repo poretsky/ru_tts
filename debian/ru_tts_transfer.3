@@ -1,5 +1,5 @@
 .\"                                      Hey, EMACS: -*- nroff -*-
-.TH RU_TTS_TRANSFER 3 "January 25, 2016"
+.TH RU_TTS_TRANSFER 3 "August 19, 2021"
 .SH NAME
 ru_tts_transfer \- transfer specified Russian text to speech
 .SH SYNOPSIS
@@ -10,9 +10,9 @@ ru_tts_transfer \- transfer specified Russian text to speech
 .sp
 .BI "void ru_tts_transfer(char *" text ", void *" wave_buffer \
 ", size_t " wave_buffer_size ", ru_tts_callback " wave_consumer \
-", void *" user_data \
-", int " voice ", int "rate ", int " pitch \
-", int " intonation);
+", void *" user_data);
+.sp
+.BI "extern ru_tts_conf_t " ru_tts_config ;
 .fi
 .SH DESCRIPTION
 The
@@ -21,7 +21,9 @@ function transfers text pointed by
 .I text
 argument into digitized sound in the raw linear signed 8-bit 10 kHz
 format. The source text should be represented by zero-terminated
-string containing Russian text in \fBkoi8\-r\fP charset. The resulting
+string containing Russian text in \fBkoi8\-r\fP charset. Symbols
+\(oq+\(cq and \(oq=\(cq immediately after a vowel are treated as
+strong and weak stress sign respectively. The resulting
 data are fed to the callback function referenced by
 .I wave_consumer
 argument chunk by chunk via buffer specified by
@@ -33,23 +35,96 @@ arguments. The
 argument is passed to the callback as a pointer to any additional data
 specified by user.
 .PP
-The other arguments specify various speech parameters. if
-.I voice
-is non-zero, the alternative voice will be used instead of the default
-one. The reasonable values of
-.I rate
-and
-.I pitch
-are from 0 through 250. All other values are reduced to this
-interval. The greater rate value implies faster speech. The greater
-value of pitch causes higher pitched voice. The
-.I gaplen
-argument specifies relative interphrase gap duration. Its value
-should be from 0 through 100. Any other value will be reduced
-to this range. Greater value implies longer gaps. The argument
+Various speech synthesis control options can be passed via
+.I ru_tts_config
+data structure that contains the following fields:
+.sp
+.in +4n
+.nf
+typedef struct {
+    int speech_rate;
+    int voice_pitch;
+    int intonation;
+    int general_gap_factor;
+    int comma_gap_factor;
+    int dot_gap_factor;
+    int semicolon_gap_factor;
+    int colon_gap_factor;
+    int question_gap_factor;
+    int exclamation_gap_factor;
+    int intonational_gap_factor;
+    int flags;
+} ru_tts_conf_t;
+.fi
+.in
+.PP
+All numeric values represent a percentage of the corresponding
+parameter normal level. Initially they are set to 100. Each parameter
+has its own reasonable value range, but out of range values do not
+cause any problem since they are treated as the nearest boundary of
+the acceptable range.
+.TP
+.I speech_rate
+Speech rate in percents of the normal level. Reasonable value range is
+from 40 up to 250.
+.TP
+.I voice_pitch
+Voice pitch in percents of the normal level. Reasonable value range is
+from 50 up to 300.
+.TP
 .I intonation
-is treated as a boolean value. If it is zero the produced speech will
-be monotone.
+Voice pitch variation range. It can vary from 0 (absolutely monotonic
+speech) up to 140 (a bit more expressive than normal).
+.TP
+.I general_gap_factor
+Percentage factor applied to all interclause gaps. Its lower boundary
+is 0 that means no gaps at all. The maximum proportionally depends on
+the speech rate. On normal rate it is approximately 312.
+.TP
+.I comma_gap_factor
+Relative duration of the gap implied by comma encountering. Reasonable
+value range is from 0 up to 750.
+.TP
+.I dot_gap_factor
+Relative duration of the gap implied by dot encountering. Reasonable
+value range is from 0 up to 500.
+.TP
+.I semicolon_gap_factor
+Relative duration of the gap implied by semicolon
+encountering. Reasonable value range is from 0 up to 600.
+.TP
+.I colon_gap_factor
+Relative duration of the gap implied by colon encountering. Reasonable
+value range is from 0 up to 600.
+.TP
+.I question_gap_factor
+Relative duration of the gap implied by question mark
+encountering. Reasonable value range is from 0 up to 375.
+.TP
+.I exclamation_gap_factor
+Relative duration of the gap implied by exclamation mark
+encountering. Reasonable value range is from 0 up to 300.
+.TP
+.I intonational_gap_factor
+Relative duration of purely intonational gaps not caused by a
+punctuation. Reasonable value range is from 0 up to 1000.
+.TP
+.I flags
+Additional flags. The following flag constants being
+.RI bitwise- or 'd
+may be used here.
+.TP
+.B DEC_SEP_POINT
+Treat point inside a number as decimal separator. Initially this flag
+is set.
+.TP
+.B DEC_SEP_COMMA
+Treat comma inside a number as decimal separator. Initially this flag
+is set.
+.TP
+.B USE_ALTERNATIVE_VOICE
+Use alternative (female) voice instead of the default (male)
+one. Initially this flag is not set.
 .PP
 It is suggested that the user provided callback function takes further
 responsibility on the generated data. It may play it immediately or

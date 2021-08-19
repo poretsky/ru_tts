@@ -1,5 +1,5 @@
 .\"                                      Hey, EMACS: -*- nroff -*-
-.TH RU_TTS 1 "May 17, 2005"
+.TH RU_TTS 1 "August 19, 2021"
 .SH NAME
 ru_tts \- software Russian TTS engine
 .SH SYNOPSIS
@@ -10,52 +10,102 @@ ru_tts \- software Russian TTS engine
 .RI [ options ]
 .SH DESCRIPTION
 This manual page documents briefly the
-.B ru-tts
+.B ru_tts
 and
 .B ru_speak
 commands.
 .PP
-\fBru-tts\fP is a program that takes Russian text in \fBkoi8\-r\fP
+\fBru_tts\fP is a program that takes Russian text in \fBkoi8\-r\fP
 charset on it's standard input and produces digital sound stream in
 the raw linear signed 8-bit 10 kHz format on the standard output.
 .PP
-\fBru-speak\fP is a simple wrapper around \fBru-tts\fP. It takes
+Symbols \(oq+\(cq and \(oq=\(cq immediately after a vowel in input
+text are treated as strong and weak stress sign respectively.
+.PP
+\fBru_speak\fP is a simple wrapper around \fBru_tts\fP. It takes
 Russian text on it's standard input, convert it into the spoken speech
 and plays produced sound via \fBplay\fP utility from the \fBsox\fP
 package.
 .SH OPTIONS
-Both programs recognize the same set of options.
+Both programs recognize the same set of options that for convenience
+can be divided onto several groups.
+.SH SPEECH CONTROL OPTIONS
+These options affect general speech parameters. The most of them
+accept numeric value as an argument. All numeric values serve as
+factors applied to a default level of the corresponding parameter.
+Thus, they must be positive numbers and the default value is 1.0.
+Greater value proportionally increases the parameter level,
+lesser value proportionally decreases it.
+Reasonable value range for various options is different,
+but any out of range value will be automatically reduced to the
+acceptable range.
 .TP
-.B \-h
+.B \-r value
 .br
-Show summary of options.
+Set speech rate factor. Reasonable value range is from 0.4 up to 2.5.
 .TP
-.B \-p pitch
-Set voice pitch. The value must be between 0 and 1. Greater value
-implies higher pitch.
-.TP
-.B \-r rate
-Set speech rate. The value must be between 0 and 1. Greater value
-implies slower speech.
-.TP
-.B \-g gaplen
-Set relative interphrase gap duration. The value must be between
-0 and 1. Greater value implies longer gaps.
-.TP
-.B \-m
+.B \-p value
 .br
-Absolutely monotone speech without intonations.
+Set voice pitch factor. Reasonable value range is from 0.5 up to 3.0.
+.TP
+.B \-e value
+.br
+Set speech emotionality factor. Reasonable value range is from 0.0
+(absolutely monotone speech without intonations) up to 1.4.
+.TP
+.B \-g value
+.br
+Set interclause gaps duration factor. If this value is immediately
+prepended by one of the following punctuations \(oq,\(cq, \(oq.\(cq,
+\(oq;\(cq, \(oq:\(cq, \(oq?\(cq, \(oq!\(cq, the factor will be applied
+only to the gaps implied by that punctuation. If the value is
+prepended by symbol \(oq-\(cq, it will be used for intonational gaps
+not caused by any punctuation. Otherwise all interclause gaps will be
+affected. Use this option several times to adjust various gaps. Lower
+boundary of the reasonable value range is always 0.0, but the upper
+one greatly depends on the value prepending symbol and actual speech
+rate.
 .TP
 .B \-a
-Use an alternative voice (female) instead of the default one.
+.br
+Use an alternative (female) voice instead of the default one.
+.SH NUMBERS INTERPRETATION CONTROL OPTIONS
+By default point and comma inside a number both are interpreted
+as decimal separator. But this behaviour can be changed.
+.TP
+.B \-d.
+.br
+Only point should be treated as decimal separator.
+.TP
+.B \-d,
+.br
+Only comma should be treated as decimal separator.
+.TP
+.B \-d\-
+.br
+Disable decimal separators treating. In that case integer and
+fractional parts will be interpreted as two distinct integer numbers.
+.SH PRONUNCIATION DICTIONARY RELATED OPTIONS
 .TP
 .B \-s path
+.br
 Points location of stress and pronunciation dictionary to use. You may
 use pronunciation dictionary shipped with the package \fBrulex\fP here.
 .TP
 .B \-l file
+.br
 Save words that were not found in the dictionary in specified file. It
-is useful for dictionary developing.
+is useful for dictionary developing. This option does matter only when
+the pronunciation dictionary itself is used.
+.SH OTHER OPTIONS
+.TP
+.B \-v
+.br
+Show program name and version.
+.TP
+.B \-h
+.br
+Show summary of options.
 .SH SEE ALSO
 .BR sox (1),
 .BR aplay (1),
