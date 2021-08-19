@@ -172,7 +172,7 @@ static void shift(uint8_t *buf)
       i++;
     }
   while ((buf[i] < 44) || (buf[i] > 52));
-  buf[i + 1] = 43;
+  buf[i] = 43;
 }
 
 /*
