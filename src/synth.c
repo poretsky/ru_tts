@@ -162,7 +162,7 @@ static int test_list(const uint8_t *ptr, const uint8_t *lst)
   return (item[0] != 0) && (ptr[item[0]] > 42) && (ptr[item[0]] < 53);
 }
 
-/* Shift transcription chunk */
+/* Shift clause transcription one point left */
 static void shift(uint8_t *buf)
 {
   size_t i = 0;
@@ -191,8 +191,8 @@ static uint8_t *transcription_advance(uint8_t *transcription, uint8_t *point)
   return transcription + TRANSCRIPTION_START;
 }
 
-/* Synthesize speech for specified phonetic transcription */
-static void synth_chunk(uint8_t *transcription, ttscb_t *ttscb, uint8_t clause_type)
+/* Synthesize speech for specified clause phonetic transcription */
+static void synth_clause(uint8_t *transcription, ttscb_t *ttscb, uint8_t clause_type)
 {
   soundscript_t *soundscript = malloc(sizeof(soundscript_t));
   if (soundscript)
@@ -213,7 +213,7 @@ static void synth_chunk(uint8_t *transcription, ttscb_t *ttscb, uint8_t clause_t
     }
 }
 
-/* Synthesize speech chunk by chunk for specified phonetic transcription */
+/* Synthesize speech clause by clause for specified phonetic transcription */
 static void synth(uint8_t *transcription, ttscb_t *ttscb)
 {
   uint8_t *tptr;
@@ -231,7 +231,7 @@ static void synth(uint8_t *transcription, ttscb_t *ttscb)
               if (flags & 1)
                 {
                   *sptr = 50;
-                  synth_chunk(transcription, ttscb, 0);
+                  synth_clause(transcription, ttscb, 0);
                   tptr = transcription_advance(transcription, tptr);
                   count = 0;
                   flags &= ~1;
@@ -259,7 +259,7 @@ static void synth(uint8_t *transcription, ttscb_t *ttscb)
         {
           if ((*tptr > 43) && (*tptr < 53))
             {
-              synth_chunk(transcription, ttscb, ttscb->transcription_state.clause_type);
+              synth_clause(transcription, ttscb, ttscb->transcription_state.clause_type);
               break;
             }
         }
@@ -290,7 +290,7 @@ static void synth(uint8_t *transcription, ttscb_t *ttscb)
           if ((k > perspective) && !test_list(next, seqlist1))
             {
               *sptr = 50;
-              synth_chunk(transcription, ttscb, 0);
+              synth_clause(transcription, ttscb, 0);
               tptr = transcription_advance(transcription, sptr + 1) - 1;
               count = 0;
               flags &= ~2;
