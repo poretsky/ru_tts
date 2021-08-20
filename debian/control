@@ -11,6 +11,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: rulex (>= 2.0)
 Suggests: sox
 Conflicts: rulex (<< 2.0)
+Breaks: libmultispeech0 (<< 4.1), rbook (<< 2.6)
 Description: software Russian TTS engine
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset from standard input
@@ -19,7 +20,7 @@ Description: software Russian TTS engine
  It doesn't actually play this sound. You should use
  some player for it like sox for example.
 
-Package: librutts5
+Package: librutts6
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -36,7 +37,7 @@ Description: software Russian TTS engine
 Package: librutts-dev
 Section: libdevel
 Architecture: any
-Depends: librutts5 (= ${binary:Version}), ${misc:Depends}
+Depends: librutts6 (= ${binary:Version}), ${misc:Depends}
 Description: software Russian TTS engine
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset as an input

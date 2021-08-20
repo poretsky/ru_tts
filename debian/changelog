@@ -1,3 +1,16 @@
+ru-tts (6.0) unstable; urgency=medium
+
+  * Library API update.
+  * Conventional scaling of speech parameters.
+  * Speech expressiveness level control.
+  * Female voice pitch fix.
+  * Decimal separator choice facility.
+  * Separate interclause gaps duration control.
+  * More informative help message.
+  * Version report option added.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Fri, 20 Aug 2021 18:01:46 +0300
+
 ru-tts (5.1.1) unstable; urgency=medium
 
   * Man page fix.
