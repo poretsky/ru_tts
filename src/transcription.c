@@ -502,7 +502,7 @@ void process_text(const char *text, sink_t *consumer)
               if (check_clause_termination(&input, consumer))
                 transcription->flags |= CLAUSE_START;
               else sink_put(consumer, 43);
-              last_char = 0;
+              last_char = ' ';
               if (input.start[0] != ' ')
                 input.start--;
               continue;
