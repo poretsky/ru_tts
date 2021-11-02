@@ -72,7 +72,7 @@ void build_utterance(uint8_t *transcription, soundscript_t *script)
   while ((a < 44) && (i < TRANSCRIPTION_BUFFER_SIZE))
     {
       uint8_t flags = 0;
-      uint8_t j;
+      uint16_t j;
 
       for (j = i; j < TRANSCRIPTION_BUFFER_SIZE; j++)
         if (transcription[j] != 43)
