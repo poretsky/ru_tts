@@ -203,7 +203,7 @@ time_plan_ptr_t plan_time(uint8_t *transcription)
                           {
                             scratch->ndx1++;
                             values[2] = DISCRIMINANT(ndx5, scratch->area[3][ndx2]);
-                            for (j = 1; j <= scratch->area[2][ndx1]; j++, m++)
+                            for (j = 1; (j <= scratch->area[2][ndx1]) && (m < sizeof(*draft)); j++, m++)
                               {
                                 uint8_t phoncode_cur = transcription[i];
                                 uint8_t phoncode_prev = phoncode_cur;
