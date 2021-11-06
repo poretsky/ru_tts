@@ -1,3 +1,9 @@
+ru-tts (6.0.2) unstable; urgency=medium
+
+  * Minor bugfixes.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sat, 06 Nov 2021 17:31:58 +0300
+
 ru-tts (6.0.1) unstable; urgency=medium
 
   * Fixed unwanted artefact after digits in some cases.
