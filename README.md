@@ -4,11 +4,14 @@ An alternative implementation of the Phonemophone-5 Russian speech
 synthesizer by the international laboratory of intelligent systems
 BelSInt (the Speech Recognition and Synthesis Lab of the Institute of
 Technical Cybernetics of the Academy of Sciences of the Byelorussian
-SSR). This implementation is the result of a reverse engineering of
+SSR). The source code of the original implementation has been lost.
+This implementation is the result of a reverse engineering of
 the SDRV resident speech driver for MS-DOS, and it is officially
 approved for publication under a free license by Boris Lobanov, who is
 the head of the laboratory and the author of the design solutions that
-formed the basis of the speech synthesizer.
+formed the basis of the speech synthesizer, and Alexander Ivanov,
+who is an engineer of the laboratory and the developer of
+the speech synthesizer's the original software implementation.
 
 ## Acknowledgements
 
@@ -22,6 +25,10 @@ Thanks to the following organizations and people for their contributions to the 
   synthesizer and approval of the publication of the results of a
   reverse engineering of the SDRV resident speech driver under a free
   license.
+* Alexander Ivanov for the development of the original software
+  implementation of the Phonemophone-5 speech synthesizer and
+  approval of the publication of the results of a reverse engineering
+  of the SDRV resident speech driver under a free license.
 
 ## Scientific publications
 
