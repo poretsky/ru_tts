@@ -56,3 +56,13 @@
   М., 1991. - С. 82-84.
 * Lobanov B. - Microwave Speech Synthesis from Text // Proc. of the 24
   Fachkolloquim Informationstechnik. - Dresden, 1991. - pp. 118-120.
+
+## Связанные проекты
+
+Существует несколько проектов, связанных с синтезатором речи ru_tts:
+
+* [RuLex](https://github.com/poretsky/rulex) -
+  русский словарь произношений для ru_tts
+* [RU_TTS_EX](https://electrik-spb.ru/ru_tts/ru_tts_ex/) -
+  расширение для облегчения работы с языками высокого уровня
+  и реализации дополнительных возможностей синтезатора

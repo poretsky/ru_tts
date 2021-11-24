@@ -60,3 +60,13 @@ scientific publications:
 
 (For the original Russian titles of the scientific publications, see
 the [Russian version of ReadMe](README_RU.md).)
+
+## Related projects
+
+There are several projects related to ru_tts speech synthesizer:
+
+* [RuLex](https://github.com/poretsky/rulex) -
+  Russian pronunciation dictionary for ru_tts
+* [RU_TTS_EX](https://electrik-spb.ru/ru_tts/ru_tts_ex/) -
+  extension to facilitate work with high-level languages
+  and implement additional synthesizer capabilities
