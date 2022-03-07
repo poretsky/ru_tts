@@ -7,8 +7,8 @@ Standards-Version: 3.9.3
 
 Package: ru-tts
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: rulex (>= 2.0)
+Depends: locales, ${shlibs:Depends}, ${misc:Depends}
+Recommends: rulex-data
 Suggests: sox
 Conflicts: rulex (<< 2.0)
 Breaks: libmultispeech0 (<< 4.1), rbook (<< 2.6)
