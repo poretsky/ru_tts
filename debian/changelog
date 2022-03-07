@@ -1,3 +1,10 @@
+ru-tts (6.0.3) unstable; urgency=medium
+
+  * Copyright update.
+  * Package dependencies update.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 07 Mar 2022 23:19:06 +0300
+
 ru-tts (6.0.2) unstable; urgency=medium
 
   * Minor bugfixes.
