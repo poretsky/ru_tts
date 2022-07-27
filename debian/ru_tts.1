@@ -25,7 +25,8 @@ text are treated as strong and weak stress sign respectively.
 \fBru_speak\fP is a simple wrapper around \fBru_tts\fP. It takes
 Russian text on its standard input, convert it into the spoken speech
 and plays produced sound via \fBplay\fP utility from the \fBsox\fP
-package.
+package. It accepts input text in the current locale's character
+encoding taking care of proper recoding.
 .SH OPTIONS
 Both programs recognize the same set of options that for convenience
 can be divided onto several groups.

@@ -5,7 +5,10 @@ text in koi8-r from the standard input, performs TTS transformation and
 writes the result to the standard output as raw linear signed 8-bit 10
 kHz sound stream, which can be played by any appropriate sound player,
 such as Sox, for instance. A simple example of such usage you can find
-in the script ru_speak, provided with this package.
+in the script ru_speak, provided with this package. By the way, this
+script takes care of input text recoding. Thus, it accepts a text
+in the current locale's character encoding and can be used for
+immediate speaking. All command line arguments are passed to ru_tts.
 
 Symbols '+' and '=' immediately after a vowel in input text
 are treated as strong and weak stress sign respectively.
