@@ -1,3 +1,11 @@
+ru-tts (6.0.4) unstable; urgency=medium
+
+  * Better speech segmentation when input text contains numbers.
+  * Input text recoding in the ru_speak wrapper script.
+  * Switch to dpkg-source 3.0 format.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Wed, 27 Jul 2022 20:54:39 +0300
+
 ru-tts (6.0.3) unstable; urgency=medium
 
   * Copyright update.
