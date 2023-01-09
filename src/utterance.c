@@ -36,15 +36,10 @@ static const uint8_t soundset2[] =
   };
 static const uint8_t soundset3[] =
   {
-    112, 112, 107,
-    99, 99, 99
-  };
-static const uint8_t soundset4[] =
-  {
     134, 134, 131,
     119, 119, 119
   };
-static const uint8_t soundset5[] =
+static const uint8_t soundset4[] =
   {
     148, 148, 147,
     145, 145, 145
@@ -127,7 +122,7 @@ void build_utterance(uint8_t *transcription, soundscript_t *script)
                             }
                           else if ((a < 40) || (a == 41) || (c > 5))
                             put_sound(script, a + 145, 2);
-                          else put_sound(script, a + soundset5[c], 2);
+                          else put_sound(script, a + soundset4[c], 2);
                         }
                       else
                         {
@@ -137,11 +132,11 @@ void build_utterance(uint8_t *transcription, soundscript_t *script)
                               if (a < 26)
                                 {
                                   if ((a < 23) && (c < 6))
-                                    put_sound(script, a + soundset4[c], 3);
+                                    put_sound(script, a + soundset3[c], 3);
                                   else put_sound(script, a + 119, 3);
                                 }
                               else if (c < 6)
-                                put_sound(script, a + soundset4[c], 3);
+                                put_sound(script, a + soundset3[c], 3);
                               else put_sound(script, a + 119, 3);
                             }
                           else put_sound(script, a + 119, 3);
