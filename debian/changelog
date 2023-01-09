@@ -1,3 +1,9 @@
+ru-tts (6.0.5) unstable; urgency=medium
+
+  * Removed unused data.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 09 Jan 2023 11:37:33 +0300
+
 ru-tts (6.0.4) unstable; urgency=medium
 
   * Better speech segmentation when input text contains numbers.
