@@ -1,4 +1,4 @@
 RU_TTS_6 {
-  global: ru_tts_config; ru_tts_transfer;
+  global: ru_tts_config_init; ru_tts_transfer;
   local: *;
 };

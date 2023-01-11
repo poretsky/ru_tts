@@ -129,7 +129,9 @@ int main(int argc, char **argv)
   void *wave;
   FILE *slog = NULL;
   RULEXDB *db = NULL;
+  ru_tts_conf_t ru_tts_config;
 
+  ru_tts_config_init(&ru_tts_config);
   while ((c = getopt(argc, argv, "s:l:r:p:g:e:d:ahv")) != -1)
     {
       switch (c)
@@ -282,10 +284,10 @@ int main(int argc, char **argv)
                     }
                 }
               *t = 0;
-              ru_tts_transfer(stressed, wave, WAVE_SIZE, wave_consumer, NULL);
+              ru_tts_transfer(&ru_tts_config, stressed, wave, WAVE_SIZE, wave_consumer, NULL);
               free(stressed);
             }
-          else ru_tts_transfer(text, wave, WAVE_SIZE, wave_consumer, NULL);
+          else ru_tts_transfer(&ru_tts_config, text, wave, WAVE_SIZE, wave_consumer, NULL);
           s = text;
         }
       else

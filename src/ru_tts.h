@@ -63,12 +63,16 @@ typedef struct
   int flags;
 } ru_tts_conf_t;
 
-extern ru_tts_conf_t ru_tts_config;
+/*
+ * Initialize ru_tts configuration structure with the default values.
+ */
+extern void ru_tts_config_init(ru_tts_conf_t *config);
 
 /*
  * Perform TTS transformation for specified text.
  *
- * The first argument points to a zero-terminated string to transfer.
+ * The first argument points to a configuration structure.
+ * The second argument points to a zero-terminated string to transfer.
  * This string must contain a Russian text in koi8-r.
  * The next two arguments specify a buffer that will be used
  * by the library for delivering produced wave data
@@ -76,7 +80,8 @@ extern ru_tts_conf_t ru_tts_config;
  * Non-zero return value of the consumer causes immediate speech termination.
  * The last argument points to any additional user data passed to the consumer.
  */
-extern void ru_tts_transfer(const char *text, void *wave_buffer, size_t wave_buffer_size,
+extern void ru_tts_transfer(const ru_tts_conf_t *config,
+                            const char *text, void *wave_buffer, size_t wave_buffer_size,
                             ru_tts_callback wave_consumer, void *user_data);
 
 END_C_DECLS
