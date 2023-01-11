@@ -1,3 +1,9 @@
+ru-tts (6.1.0) unstable; urgency=medium
+
+  * Get rid of internal static data in the library functions.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Wed, 11 Jan 2023 11:37:35 +0300
+
 ru-tts (6.0.5) unstable; urgency=medium
 
   * Removed unused data.
