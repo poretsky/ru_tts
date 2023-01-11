@@ -1,5 +1,5 @@
 .\"                                      Hey, EMACS: -*- nroff -*-
-.TH RU_TTS_TRANSFER 3 "August 19, 2021"
+.TH RU_TTS_TRANSFER 3 "January 11, 2023"
 .SH NAME
 ru_tts_transfer \- transfer specified Russian text to speech
 .SH SYNOPSIS
@@ -8,11 +8,11 @@ ru_tts_transfer \- transfer specified Russian text to speech
 .sp
 .B typedef int (*ru_tts_callback)(void *buffer, size_t size, void *user_data);
 .sp
-.BI "void ru_tts_transfer(char *" text ", void *" wave_buffer \
-", size_t " wave_buffer_size ", ru_tts_callback " wave_consumer \
-", void *" user_data);
+.BI "void ru_tts_transfer(ru_tts_conf_t *" config ", char *" text \
+ ", void *" wave_buffer ", size_t " wave_buffer_size \
+", ru_tts_callback " wave_consumer ", void *" user_data);
 .sp
-.BI "extern ru_tts_conf_t " ru_tts_config ;
+.BI "void ru_tts_config_init(ru_tts_conf_t *" config);
 .fi
 .SH DESCRIPTION
 The
@@ -36,8 +36,10 @@ argument is passed to the callback as a pointer to any additional data
 specified by user.
 .PP
 Various speech synthesis control options can be passed via
-.I ru_tts_config
-data structure that contains the following fields:
+.I ru_tts_conf_t
+data structure pointed by the
+.I config
+argument that contains the following fields:
 .sp
 .in +4n
 .nf
@@ -57,6 +59,10 @@ typedef struct {
 } ru_tts_conf_t;
 .fi
 .in
+.PP
+This structure should be initialized by the
+.BR ru_tts_config_init ()
+function that fills it by the default values.
 .PP
 All numeric values represent a percentage of the corresponding
 parameter normal level. Initially they are set to 100. Each parameter
