@@ -121,15 +121,14 @@ static const uint8_t elements[][6] =
  */
 void timing_setup(timing_t *timing, int speech_rate, int gap_factor)
 {
-  int stretch, i;
+  int i;
 
-  if (speech_rate < 40)
-    stretch = 500;
-  else if (speech_rate > 250)
-    stretch = 80;
-  else stretch = 20000 / speech_rate;
-  timing->rate_factor = stretch - 80;
-  timing->gap_factor = (uint8_t) (stretch * (gap_factor << 1) / 500);
+  if (speech_rate < 20)
+    timing->rate_factor = 20;
+  else if (speech_rate > 500)
+    timing->rate_factor = 500;
+  else timing->rate_factor = speech_rate;
+  timing->gap_factor = (uint8_t) ((gap_factor << 2) / 5);
   for (i = 0; i < CLAUSE_SEPARATORS; i++)
     timing->gaplen[i] = top[i + 191];
 }
@@ -174,12 +173,12 @@ void apply_speechrate(soundscript_t *script, timing_t *timing, time_plan_ptr_t d
               for (k = 0; k < TIME_PLAN_ROWS; k++)
                 s += elements[k][draft[k][n]];
               s *= top[j] - bottom[j];
-              s *= timing->rate_factor;
+              s *= 120;
               s += (((uint32_t) bottom[j]) << 14) + 2048;
               s >>= 12;
               if ((draft[1][n] == 5) && (script->sounds[i].stage == 2))
                 s += s >> 1;
-              script->sounds[i].duration = (uint16_t)s;
+              script->sounds[i].duration = (uint16_t)(s * 100 / timing->rate_factor);
             }
           else script->sounds[i].duration = 0;
           if (script->sounds[i].stage >= script->sounds[i + 1].stage)
@@ -198,7 +197,7 @@ void apply_speechrate(soundscript_t *script, timing_t *timing, time_plan_ptr_t d
         {
           int k = j - 191;
           uint8_t gaplen = ((k >= 0) && (k < CLAUSE_SEPARATORS)) ? timing->gaplen[k] : top[j];
-          script->sounds[i].duration = ((uint16_t)(timing->gap_factor)) * ((uint16_t)gaplen);
+          script->sounds[i].duration = (uint16_t)((unsigned int)timing->gap_factor * gaplen * 100 / timing->rate_factor);
         }
     }
 }

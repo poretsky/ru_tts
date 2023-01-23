@@ -30,7 +30,7 @@ but any out of range value will be automatically reduced
 to the acceptable range.
 
 -r value -- Set speech rate factor.
-             Reasonable value range is [0.4..2.5].
+             Reasonable value range is [0.3..3.0].
 
 -p value -- Set voice pitch factor.
             Reasonable value range is [0.5..3.0].
