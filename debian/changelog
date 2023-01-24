@@ -1,3 +1,9 @@
+ru-tts (6.1.1) unstable; urgency=medium
+
+  * Extended speech rate variation range.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Tue, 24 Jan 2023 10:17:33 +0300
+
 ru-tts (6.1.0) unstable; urgency=medium
 
   * Get rid of internal static data in the library functions.
