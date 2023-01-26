@@ -1,3 +1,9 @@
+ru-tts (6.1.2) unstable; urgency=medium
+
+  * Documentation adjustment.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Thu, 26 Jan 2023 10:47:33 +0300
+
 ru-tts (6.1.1) unstable; urgency=medium
 
   * Extended speech rate variation range.
