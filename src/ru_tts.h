@@ -41,7 +41,7 @@ typedef int (*ru_tts_callback)(void *buffer, size_t size, void *user_data);
 /* Speech parameters */
 typedef struct
 {
-  int speech_rate; /* Reasonable value range is [40..250]. */
+  int speech_rate; /* Reasonable value range is [20..500]. */
   int voice_pitch; /* Reasonable value range is [50..300]. */
   int intonation; /* Reasonable value range is [0..140].
                      Greater values imply more expressive speech. */
