@@ -48,8 +48,7 @@ scientific publications:
 
 * [Lobanov B.M. - Microwave Speech Synthesis from Text // Analysis and
   speech synthesis. - Minsk: the Institute of Technical Cybernetics of
-  the ASB, 1991. - pp. 57-73 (in Russian).]
-  (publications/Lobanov_B.M._-_Microwave_Speech_Synthesis_from_Text_(in_Russian).pdf)
+  the ASB, 1991. - pp. 57-73 (in Russian).](publications/Lobanov_B.M._-_Microwave_Speech_Synthesis_from_Text_(in_Russian).pdf)
 * Lobanov B.M. - Programming Model of Microwave Speech Synthesis from
   Text // Automatic Acoustic Pattern Recognition (AAPR-14). -
   Moscow, 1991. - pp. 82-84 (in Russian).
