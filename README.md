@@ -46,15 +46,15 @@ The microwave speech synthesis  method developed by Boris Lobanov and
 used in the Phonemophone-5 is also described in the following
 scientific publications:
 
-* Lobanov B.M. - Microwave Speech Synthesis // Automatic recognition
-  of auditory images (ARAI-16). - Moscow, 1991. - pp. 27-31 (in
-  Russian).
 * Lobanov B.M. - Microwave Speech Synthesis from Text // Analysis and
   speech synthesis. - Minsk: the Institute of Technical Cybernetics of
   the ASB, 1991. - pp. 57-73 (in Russian).
 * Lobanov B.M. - Programming Model of Microwave Speech Synthesis from
-  Text // Automatic recognition of auditory images (ARAI-14). -
+  Text // Automatic Acoustic Pattern Recognition (AAPR-14). -
   Moscow, 1991. - pp. 82-84 (in Russian).
+* Lobanov B.M. - Microwave Speech Synthesis // Automatic Acoustic
+  Pattern Recognition (AAPR-16). - Moscow, 1991. - pp. 27-31 (in
+  Russian).
 * Lobanov B. - Microwave Speech Synthesis from Text // Proc. of the 24
   Fachkolloquim Informationstechnik. - Dresden, 1991. - pp. 118-120.
 
