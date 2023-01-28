@@ -103,7 +103,7 @@ static const uint8_t suffixes[] =
   {
     2, 4, 40,
     3, 2, 10, 2,
-    2, 2, 6
+    2, 2, 34
   };
 static const uint8_t one_int[] =
   {
@@ -300,10 +300,14 @@ void process_number(input_t *input, sink_t *consumer)
                           put_transcription(consumer, periods, triplets - 1);
                           if (triplets != 1)
                             {
-                              if (nc > 1)
-                                sink_put(consumer, 2);
-                              else if (nc != 1)
-                                put_transcription(consumer, suffixes, 2);
+                              if (nc != 1)
+                                {
+                                  if (sink_last(consumer) == 27)
+                                    sink_replace(consumer, 21);
+                                  if (nc > 1)
+                                    sink_put(consumer, 2);
+                                  else put_transcription(consumer, suffixes, 2);
+                                }
                             }
                           else if (nc > 0)
                             sink_put(consumer, (nc > 1) ? 5 : 2);
