@@ -1,3 +1,9 @@
+ru-tts (6.1.3) unstable; urgency=medium
+
+  * Huge numbers speaking correction.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sat, 28 Jan 2023 23:45:06 +0300
+
 ru-tts (6.1.2) unstable; urgency=medium
 
   * Documentation adjustment.
