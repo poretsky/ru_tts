@@ -274,6 +274,8 @@ void process_number(input_t *input, sink_t *consumer)
                   break;
                 }
             }
+          else if (!flags)
+            transcribe_digit(consumer, c, s[0]);
           if (!(--digits))
             {
               if (lzn == 3)
