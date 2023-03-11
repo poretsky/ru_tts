@@ -70,3 +70,4 @@ There are several projects related to ru_tts speech synthesizer:
 * [RU_TTS_EX](https://electrik-spb.ru/ru_tts/ru_tts_ex/) -
   extension to facilitate work with high-level languages
   and implement additional synthesizer capabilities
+  (deprecated after ru_tts package release 6.0.4 and not supported)
