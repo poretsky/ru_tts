@@ -6,12 +6,25 @@
 # Copyright (C) 2021 Alexander Ivanov <ivalex01@gmail.com>
 #
 # SPDX-License-Identifier: MIT
+#
+# Use command
+#
+# make dictionary=skip
+#
+# to build the synthesizer without dictionary support.
+# Otherwise the RuLex dictionary is used.
 
 CC = gcc
 CFLAGS = -Wall -Wno-unused-result -O2
 LFLAGS =
-LIBS = -lrulexdb -lm
+LIBS = -lm
 solib_LFLAGS = -Wl,--version-script=ru_tts.vscript
+
+ifeq ($(dictionary),skip)
+CFLAGS += -DWITHOUT_DICTIONARY
+else
+LIBS += -lrulexdb
+endif
 
 # Installation paths
 DESTDIR = 

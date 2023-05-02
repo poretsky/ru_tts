@@ -18,14 +18,17 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#ifndef WITHOUT_DICTIONARY
 #include <locale.h>
 #include <ctype.h>
 #include <rulexdb.h>
+#endif
 
 #include "ru_tts.h"
 
 #define WAVE_SIZE 4096
 
+#ifndef WITHOUT_DICTIONARY
 /* Acceptable character codes */
 static const char symbols[] =
   {
@@ -44,6 +47,10 @@ static const char symbols[] =
     0
   };
 
+static const char *charset = "ru_RU.koi8r";
+static const char *alphabet;
+#endif
+
 static const char *help_msg =
   "Speech control options:\n"
   "-r value -- Speech rate factor.\n"
@@ -58,9 +65,11 @@ static const char *help_msg =
   "-d- -- Disable decimal separators treating.\n\n"
 
   "Other options:\n"
+#ifndef WITHOUT_DICTIONARY
   "-s path -- Pronunciation dictionary location.\n"
   "-l path -- Log unknown words in specified file\n"
   "           (does matter only in conjunction with pronunciation dictionary).\n"
+#endif
   "-v -- Print name and version on stderr and exit.\n"
   "-h -- Get this help.\n\n"
 
@@ -75,8 +84,6 @@ static const char *help_msg =
   "Use this option several times to adjust various gaps.\n";
 
 static const char *clause_separators = ",.;:?!-";
-static const char *charset = "ru_RU.koi8r";
-static const char *alphabet;
 
 static int wave_consumer(void *buffer, size_t size, void *user_data)
 {
@@ -127,8 +134,10 @@ int main(int argc, char **argv)
   size_t size = 64;
   char c, *s, *text, *input;
   void *wave;
+#ifndef WITHOUT_DICTIONARY
   FILE *slog = NULL;
   RULEXDB *db = NULL;
+#endif
   ru_tts_conf_t ru_tts_config;
 
   ru_tts_config_init(&ru_tts_config);
@@ -137,12 +146,20 @@ int main(int argc, char **argv)
       switch (c)
         {
           case 's':
+#ifndef WITHOUT_DICTIONARY
             db = rulexdb_open(optarg, RULEXDB_SEARCH);
             if (!db) perror(optarg);
+#else
+            fprintf(stderr, "Unsupported option \"-s\" is ignored\n");
+#endif
             break;
           case 'l':
+#ifndef WITHOUT_DICTIONARY
             slog = fopen(optarg, "a");
             if (!slog) perror(optarg);
+#else
+            fprintf(stderr, "Unsupported option \"-l\" is ignored\n");
+#endif
             break;
           case 'a':
             ru_tts_config.flags |= USE_ALTERNATIVE_VOICE;
@@ -217,6 +234,7 @@ int main(int argc, char **argv)
     }
 
   /* Set locale if necessary */
+#ifndef WITHOUT_DICTIONARY
   if (db)
     {
       alphabet = symbols + 2;
@@ -226,6 +244,7 @@ int main(int argc, char **argv)
           return EXIT_FAILURE;
         }
     }
+#endif
 
   /* doing tts in the loop */
   wave = xmalloc(WAVE_SIZE);
@@ -244,6 +263,7 @@ int main(int argc, char **argv)
               if (*s == ' ') *s = 0;
               else break;
             }
+#ifndef WITHOUT_DICTIONARY
           if (db)
             {
               char *stressed = xmalloc(strlen(text) << 1);
@@ -287,7 +307,9 @@ int main(int argc, char **argv)
               ru_tts_transfer(&ru_tts_config, stressed, wave, WAVE_SIZE, wave_consumer, NULL);
               free(stressed);
             }
-          else ru_tts_transfer(&ru_tts_config, text, wave, WAVE_SIZE, wave_consumer, NULL);
+          else
+#endif
+            ru_tts_transfer(&ru_tts_config, text, wave, WAVE_SIZE, wave_consumer, NULL);
           s = text;
         }
       else
@@ -298,10 +320,12 @@ int main(int argc, char **argv)
     }
   while (input);
 
+#ifndef WITHOUT_DICTIONARY
   if (db)
     rulexdb_close(db);
   if (slog)
     fclose(slog);
+#endif
 
   free(text);
   free(wave);
