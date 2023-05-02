@@ -45,15 +45,15 @@ install: ru_tts librutts.la
 	install -D -m 0644 -p ru_tts.h ${DESTDIR}${includedir}/ru_tts.h
 
 ru_tts: ru_tts.o librutts.la
-	libtool --mode=link ${CC} ${LFLAGS} -o $@ $^ ${LIBS}
+	libtool --tag=CC --mode=link ${CC} ${LFLAGS} -o $@ $^ ${LIBS}
 
 librutts.la: synth.lo sink.lo transcription.lo text2speech.lo \
 	 utterance.lo time_planner.lo speechrate_control.lo \
 	 intonator.lo soundproducer.lo numerics.lo male.lo female.lo
-	libtool --mode=link ${CC} ${LFLAGS} ${solib_LFLAGS} -o $@ $^ -rpath ${libdir} -version-info 7:3:0
+	libtool --tag=CC --mode=link ${CC} ${LFLAGS} ${solib_LFLAGS} -o $@ $^ -rpath ${libdir} -version-info 7:3:0
 
 %.lo:%.c
-	libtool --mode=compile ${CC} -c ${CFLAGS} $<
+	libtool --tag=CC --mode=compile ${CC} -c ${CFLAGS} $<
 
 %.o:%.c
 	${CC} -c ${CFLAGS} $<
