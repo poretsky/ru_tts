@@ -357,7 +357,7 @@ void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
       uint16_t j = 0;
       uint8_t m = 0;
       uint8_t st4 = 0;
-      uint8_t stage;
+      uint8_t stage = 0;
 
       for (i = 0; i < NSTAGES; i++)
         {
