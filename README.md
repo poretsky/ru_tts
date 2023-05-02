@@ -13,6 +13,31 @@ formed the basis of the speech synthesizer, and Alexander Ivanov,
 who is an engineer of the laboratory and the developer of
 the speech synthesizer's the original software implementation.
 
+## Build instructions
+
+To build the application enter into the src subdirectory and issue the
+command:
+
+```bash
+$ make
+```
+
+By default the synthesizer utilizes pronunciation dictionary from the
+[RuLex](https://github.com/poretsky/rulex) project, but can be built
+independently of it with the command:
+
+```bash
+$ make dictionary=skip
+```
+
+After building the application can be installed as follows:
+
+```bash
+# make install
+```
+
+See [README file](README) for usage details.
+
 ## Acknowledgements
 
 Thanks to the following organizations and people for their contributions to the project:
