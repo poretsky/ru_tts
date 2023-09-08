@@ -14,6 +14,12 @@
 #include <stdlib.h>
 
 
+#if defined(_WIN32) || defined(_WIN64)
+#define RUTTS_EXPORT __declspec(dllexport)
+#else
+#define RUTTS_EXPORT
+#endif
+
 /* TTS control flags */
 #define DEC_SEP_POINT 1 /* Use point as a decimal separator */
 #define DEC_SEP_COMMA 2 /* Use comma as a decimal separator */
@@ -66,7 +72,7 @@ typedef struct
 /*
  * Initialize ru_tts configuration structure with the default values.
  */
-extern void ru_tts_config_init(ru_tts_conf_t *config);
+extern RUTTS_EXPORT void ru_tts_config_init(ru_tts_conf_t *config);
 
 /*
  * Perform TTS transformation for specified text.
@@ -80,7 +86,7 @@ extern void ru_tts_config_init(ru_tts_conf_t *config);
  * Non-zero return value of the consumer causes immediate speech termination.
  * The last argument points to any additional user data passed to the consumer.
  */
-extern void ru_tts_transfer(const ru_tts_conf_t *config,
+extern RUTTS_EXPORT void ru_tts_transfer(const ru_tts_conf_t *config,
                             const char *text, void *wave_buffer, size_t wave_buffer_size,
                             ru_tts_callback wave_consumer, void *user_data);
 
