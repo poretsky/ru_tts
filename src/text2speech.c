@@ -55,8 +55,8 @@ RUTTS_EXPORT void ru_tts_config_init(ru_tts_conf_t *config)
  * The last argument points to a structure containing TTS parameters.
  */
 RUTTS_EXPORT void ru_tts_transfer(const ru_tts_conf_t *config,
-                     const char *text, void *wave_buffer, size_t wave_buffer_size,
-                     ru_tts_callback consumer, void *user_data)
+                                  const char *text, void *wave_buffer, size_t wave_buffer_size,
+                                  ru_tts_callback consumer, void *user_data)
 {
   uint8_t *transcription_buffer = malloc(TRANSCRIPTION_BUFFER_SIZE);
 

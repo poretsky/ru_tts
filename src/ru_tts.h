@@ -87,8 +87,8 @@ extern RUTTS_EXPORT void ru_tts_config_init(ru_tts_conf_t *config);
  * The last argument points to any additional user data passed to the consumer.
  */
 extern RUTTS_EXPORT void ru_tts_transfer(const ru_tts_conf_t *config,
-                            const char *text, void *wave_buffer, size_t wave_buffer_size,
-                            ru_tts_callback wave_consumer, void *user_data);
+                                         const char *text, void *wave_buffer, size_t wave_buffer_size,
+                                         ru_tts_callback wave_consumer, void *user_data);
 
 END_C_DECLS
 
