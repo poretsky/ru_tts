@@ -92,6 +92,8 @@ There are several projects related to ru_tts speech synthesizer:
 
 * [RuLex](https://github.com/poretsky/rulex) -
   Russian pronunciation dictionary for ru_tts
+* [ru_tts for NVDA](https://github.com/kvark128/ru_tts-for-nvda) -
+  add-on for NVDA screen reader with speech driver for ru_tts.
 * [RU_TTS_EX](https://electrik-spb.ru/ru_tts/ru_tts_ex/) -
   extension to facilitate work with high-level languages
   and implement additional synthesizer capabilities
