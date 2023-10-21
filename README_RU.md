@@ -88,6 +88,8 @@ $ make dictionary=skip
 
 * [RuLex](https://github.com/poretsky/rulex) -
   русский словарь произношений для ru_tts
+* [ru_tts for NVDA](https://github.com/kvark128/ru_tts-for-nvda) -
+  дополнение для программы экранного доступа NVDA с речевым драйвером для ru_tts.
 * [RU_TTS_EX](https://electrik-spb.ru/ru_tts/ru_tts_ex/) -
   расширение для облегчения работы с языками высокого уровня
   и реализации дополнительных возможностей синтезатора
