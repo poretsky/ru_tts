@@ -237,12 +237,20 @@ int main(int argc, char **argv)
 #ifndef WITHOUT_DICTIONARY
   if (db)
     {
-      alphabet = symbols + 2;
       if (!setlocale(LC_CTYPE, charset))
         {
           fprintf(stderr, "Cannot set \"%s\" locale.\n", charset);
-          return EXIT_FAILURE;
+          fprintf(stderr, "Dictionary will not be searched\n");
+          if (slog)
+            {
+              fclose(slog);
+              slog = NULL;
+            }
+          rulexdb_close(db);
+          db = NULL;
         }
+      else
+        alphabet = symbols + 2;
     }
 #endif
 
