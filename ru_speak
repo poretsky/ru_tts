@@ -1,2 +1,2 @@
 #!/bin/sh
-exec iconv -t koi8-r | ru_tts $* | play -G -D -t raw -s -1 -r 10000 -c 1 -v 0.8 - 2>/dev/null
+exec iconv -t koi8-r | ru_tts $* | play -G -D -t raw -e signed-integer -b 8 -r 10000 -c 1 -v 0.8 - 2>/dev/null
