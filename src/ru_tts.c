@@ -276,7 +276,16 @@ int main(int argc, char **argv)
 #ifndef WITHOUT_DICTIONARY
   if (db)
     {
-      if (!setlocale(LC_CTYPE, charset))
+      if (setlocale(LC_CTYPE, charset))
+        {
+          if (input)
+            {
+              slog = fopen(input, "a");
+              if (!slog) perror(input);
+            }
+          alphabet = symbols + 2;
+        }
+      else
         {
           fprintf(stderr, "Cannot set \"%s\" locale.\n", charset);
           fprintf(stderr, "Dictionary will not be searched\n");
@@ -289,15 +298,6 @@ int main(int argc, char **argv)
               dll = NULL;
             }
 #endif
-        }
-      else
-        {
-          if (input)
-            {
-              slog = fopen(input, "a");
-              if (!slog) perror(input);
-            }
-          alphabet = symbols + 2;
         }
     }
 #endif
