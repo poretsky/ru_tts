@@ -170,7 +170,7 @@ static void usage(const char* name)
 int main(int argc, char **argv)
 {
   size_t size = 64;
-  char c, *s, *text, *input;
+  char c, *s, *text, *input = NULL;
   void *wave;
 #ifndef WITHOUT_DICTIONARY
   FILE *slog = NULL;
@@ -196,8 +196,7 @@ int main(int argc, char **argv)
             break;
           case 'l':
 #ifndef WITHOUT_DICTIONARY
-            slog = fopen(optarg, "a");
-            if (!slog) perror(optarg);
+            input = optarg;
 #else
             fprintf(stderr, "Unsupported option \"-l\" is ignored\n");
 #endif
@@ -274,7 +273,6 @@ int main(int argc, char **argv)
         }
     }
 
-  /* Set locale if necessary */
 #ifndef WITHOUT_DICTIONARY
   if (db)
     {
@@ -282,11 +280,6 @@ int main(int argc, char **argv)
         {
           fprintf(stderr, "Cannot set \"%s\" locale.\n", charset);
           fprintf(stderr, "Dictionary will not be searched\n");
-          if (slog)
-            {
-              fclose(slog);
-              slog = NULL;
-            }
           rulexdb_close(db);
           db = NULL;
 #ifdef RULEX_DLL
@@ -298,7 +291,14 @@ int main(int argc, char **argv)
 #endif
         }
       else
-        alphabet = symbols + 2;
+        {
+          if (input)
+            {
+              slog = fopen(input, "a");
+              if (!slog) perror(input);
+            }
+          alphabet = symbols + 2;
+        }
     }
 #endif
 
