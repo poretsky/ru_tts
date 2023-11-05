@@ -7,12 +7,17 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Use command
+# Use command:
 #
 # make dictionary=skip
 #
 # to build the synthesizer without dictionary support.
 # Otherwise the RuLex dictionary is used.
+#
+#To make the RuLex library dlopened instead of linked,
+# use command:
+#
+# make dictionary=optional
 
 CC = gcc
 CFLAGS = -Wall -Wno-unused-result -O2
@@ -22,6 +27,9 @@ solib_LFLAGS = -Wl,--version-script=ru_tts.vscript
 
 ifeq ($(dictionary),skip)
 CFLAGS += -DWITHOUT_DICTIONARY
+else ifeq ($(dictionary),optional)
+LIBS += -ldl
+CFLAGS += -DRULEX_DLL=\"librulexdb.so.0\"
 else
 LIBS += -lrulexdb
 endif

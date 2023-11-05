@@ -21,7 +21,11 @@
 #ifndef WITHOUT_DICTIONARY
 #include <locale.h>
 #include <ctype.h>
+#ifdef RULEX_DLL
+#include <dlfcn.h>
+#else
 #include <rulexdb.h>
+#endif
 #endif
 
 #include "ru_tts.h"
@@ -29,6 +33,40 @@
 #define WAVE_SIZE 4096
 
 #ifndef WITHOUT_DICTIONARY
+#ifdef RULEX_DLL
+#define RULEXDB void
+#define RULEXDB_MAX_KEY_SIZE 50
+#define RULEXDB_BUFSIZE 256
+#define RULEXDB_SEARCH 0
+#define RULEXDB_SPECIAL 1
+
+typedef RULEXDB *(*rulexdb_open_function)(const char *, int);
+typedef void (*rulexdb_close_function)(RULEXDB *);
+typedef int (*rulexdb_search_function)(RULEXDB *, const char *, char *, int);
+
+static void *dll = NULL;
+static rulexdb_search_function rulexdb_search;
+static rulexdb_close_function rulexdb_close;
+
+static RULEXDB *rulexdb_open(const char *path, int mode)
+{
+  char *err = NULL;
+  dll = dlopen(RULEX_DLL, RTLD_LAZY);
+  if (dll)
+    {
+      rulexdb_open_function do_open = (rulexdb_open_function) dlsym(dll, "rulexdb_open");
+      rulexdb_search = (rulexdb_search_function) dlsym(dll, "rulexdb_search");
+      rulexdb_close = (rulexdb_close_function) dlsym(dll, "rulexdb_close");
+      err = dlerror();
+      if (!err)
+        return do_open(path, mode);
+    }
+  else err = dlerror();
+  fprintf(stderr, "%s\nDictionary will not be searched\n", err);
+  return NULL;
+}
+#endif
+
 /* Acceptable character codes */
 static const char symbols[] =
   {
@@ -148,6 +186,9 @@ int main(int argc, char **argv)
           case 's':
 #ifndef WITHOUT_DICTIONARY
             db = rulexdb_open(optarg, RULEXDB_SEARCH);
+#ifdef RULEX_DLL
+            if (dll)
+#endif
             if (!db) perror(optarg);
 #else
             fprintf(stderr, "Unsupported option \"-s\" is ignored\n");
@@ -248,6 +289,13 @@ int main(int argc, char **argv)
             }
           rulexdb_close(db);
           db = NULL;
+#ifdef RULEX_DLL
+          if (dll)
+            {
+              dlclose(dll);
+              dll = NULL;
+            }
+#endif
         }
       else
         alphabet = symbols + 2;
@@ -333,6 +381,10 @@ int main(int argc, char **argv)
     rulexdb_close(db);
   if (slog)
     fclose(slog);
+#ifdef RULEX_DLL
+  if (dll)
+    dlclose(dll);
+#endif
 #endif
 
   free(text);

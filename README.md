@@ -30,6 +30,16 @@ independently of it with the command:
 $ make dictionary=skip
 ```
 
+or
+
+```bash
+$ make dictionary=optional
+```
+
+In that latter case `rulex` library will not be linked into the result
+executable as its mandatory part, but will be loaded by need during
+runtime if present.
+
 After building the application can be installed as follows:
 
 ```bash
