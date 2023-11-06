@@ -21,7 +21,7 @@ build-indep: build-stamp
 build-stamp: configure-stamp 
 	dh_testdir
 
-	$(MAKE) -C $(CURDIR)/src prefix=/usr
+	$(MAKE) -C $(CURDIR)/src prefix=/usr dictionary=optional
 
 	touch $@
 

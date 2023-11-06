@@ -2,14 +2,13 @@ Source: ru-tts
 Section: sound
 Priority: optional
 Maintainer: Igor B. Poretsky <poretsky@mlbox.ru>
-Build-Depends: debhelper (>= 10), libtool-bin, librulexdb-dev
+Build-Depends: debhelper (>= 10), libtool-bin
 Standards-Version: 4.5.1
 
 Package: ru-tts
 Architecture: any
 Depends: locales, ${shlibs:Depends}, ${misc:Depends}
-Recommends: rulex-data
-Suggests: sox
+Suggests: rulex-data, sox
 Conflicts: rulex (<< 2.0)
 Breaks: libmultispeech0 (<< 4.1), rbook (<< 2.6)
 Description: software Russian TTS engine
