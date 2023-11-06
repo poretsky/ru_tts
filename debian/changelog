@@ -1,3 +1,9 @@
+ru-tts (6.2.0-1) unstable; urgency=medium
+
+  * Upstream sources have been separated from the debian package.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 06 Nov 2023 18:39:47 +0300
+
 ru-tts (6.1.4) unstable; urgency=medium
 
   * Speak leading zeros in numbers.
