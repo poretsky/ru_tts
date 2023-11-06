@@ -2,7 +2,7 @@ Source: ru-tts
 Section: sound
 Priority: optional
 Maintainer: Igor B. Poretsky <poretsky@mlbox.ru>
-Build-Depends: debhelper (>= 5), libtool (>= 1.5.2), librulexdb-dev
+Build-Depends: debhelper (>= 10), libtool-bin, librulexdb-dev
 Standards-Version: 3.9.3
 
 Package: ru-tts
