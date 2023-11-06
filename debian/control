@@ -3,7 +3,7 @@ Section: sound
 Priority: optional
 Maintainer: Igor B. Poretsky <poretsky@mlbox.ru>
 Build-Depends: debhelper (>= 10), libtool-bin, librulexdb-dev
-Standards-Version: 3.9.3
+Standards-Version: 4.5.1
 
 Package: ru-tts
 Architecture: any
