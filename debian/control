@@ -11,7 +11,7 @@ Depends: locales, ${shlibs:Depends}, ${misc:Depends}
 Suggests: rulex-data, sox
 Conflicts: rulex (<< 2.0)
 Breaks: libmultispeech0 (<< 4.1), rbook (<< 2.6)
-Description: software Russian TTS engine
+Description: Software Russian TTS engine
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset from standard input
  and produces digital sound stream in the raw linear
@@ -23,7 +23,7 @@ Package: librutts7
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: software Russian TTS engine
+Description: Software Russian TTS engine
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset as an input
  and produces digital sound stream in the raw linear
@@ -37,7 +37,7 @@ Package: librutts-dev
 Section: libdevel
 Architecture: any
 Depends: librutts7 (= ${binary:Version}), ${misc:Depends}
-Description: software Russian TTS engine
+Description: Software Russian TTS engine
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset as an input
  and produces digital sound stream in the raw linear
