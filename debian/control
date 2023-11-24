@@ -26,7 +26,7 @@ Package: librutts7
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Software Russian TTS engine
+Description: Software Russian TTS engine (shared library)
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset as an input
  and produces digital sound stream in the raw linear
@@ -40,7 +40,7 @@ Package: librutts-dev
 Section: libdevel
 Architecture: any
 Depends: librutts7 (= ${binary:Version}), ${misc:Depends}
-Description: Software Russian TTS engine
+Description: Software Russian TTS engine (development library)
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset as an input
  and produces digital sound stream in the raw linear
