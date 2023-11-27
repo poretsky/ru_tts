@@ -12,9 +12,7 @@ Rules-Requires-Root: no
 Package: ru-tts
 Architecture: any
 Depends: locales, ${shlibs:Depends}, ${misc:Depends}
-Suggests: rulex-data, sox
-Conflicts: rulex (<< 2.0)
-Breaks: libmultispeech0 (<< 4.1), rbook (<< 2.6)
+Suggests: sox
 Description: Software Russian TTS engine
  This is a Russian speech synthesizer.
  it takes Russian text in koi8-r charset from standard input
