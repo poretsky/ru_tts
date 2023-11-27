@@ -11,6 +11,7 @@ Rules-Requires-Root: no
 
 Package: ru-tts
 Architecture: any
+Multi-Arch: foreign
 Depends: locales, ${shlibs:Depends}, ${misc:Depends}
 Suggests: sox
 Description: Software Russian TTS engine
@@ -24,6 +25,7 @@ Description: Software Russian TTS engine
 Package: librutts7
 Section: libs
 Architecture: any
+Multi-Arch: same
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Software Russian TTS engine (shared library)
  This is a Russian speech synthesizer.
@@ -38,6 +40,7 @@ Description: Software Russian TTS engine (shared library)
 Package: librutts-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends: librutts7 (= ${binary:Version}), ${misc:Depends}
 Description: Software Russian TTS engine (development library)
  This is a Russian speech synthesizer.
