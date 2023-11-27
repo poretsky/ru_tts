@@ -2,8 +2,13 @@ ru-tts (6.2.0-1) unstable; urgency=medium
 
   * Upstream sources have been separated from the debian package.
   * Dropped rulex package dependency.
+  * Updated ru_speak script.
+  * Don't treat koi8 locale absence as a critical error.
+  * Don't touch unknown words sink when dictionary is not in use by
+    whatever reason.
+  * Packaged for Debian. (Closes: #1055879)
 
- -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 06 Nov 2023 18:39:47 +0300
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 13 Nov 2023 15:45:23 +0300
 
 ru-tts (6.1.4) unstable; urgency=medium
 
@@ -244,4 +249,3 @@ ru-tts (1.1) unstable; urgency=low
   * Packaged for Debian.
 
  -- Igor B. Poretsky <poretsky@mlbox.ru>  Sat, 24 Dec 2005 23:01:07 +0300
-
