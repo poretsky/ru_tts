@@ -48,8 +48,8 @@ clean:
 	rm -rf obj libs *.o
 
 install: ru_tts librutts.la
-	libtool --mode=install install -D -p -s librutts.la ${DESTDIR}${libdir}/librutts.la
-	libtool --mode=install install -D -p -s ru_tts ${DESTDIR}${bindir}/ru_tts
+	libtool --mode=install install -D -p librutts.la ${DESTDIR}${libdir}/librutts.la
+	libtool --mode=install install -D -p ru_tts ${DESTDIR}${bindir}/ru_tts
 	install -D -m 0644 -p ru_tts.h ${DESTDIR}${includedir}/ru_tts.h
 
 ru_tts: ru_tts.o librutts.la
