@@ -1,4 +1,5 @@
 #!/bin/sh
-exec iconv -c -t koi8-r |
+exec perl -C -pe 's/\x{301}/+/g' |
+    iconv -c -t koi8-r |
     ru_tts $* |
     play -G -D -t raw -e signed-integer -b 8 -r 10000 -c 1 -v 0.8 - 2>/dev/null
