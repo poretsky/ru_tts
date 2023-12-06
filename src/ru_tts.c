@@ -125,9 +125,11 @@ static const char *clause_separators = ",.;:?!-";
 
 static int wave_consumer(void *buffer, size_t size, void *user_data)
 {
-  (void) user_data;
-  (void)write(1, buffer, size);
-  return 0;
+  int *rc = user_data;
+  *rc = (write(1, buffer, size) == -1);
+  if (*rc)
+    perror("Output error");
+  return *rc;
 }
 
 static void *xrealloc(void *p, unsigned int n)
@@ -170,6 +172,7 @@ static void usage(const char* name)
 int main(int argc, char **argv)
 {
   size_t size = 64;
+  int write_error;
   char c, *s, *text, *input = NULL;
   void *wave;
 #ifndef WITHOUT_DICTIONARY
@@ -360,12 +363,14 @@ int main(int argc, char **argv)
                     }
                 }
               *t = 0;
-              ru_tts_transfer(&ru_tts_config, stressed, wave, WAVE_SIZE, wave_consumer, NULL);
+              ru_tts_transfer(&ru_tts_config, stressed, wave, WAVE_SIZE, wave_consumer, &write_error);
               free(stressed);
             }
           else
 #endif
-            ru_tts_transfer(&ru_tts_config, text, wave, WAVE_SIZE, wave_consumer, NULL);
+            ru_tts_transfer(&ru_tts_config, text, wave, WAVE_SIZE, wave_consumer, &write_error);
+          if (write_error)
+            break;
           s = text;
         }
       else
@@ -389,5 +394,5 @@ int main(int argc, char **argv)
 
   free(text);
   free(wave);
-  return EXIT_SUCCESS;
+  return write_error ? EXIT_FAILURE : EXIT_SUCCESS;
 }
