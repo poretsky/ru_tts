@@ -267,7 +267,7 @@ int main(int argc, char **argv)
             usage(argv[0]);
             return EXIT_SUCCESS;
           case 'v':
-            fprintf(stderr, "%s version 6.2.0\n\n", argv[0]);
+            fprintf(stderr, "%s version 6.2.1\n\n", argv[0]);
             return EXIT_SUCCESS;
           default:
             fprintf(stderr, "\n");
