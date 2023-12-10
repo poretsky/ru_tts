@@ -20,8 +20,8 @@
 # make dictionary=optional
 
 CC = gcc
-CFLAGS = -Wall -Wno-unused-result -O2
-LFLAGS =
+CFLAGS ?= -Wall -Wno-unused-result -O2
+LDFLAGS ?=
 LIBS = -lm
 solib_LFLAGS = -Wl,--version-script=ru_tts.vscript
 
@@ -48,23 +48,23 @@ clean:
 	rm -rf obj libs *.o
 
 install: ru_tts librutts.la
-	libtool --mode=install install -D -p -s librutts.la ${DESTDIR}${libdir}/librutts.la
-	libtool --mode=install install -D -p -s ru_tts ${DESTDIR}${bindir}/ru_tts
+	libtool --mode=install install -D -p librutts.la ${DESTDIR}${libdir}/librutts.la
+	libtool --mode=install install -D -p ru_tts ${DESTDIR}${bindir}/ru_tts
 	install -D -m 0644 -p ru_tts.h ${DESTDIR}${includedir}/ru_tts.h
 
 ru_tts: ru_tts.o librutts.la
-	libtool --tag=CC --mode=link ${CC} ${LFLAGS} -o $@ $^ ${LIBS}
+	libtool --tag=CC --mode=link ${CC} ${LDFLAGS} -o $@ $^ ${LIBS}
 
 librutts.la: synth.lo sink.lo transcription.lo text2speech.lo \
 	 utterance.lo time_planner.lo speechrate_control.lo \
 	 intonator.lo soundproducer.lo numerics.lo male.lo female.lo
-	libtool --tag=CC --mode=link ${CC} ${LFLAGS} ${solib_LFLAGS} -o $@ $^ -rpath ${libdir} -version-info 7:4:0
+	libtool --tag=CC --mode=link ${CC} ${LDFLAGS} ${solib_LFLAGS} -o $@ $^ -rpath ${libdir} -version-info 7:4:0
 
 %.lo:%.c
-	libtool --tag=CC --mode=compile ${CC} -c ${CFLAGS} $<
+	libtool --tag=CC --mode=compile ${CC} -c ${CFLAGS} ${CPPFLAGS} $<
 
 %.o:%.c
-	${CC} -c ${CFLAGS} $<
+	${CC} -c ${CFLAGS} ${CPPFLAGS} $<
 
 ru_tts.o: ru_tts.c ru_tts.h
 synth.lo: synth.c synth.h transcription.h soundscript.h ru_tts.h

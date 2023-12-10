@@ -1,4 +1,4 @@
-ru-tts (6.2.0-1) unstable; urgency=medium
+ru-tts (6.2.1-1) unstable; urgency=medium
 
   * Upstream sources have been separated from the debian package.
   * Dropped rulex package dependency.
@@ -8,7 +8,7 @@ ru-tts (6.2.0-1) unstable; urgency=medium
     whatever reason.
   * Packaged for Debian. (Closes: #1055879)
 
- -- Igor B. Poretsky <poretsky@mlbox.ru>  Mon, 13 Nov 2023 15:45:23 +0300
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sun, 10 Dec 2023 20:45:19 +0300
 
 ru-tts (6.1.4) unstable; urgency=medium
 
