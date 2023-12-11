@@ -21,17 +21,18 @@
 
 CC = gcc
 CFLAGS ?= -Wall -Wno-unused-result -O2
+CPPFLAGS ?=
 LDFLAGS ?=
 LIBS = -lm
 solib_LFLAGS = -Wl,--version-script=ru_tts.vscript
 
 ifeq ($(dictionary),skip)
-CFLAGS += -DWITHOUT_DICTIONARY
+override CPPFLAGS += -DWITHOUT_DICTIONARY
 else ifeq ($(dictionary),optional)
-LIBS += -ldl
-CFLAGS += -DRULEX_DLL=\"librulexdb.so.0\"
+override LIBS += -ldl
+override CPPFLAGS += -DRULEX_DLL=\"librulexdb.so.0\"
 else
-LIBS += -lrulexdb
+override LIBS += -lrulexdb
 endif
 
 # Installation paths
