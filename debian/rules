@@ -13,7 +13,7 @@ override_dh_auto_build:
 	$(MAKE) -C $(CURDIR)/src prefix=/usr libdir=/usr/lib/$(DEB_HOST_MULTIARCH) dictionary=optional
 
 override_dh_auto_clean:
-	$(MAKE) -C $(CURDIR) clean
+	$(MAKE) clean
 
 override_dh_auto_install:
-	$(MAKE) -C $(CURDIR) install prefix=/usr libdir=/usr/lib/$(DEB_HOST_MULTIARCH) DESTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) install prefix=/usr libdir=/usr/lib/$(DEB_HOST_MULTIARCH) DESTDIR=$(CURDIR)/debian/tmp
