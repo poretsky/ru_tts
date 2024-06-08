@@ -10,7 +10,7 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 	dh $@
 
 override_dh_auto_build:
-	$(MAKE) prefix=/usr libdir=/usr/lib/$(DEB_HOST_MULTIARCH) dictionary=optional
+	dh_auto_build -- prefix=/usr libdir=/usr/lib/$(DEB_HOST_MULTIARCH) dictionary=optional
 
 override_dh_auto_install:
-	$(MAKE) install prefix=/usr libdir=/usr/lib/$(DEB_HOST_MULTIARCH) DESTDIR=$(CURDIR)/debian/tmp
+	dh_auto_install -- prefix=/usr libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
