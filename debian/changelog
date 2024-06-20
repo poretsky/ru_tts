@@ -1,3 +1,9 @@
+ru-tts (6.2.3-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Fri, 21 Jun 2024 01:26:25 +0300
+
 ru-tts (6.2.2-1) unstable; urgency=medium
 
   * Packaged for Debian. (Closes: #1055879)
