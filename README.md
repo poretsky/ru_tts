@@ -13,32 +13,52 @@ formed the basis of the speech synthesizer, and Alexander Ivanov,
 who is an engineer of the laboratory and the developer of
 the speech synthesizer's the original software implementation.
 
+
 ## Build instructions
 
-To build the application enter into the src subdirectory and issue the
-command:
+To build the application you will need GNU
+[Autoconf](https://www.gnu.org/software/autoconf/),
+[Automake](https://www.gnu.org/software/automake/) and
+[Libtool](https://www.gnu.org/software/libtool/) in addition to C
+compiler and [Make](https://www.gnu.org/software/make/) utility. On a
+Debian-like system all necessary tools can be installed by following command:
 
 ```bash
+$ sudo apt install autoconf-archive automake libtool make
+```
+
+The building process itself consists of thre usual stages:
+
+```bash
+$ autoreconf -ifs
+$ ./configure
 $ make
 ```
 
-By default the synthesizer utilizes pronunciation dictionary from the
-[RuLex](https://github.com/poretsky/rulex) project, but can be built
-independently of it with the command:
+The `configure` script produced on the first stage accepts several
+options allowing us to control building process in some aspects. To
+get a grasp run it as follows:
 
 ```bash
-$ make dictionary=skip
+$ ./configure --help
 ```
 
-or
 
-```bash
-$ make dictionary=optional
-```
+## Cooperation with the RuLex pronunciation dictionary
 
-In that latter case `rulex` library will not be linked into the result
-executable as its mandatory part, but will be loaded by need during
-runtime if present.
+This synthesizer can take advantage of the
+[RuLex](https://github.com/poretsky/rulex) pronunciation dictionary.
+By default the `rulex` library, that provides dictionary access means,
+is not linked into the result executable as its mandatory part, but is
+dynamically loaded by need at runtime if present.
+
+Use configure option `--with-dictionary` if you want to link with the
+`rulex` library on the application build stage. On the contrary, if no
+*RuLex* cooperation is needed use configure option
+`--without-dictionary`.
+
+
+## Installation
 
 After building the application can be installed as follows:
 
@@ -46,7 +66,20 @@ After building the application can be installed as follows:
 # make install
 ```
 
+Besides that, there are ready to use packages for some releases of
+*Ubuntu*, that can be directly installed as follows:
+
+```bash
+$ sudo add-apt-repository ppa:poretsky/a11y
+$ sudo apt update
+$ sudo apt install ru-tts
+```
+
+
+## Usage
+
 See [README file](README) for usage details.
+
 
 ## Acknowledgements
 
@@ -64,6 +97,7 @@ Thanks to the following organizations and people for their contributions to the 
   implementation of the Phonemophone-5 speech synthesizer and
   approval of the publication of the results of a reverse engineering
   of the SDRV resident speech driver under a free license.
+
 
 ## Scientific publications
 
@@ -95,6 +129,7 @@ scientific publications:
 
 (For the original Russian titles of the scientific publications, see
 the [Russian version of ReadMe](README_RU.md).)
+
 
 ## Related projects
 

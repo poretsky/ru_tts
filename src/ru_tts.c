@@ -18,6 +18,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "config.h"
+
 #ifndef WITHOUT_DICTIONARY
 #include <locale.h>
 #include <ctype.h>
@@ -267,7 +269,7 @@ int main(int argc, char **argv)
             usage(argv[0]);
             return EXIT_SUCCESS;
           case 'v':
-            fprintf(stderr, "%s version 6.2.2\n\n", argv[0]);
+            fprintf(stderr, "%s version %s\n\n", PACKAGE_NAME, PACKAGE_VERSION);
             return EXIT_SUCCESS;
           default:
             fprintf(stderr, "\n");
