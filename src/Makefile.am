@@ -12,7 +12,7 @@ ru_tts_LDADD = librutts.la
 librutts_la_LDFLAGS = -version-info 7:4:0
 
 if HAVE_VSCRIPT
-librutts_la_LDFLAGS += $(VSCRIPT_LDFLAGS),ru_tts.vscript
+librutts_la_LDFLAGS += $(VSCRIPT_LDFLAGS),@srcdir@/ru_tts.vscript
 endif
 
 librutts_la_SOURCES = synth.c sink.c transcription.c text2speech.c \
@@ -21,4 +21,4 @@ librutts_la_SOURCES = synth.c sink.c transcription.c text2speech.c \
 
 EXTRA_DIST = ru_tts.vscript modulation.h numerics.h soundscript.h \
 	synth.h sink.h timing.h transcription.h voice.h
-MAINTAINERCLEANFILES = Makefile.in config.h.in config.h.in~
+MAINTAINERCLEANFILES = @srcdir@/Makefile.in @srcdir@/config.h.in @srcdir@/config.h.in~
