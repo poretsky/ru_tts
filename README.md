@@ -143,3 +143,4 @@ There are several projects related to ru_tts speech synthesizer:
   extension to facilitate work with high-level languages
   and implement additional synthesizer capabilities
   (deprecated after ru_tts package release 6.0.4 and not supported)
+* [FonTTS](https://play.google.com/store/apps/details?id=org.gozaltech.fontts) - An Android text-to-speech engine, continuation of the development of Nefonit tts, using ru tts as the core.
