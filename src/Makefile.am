@@ -20,5 +20,6 @@ librutts_la_SOURCES = synth.c sink.c transcription.c text2speech.c \
 	intonator.c soundproducer.c numerics.c male.c female.c
 
 EXTRA_DIST = ru_tts.vscript modulation.h numerics.h soundscript.h \
-	synth.h sink.h timing.h transcription.h voice.h
+	synth.h sink.h timing.h transcription.h voice.h \
+	phonemes.h
 MAINTAINERCLEANFILES = @srcdir@/Makefile.in @srcdir@/config.h.in @srcdir@/config.h.in~
