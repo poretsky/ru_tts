@@ -15,6 +15,7 @@
 #include "transcription.h"
 #include "numerics.h"
 #include "sink.h"
+#include "phonemes.h"
 
 
 /* Internal flags */
@@ -54,77 +55,81 @@ static const char *ndts = "NDTS";
 static const char *bgdjz = "BGD_Z";
 
 /* Phoncodes */
-static const uint8_t vocal_phoncodes[] = { 0, 3, 4, 1, 2 };
-static const uint8_t ndts_soft_phs[] = { 19, 24, 30, 38 };
+static const uint8_t vocal_phoncodes[] = { PH_U, PH_E, PH_Y, PH_O, PH_A };
+static const uint8_t ndts_soft_phs[] = { PH_N_, PH_D_, PH_T_, PH_S_ };
 static const uint8_t hard_consonant_phs[] =
   {
-    10, 15, 16, 8,  14, 33, 40, 32, 39,
-    36, 35, 26, 34, 27, 28,
-    9,  7,  20, 6,  21, 22
+    PH_J, PH_M, PH_N, PH_R,  PH_L, PH_CH, PH_X, PH_C, PH_SH_,
+    PH_SH, PH_S , PH_P, PH_F, PH_T, PH_K ,
+    PH_ZH,  PH_Z,  PH_B, PH_V,  PH_D, PH_G
   };
 static const uint8_t soft_consonant_phs[] =
   {
-    10, 18, 19, 13, 17, 33, 41, 32, 39,
-    36, 38, 29, 37, 30, 31,
-    9,  12, 23, 11, 24, 25
+    PH_J, PH_M_, PH_N_, PH_R_, PH_L_, PH_CH, PH_X_, PH_C, PH_SH_,
+    PH_SH, PH_S_, PH_P_, PH_F_, PH_T_, PH_K_,
+    PH_ZH,  PH_Z_, PH_B_, PH_V_, PH_D_, PH_G_
   };
 
 /* Predefined transcription blocks */
 static const uint8_t transcription_blocks[] =
   {
-    3, 27, 3, 53,
-    3, 3, 53, 16,
-    3, 3, 53, 8,
-    3, 3, 53, 17,
-    3, 3, 53, 15,
-    3, 21, 3, 53,
-    3, 26, 3, 53,
-    3, 7, 3, 53,
-    3, 22, 3, 53,
-    3, 33, 3, 53,
-    10, 5, 28, 8, 2, 53, 27, 28, 2, 10, 3,
-    3, 40, 2, 53,
-    3, 9, 3, 53,
-    3, 36, 2, 53,
-    3, 32, 3, 53,
-    3, 39, 2, 53,
-    3, 3, 53, 34,
-    2, 1, 53,
-    3, 10, 3, 53,
-    3, 10, 1, 53,
-    2, 0, 53,
-    3, 10, 2, 53,
-    2, 4, 53,
-    13, 18, 2, 53, 40, 28, 5, 10, 43, 7, 16, 2, 53, 28,
-    14, 27, 11, 1, 53, 8, 21, 4, 10, 43, 7, 16, 2, 53, 28,
-    3, 10, 0, 53,
-    2, 3, 53,
-    8, 28, 2, 6, 4, 53, 33, 31, 5,
+    3, PH_T, PH_E, PH_PRIMARY_STRESS,
+    3, PH_E, PH_PRIMARY_STRESS, PH_N,
+    3, PH_E, PH_PRIMARY_STRESS, PH_R,
+    3, PH_E, PH_PRIMARY_STRESS, PH_L_,
+    3, PH_E, PH_PRIMARY_STRESS, PH_M,
+    3, PH_D, PH_E, PH_PRIMARY_STRESS,
+    3, PH_P, PH_E, PH_PRIMARY_STRESS,
+    3, PH_Z, PH_E, PH_PRIMARY_STRESS,
+    3, PH_G, PH_E, PH_PRIMARY_STRESS,
+    3, PH_CH, PH_E, PH_PRIMARY_STRESS,
+    10, PH_I, PH_K, PH_R, PH_A, PH_PRIMARY_STRESS, PH_T, PH_K, PH_A, PH_J, PH_E,
+    3, PH_X, PH_A, PH_PRIMARY_STRESS,
+    3, PH_ZH, PH_E, PH_PRIMARY_STRESS,
+    3, PH_SH, PH_A, PH_PRIMARY_STRESS,
+    3, PH_C, PH_E, PH_PRIMARY_STRESS,
+    3, PH_SH_, PH_A, PH_PRIMARY_STRESS,
+    3, PH_E, PH_PRIMARY_STRESS, PH_F,
+    2, PH_O , PH_PRIMARY_STRESS,
+    3, PH_J, PH_E , PH_PRIMARY_STRESS,
+    3, PH_J, PH_O , PH_PRIMARY_STRESS,
+    2, PH_U, PH_PRIMARY_STRESS,
+    3, PH_J, PH_A, PH_PRIMARY_STRESS,
+    2, PH_Y, PH_PRIMARY_STRESS,
+    13, PH_M_, PH_A, PH_PRIMARY_STRESS, PH_X_, PH_K , PH_I, PH_J,
+        PH_SPACE, PH_Z, PH_N, PH_A, PH_PRIMARY_STRESS, PH_K,
+    14, PH_T, PH_V_, PH_O, PH_PRIMARY_STRESS, PH_R, PH_D, PH_Y, PH_J,
+        PH_SPACE, PH_Z, PH_N, PH_A, PH_PRIMARY_STRESS, PH_K,
+    3, PH_J, PH_U, PH_PRIMARY_STRESS,
+    2, PH_E, PH_PRIMARY_STRESS,
+    8, PH_K, PH_A, PH_V, PH_Y, PH_PRIMARY_STRESS, PH_CH, PH_K_, PH_I,
     0,
-    8, 0, 15, 16, 1, 53, 9, 5, 30,
-    15, 2, 27, 28, 8, 4, 53, 30, 43, 35, 28, 1, 53, 26, 28, 0,
-    15, 7, 2, 28, 8, 4, 53, 30, 43, 35, 28, 1, 53, 26, 28, 0,
-    10, 26, 8, 2, 32, 3, 53, 16, 27, 2, 34,
-    8, 28, 2, 6, 4, 53, 33, 31, 5,
-    5, 21, 8, 1, 53, 23,
-    10, 2, 15, 26, 3, 8, 35, 3, 53, 16, 21,
-    8, 21, 1, 53, 14, 2, 8, 2, 34,
-    6, 20, 1, 53, 17, 36, 3,
-    6, 18, 3, 53, 19, 36, 3,
-    9, 26, 2, 8, 2, 53, 22, 8, 2, 34,
-    5, 29, 17, 0, 53, 35,
-    11, 8, 2, 6, 19, 2, 53, 10, 3, 27, 38, 2,
+    8, PH_U, PH_M, PH_N, PH_O, PH_PRIMARY_STRESS, PH_ZH, PH_I, PH_T_,
+    15, PH_A, PH_T, PH_K, PH_R, PH_Y, PH_PRIMARY_STRESS, PH_T_,
+        PH_SPACE, PH_S, PH_K, PH_O, PH_PRIMARY_STRESS, PH_P, PH_K, PH_U,
+    15, PH_Z, PH_A, PH_K, PH_R, PH_Y, PH_PRIMARY_STRESS, PH_T_,
+        PH_SPACE, PH_S, PH_K, PH_O, PH_PRIMARY_STRESS, PH_P, PH_K, PH_U,
+    10, PH_P, PH_R, PH_A, PH_C, PH_E, PH_PRIMARY_STRESS, PH_N, PH_T, PH_A, PH_F,
+    8, PH_K, PH_A, PH_V, PH_Y, PH_PRIMARY_STRESS, PH_CH, PH_K_, PH_I,
+    5, PH_D, PH_R, PH_O, PH_PRIMARY_STRESS, PH_B_,
+    10, PH_A, PH_M, PH_P, PH_E, PH_R, PH_S, PH_E, PH_PRIMARY_STRESS, PH_N, PH_D,
+    8, PH_D, PH_O, PH_PRIMARY_STRESS, PH_L, PH_A, PH_R, PH_A, PH_F,
+    6, PH_B, PH_O , PH_PRIMARY_STRESS, PH_L_, PH_SH , PH_E,
+    6, PH_M_, PH_E, PH_PRIMARY_STRESS, PH_N_, PH_SH , PH_E,
+    9, PH_P, PH_A, PH_R, PH_A, PH_PRIMARY_STRESS, PH_G, PH_R, PH_A, PH_F,
+    5, PH_P_, PH_L_, PH_U, PH_PRIMARY_STRESS, PH_S,
+    11, PH_R, PH_A, PH_V, PH_N_, PH_A, PH_PRIMARY_STRESS, PH_J, PH_E, PH_T, PH_S_, PH_A,
 
-    4, 1, 53, 6, 2, /* 42: O+GO */
-    4, 2, 6, 1, 53, /* 43: OGO+ */
-    3, 2, 6, 2, /* 44: OGO */
-    4, 3, 53, 6, 2, /* 45: E+GO (1) */
-    4, 3, 6, 1, 53, /* 46: EGO+ (1) */
-    3, 3, 6, 2, /* 47: EGO (1) */
-    5, 10, 3, 53, 6, 2, /* 48: E+GO (2) */
-    5, 10, 3, 6, 1, 53, /* 49: EGO+ (2) */
-    4, 10, 3, 6, 2, /* 50: EGO (2) */
-    3, 27, 35, 2 /* 51: TSA */
+    4, PH_O, PH_PRIMARY_STRESS, PH_V, PH_A , /* 42: O+GO */
+    4, PH_A , PH_V, PH_O, PH_PRIMARY_STRESS, /* 43: OGO+ */
+    3, PH_A, PH_V, PH_A, /* 44: OGO */
+    4, PH_E, PH_PRIMARY_STRESS, PH_V, PH_A, /* 45: E+GO (1) */
+    4, PH_E, PH_V, PH_O, PH_PRIMARY_STRESS, /* 46: EGO+ (1) */
+    3, PH_E, PH_V, PH_A, /* 47: EGO (1) */
+    5, PH_J, PH_E, PH_PRIMARY_STRESS, PH_V, PH_A, /* 48: E+GO (2) */
+    5, PH_J, PH_E, PH_V, PH_O, PH_PRIMARY_STRESS, /* 49: EGO+ (2) */
+    4, PH_J, PH_E, PH_V, PH_A, /* 50: EGO (2) */
+    3, PH_T, PH_S, PH_A /* 51: TSA */
   };
 
 /* Clause termination pairs */
@@ -161,7 +166,7 @@ static void put_transcription_block(sink_t *consumer, uint8_t n)
   for (i = 1; i <= block[0]; i++)
     {
       uint8_t c = block[i];
-      sink_put(consumer, ((c == 53) && (transcription->flags & WEAK_STRESS)) ? 54 : c);
+      sink_put(consumer, ((c == PH_PRIMARY_STRESS) && (transcription->flags & WEAK_STRESS)) ? PH_SECONDARY_STRESS : c);
     }
 }
 
@@ -215,7 +220,7 @@ static int check_clause_termination(input_t *input, sink_t *consumer)
       for (i = 0; (i < (sizeof(clause_terminations) / sizeof(uint16_t))) && (clause_terminations[i] != termination); i++);
       transcription->clause_type = i & 0x0F;
       transcription->flags |= CLAUSE_DONE;
-      sink_put(consumer, s - symbols + 43);
+      sink_put(consumer, s - symbols + PH_SPACE);
       sink_flush(consumer);
       result = 1;
     }
@@ -229,7 +234,7 @@ static int check_clause_termination(input_t *input, sink_t *consumer)
  */
 static uint8_t voicify(const uint8_t *phs, uint8_t idx)
 {
-  return phs[(idx < 15) ? (idx + 6) : idx];
+  return phs[(idx < PH_M) ? (idx + 6) : idx];
 }
 
 /*
@@ -238,7 +243,7 @@ static uint8_t voicify(const uint8_t *phs, uint8_t idx)
  */
 static uint8_t unvoicify(const uint8_t *phs, uint8_t idx)
 {
-  return phs[(idx < 15) ? idx : (idx - 6)];
+  return phs[(idx < PH_M) ? idx : (idx - 6)];
 }
 
 /*
@@ -248,8 +253,8 @@ static uint8_t unvoicify(const uint8_t *phs, uint8_t idx)
  */
 static uint8_t unvoicify_hard(uint8_t idx, char following)
 {
-  return (((idx != 10) && (idx != 16)) || (following != 'W')) ?
-    unvoicify(hard_consonant_phs, idx) : 36;
+  return (((idx != PH_J) && (idx != PH_N)) || (following != 'W')) ?
+    unvoicify(hard_consonant_phs, idx) : PH_SH;
 }
 
 /*
@@ -261,17 +266,17 @@ static uint8_t correct_consonant(uint8_t idx, char following)
   if (memchr(consonants + 5, following, 10))
     return unvoicify_hard(idx, following);
   else if (strchr(bgdjz, following))
-    return (((idx != 10) && (idx != 16)) || (following != '_')) ?
-      voicify(hard_consonant_phs, idx) : 9;
-  return ((idx != 16) || (following != '_')) ?
-    hard_consonant_phs[idx] : 9;
+    return (((idx != PH_J) && (idx != PH_N)) || (following != '_')) ?
+      voicify(hard_consonant_phs, idx) : PH_ZH;
+  return ((idx != PH_N) || (following != '_')) ?
+    hard_consonant_phs[idx] : PH_ZH;
 }
 
 /* Transcription cycle initialization actions */
 static void transcription_init(sink_t *consumer)
 {
   uint8_t *buffer = consumer->buffer;
-  memset(buffer, 43, TRANSCRIPTION_BUFFER_SIZE);
+  memset(buffer, PH_SPACE, TRANSCRIPTION_BUFFER_SIZE);
   consumer->buffer_offset = TRANSCRIPTION_START;
 }
 
@@ -408,7 +413,7 @@ void process_text(const char *text, sink_t *consumer)
           if (s)
             {
               uint8_t char_index = s - char_list;
-              if ((char_index < 17) &&
+              if ((char_index < 16) &&
                   (last_char != '+') &&
                   (last_char != '=') &&
                   (last_char < 'A') &&
@@ -422,18 +427,18 @@ void process_text(const char *text, sink_t *consumer)
               else if (char_index > 26)
                 {
                   uint8_t prev = sink_last(consumer);
-                  if (((c != '+') && (c != '=')) || (prev > 5))
+                  if (((c != '+') && (c != '=')) || (prev > PH_I))
                     {
-                      if ((prev < 43) || (prev > 52))
-                        sink_put(consumer, 43);
+                      if ((prev < PH_SPACE) || (prev > PH_MINUS))
+                        sink_put(consumer, PH_SPACE);
                       put_transcription_block(consumer, char_index);
                       if ((c != '-') && (input.start[1] >= 'A'))
-                        sink_put(consumer, 43);
+                        sink_put(consumer, PH_SPACE);
                       transcription->flags |= CLAUSE_START;
                     }
                   else
                     {
-                      sink_put(consumer, (c != '+') ? 54 : 53);
+                      sink_put(consumer, (c != '+') ? PH_SECONDARY_STRESS  : PH_PRIMARY_STRESS);
                       transcription->flags &= ~CLAUSE_START;
                     }
                   last_char = c;
@@ -516,9 +521,9 @@ void process_text(const char *text, sink_t *consumer)
           s = strchr(vocalics, c);
           if (s)
             {
-              uint8_t vc = (c == 'I') ? 5 :
+              uint8_t vc = (c == 'I') ? PH_I :
                 (((c == 'O') &&accented && (input.start[1] != '+') && (input.start[1] != '=')) ?
-                 2 : vocal_phoncodes[(s - vocalics) % 5]);
+                 PH_A : vocal_phoncodes[(s - vocalics) % 5]);
               transcription->flags &= ~CLAUSE_START;
               if (input.start > input.text)
                 {
@@ -528,13 +533,13 @@ void process_text(const char *text, sink_t *consumer)
                       if ((strchr(vocalics, prevc) || memchr(symbols, prevc, 13) ||
                            (prevc == ']')) &&
                           strchr("`QE\\", c))
-                        sink_put(consumer, 10);
+                        sink_put(consumer, PH_J);
                     }
                   else if (strchr("`QE\\IO", c))
-                    sink_put(consumer, 10);
+                    sink_put(consumer, PH_J);
                 }
               else if (strchr("`QE\\", c))
-                sink_put(consumer, 10);
+                sink_put(consumer, PH_J);
               sink_put(consumer, vc);
               last_char = c;
               continue;
@@ -570,7 +575,7 @@ void process_text(const char *text, sink_t *consumer)
                 {
                   input.start++;
                   nextc = ((input.end - input.start) > 1) ? input.start[1] : ',';
-                  if ((memchr(symbols + 1, nextc, 6) && (sink_last(consumer) != 43)) || memchr(consonants + 5, nextc, 10))
+                  if ((memchr(symbols + 1, nextc, 6) && (sink_last(consumer) != PH_SPACE)) || memchr(consonants + 5, nextc, 10))
                     sink_put(consumer, unvoicify(soft_consonant_phs, idx));
                   else if (strchr(bgdjz, nextc))
                     sink_put(consumer, voicify(soft_consonant_phs, idx));
@@ -579,13 +584,13 @@ void process_text(const char *text, sink_t *consumer)
               else if (memchr(vocalics, nextc, 5))
                 sink_put(consumer, soft_consonant_phs[idx]);
               else if (memchr(symbols + 1, nextc, 6))
-                sink_put(consumer, (sink_last(consumer) != 43) ? unvoicify_hard(idx, nextc) : hard_consonant_phs[idx]);
+                sink_put(consumer, (sink_last(consumer) != PH_SPACE) ? unvoicify_hard(idx, nextc) : hard_consonant_phs[idx]);
               else sink_put(consumer, correct_consonant(idx, (nextc != ' ') ? nextc : input.start[2]));
             }
           else if (c != ']')
             {
               transcription->flags |= CLAUSE_START;
-              sink_put(consumer, (c != '#') ? 43 : 42);
+              sink_put(consumer, (c != '#') ? PH_SPACE : PH_TERMINATOR);
             }
           else transcription->flags &= ~CLAUSE_START;
           last_char = c;

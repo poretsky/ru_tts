@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "phonemes.h"
 #include "synth.h"
 #include "soundscript.h"
 #include "transcription.h"
@@ -22,130 +23,130 @@
 
 static const uint8_t seqlist1[] =
   {
-    1, 2,
-    5, 6, 8, 1, 24, 3,
-    4, 21, 2, 25, 3,
-    2, 21, 2,
-    5, 10, 3, 21, 6, 2,
-    5, 10, 3, 35, 17, 5,
-    3, 5, 17, 5,
-    4, 5, 27, 2, 28,
-    5, 5, 16, 2, 33, 3,
-    1, 5,
-    3, 28, 2, 28,
-    4, 17, 5, 20, 1,
-    2, 16, 1,
-    3, 8, 2, 35,
-    5, 27, 2, 28, 25, 3,
-    3, 27, 2, 28,
-    3, 30, 3, 15,
-    4, 27, 1, 25, 3,
-    3, 40, 1, 30,
-    3, 33, 3, 15,
-    5, 33, 27, 1, 20, 4,
-    4, 33, 27, 1, 26,
-    3, 33, 27, 1,
-    4, 5, 27, 2, 22,
-    3, 28, 2, 22,
-    3, 8, 2, 7,
-    3, 27, 2, 22,
-    3, 40, 1, 24,
-    4, 33, 27, 1, 20,
-    2, 27, 1,
+    1, PH_A,
+    5, PH_V, PH_R, PH_O, PH_D_, PH_E,
+    4, PH_D, PH_A, PH_G_, PH_E,
+    2, PH_D, PH_A,
+    5, PH_J, PH_E, PH_D, PH_V, PH_A,
+    5, PH_J, PH_E, PH_S, PH_L_, PH_I,
+    3, PH_I, PH_L_, PH_I,
+    4, PH_I, PH_T, PH_A, PH_K,
+    5, PH_I, PH_N, PH_A, PH_CH, PH_E,
+    1, PH_I,
+    3, PH_K, PH_A, PH_K,
+    4, PH_L_, PH_I, PH_B, PH_O,
+    2, PH_N, PH_O,
+    3, PH_R, PH_A, PH_S,
+    5, PH_T, PH_A, PH_K, PH_G_, PH_E,
+    3, PH_T, PH_A, PH_K,
+    3, PH_T_, PH_E, PH_M,
+    4, PH_T, PH_O, PH_G_, PH_E,
+    3, PH_X, PH_O, PH_T_,
+    3, PH_CH, PH_E, PH_M,
+    5, PH_CH, PH_T, PH_O, PH_B, PH_Y,
+    4, PH_CH, PH_T, PH_O, PH_P,
+    3, PH_CH, PH_T, PH_O,
+    4, PH_I, PH_T, PH_A, PH_G,
+    3, PH_K, PH_A, PH_G,
+    3, PH_R, PH_A, PH_Z,
+    3, PH_T, PH_A, PH_G,
+    3, PH_X, PH_O, PH_D_,
+    4, PH_CH, PH_T, PH_O, PH_B,
+    2, PH_T, PH_O,
     0
   };
 
 static const uint8_t seqlist2[] =
   {
-    3, 23, 3, 35,
-    3, 23, 3, 7,
-    4, 6, 21, 1, 17,
-    4, 20, 17, 5, 35,
-    4, 20, 17, 5, 7,
-    5, 6, 8, 1, 24, 3,
-    5, 6, 1, 7, 17, 3,
-    5, 6, 11, 5, 21, 0,
-    3, 6, 19, 3,
-    2, 6, 1,
-    1, 6,
-    1, 34,
-    3, 21, 17, 2,
-    2, 21, 1,
-    2, 5, 35,
-    2, 5, 7,
-    2, 28, 1,
-    1, 28,
-    1, 22,
-    5, 18, 3, 9, 21, 0,
-    3, 16, 2, 21,
-    3, 16, 2, 27,
-    2, 16, 2,
-    2, 19, 3,
-    2, 1, 27,
-    2, 1, 21,
-    2, 1, 20,
-    2, 1, 26,
-    1, 1,
-    5, 29, 3, 13, 3, 21,
-    5, 29, 3, 13, 3, 27,
-    5, 26, 1, 35, 17, 3,
-    3, 26, 1, 21,
-    3, 26, 1, 27,
-    3, 26, 13, 5,
-    3, 26, 8, 1,
-    2, 26, 1,
-    4, 8, 2, 24, 5,
-    5, 35, 28, 6, 1, 38,
-    5, 35, 28, 6, 1, 12,
-    6, 35, 11, 3, 8, 40, 2,
-    2, 35, 1,
-    1, 35,
-    5, 7, 7, 2, 24, 5,
-    1, 0,
-    5, 33, 3, 13, 3, 35,
-    5, 33, 3, 13, 3, 7,
-    2, 7, 2,
-    1, 7,
+    3, PH_B_, PH_E, PH_S,
+    3, PH_B_, PH_E, PH_Z,
+    4, PH_V, PH_D, PH_O, PH_L_,
+    4, PH_B, PH_L_, PH_I, PH_S,
+    4, PH_B, PH_L_, PH_I, PH_Z,
+    5, PH_V, PH_R, PH_O, PH_D_, PH_E,
+    5, PH_V, PH_O, PH_Z, PH_L_, PH_E,
+    5, PH_V, PH_V_, PH_I, PH_D, PH_U,
+    3, PH_V, PH_N_, PH_E,
+    2, PH_V, PH_O,
+    1, PH_V,
+    1, PH_F,
+    3, PH_D, PH_L_, PH_A,
+    2, PH_D, PH_O,
+    2, PH_I, PH_S,
+    2, PH_I, PH_Z,
+    2, PH_K, PH_O,
+    1, PH_K,
+    1, PH_G,
+    5, PH_M_, PH_E, PH_ZH, PH_D, PH_U,
+    3, PH_N, PH_A, PH_D,
+    3, PH_N, PH_A, PH_T,
+    2, PH_N, PH_A,
+    2, PH_N_, PH_E,
+    2, PH_O, PH_T,
+    2, PH_O, PH_D,
+    2, PH_O, PH_B,
+    2, PH_O, PH_P,
+    1, PH_O,
+    5, PH_P_, PH_E, PH_R_, PH_E, PH_D,
+    5, PH_P_, PH_E, PH_R_, PH_E, PH_T,
+    5, PH_P, PH_O, PH_S, PH_L_, PH_E,
+    3, PH_P, PH_O, PH_D,
+    3, PH_P, PH_O, PH_T,
+    3, PH_P, PH_R_, PH_I,
+    3, PH_P, PH_R, PH_O,
+    2, PH_P, PH_O,
+    4, PH_R, PH_A, PH_D_, PH_I,
+    5, PH_S, PH_K, PH_V, PH_O, PH_S_,
+    5, PH_S, PH_K, PH_V, PH_O, PH_Z_,
+    6, PH_S, PH_V_, PH_E, PH_R, PH_X, PH_A,
+    2, PH_S, PH_O,
+    1, PH_S,
+    5, PH_Z, PH_Z, PH_A, PH_D_, PH_I,
+    1, PH_U,
+    5, PH_CH, PH_E, PH_R_, PH_E, PH_S,
+    5, PH_CH, PH_E, PH_R_, PH_E, PH_Z,
+    2, PH_Z, PH_A,
+    1, PH_Z,
     0
   };
 
 static const uint8_t seqlist3[] =
   {
-    2, 20, 4,
-    1, 20,
-    2, 9, 3,
-    1, 9,
-    5, 19, 5, 20, 0, 24,
-    1, 26,
-    2, 27, 1,
+    2, PH_B, PH_Y,
+    1, PH_B,
+    2, PH_ZH, PH_E,
+    1, PH_ZH,
+    5, PH_N_, PH_I, PH_B, PH_U, PH_D_,
+    1, PH_P,
+    2, PH_T, PH_O,
     0
   };
 
 static const uint8_t seqlist4[] =
   {
-    3, 2, 6, 2,
-    3, 3, 6, 2,
-    3, 2, 15, 0,
-    3, 3, 15, 0,
-    3, 5, 18, 5,
-    3, 2, 10, 3,
-    3, 2, 10, 2,
-    3, 5, 10, 3,
-    3, 0, 10, 0,
-    4, 1, 53, 6, 2,
-    4, 3, 6, 1, 53,
+    3, PH_A, PH_V, PH_A,
+    3, PH_E, PH_V, PH_A,
+    3, PH_A, PH_M, PH_U,
+    3, PH_E, PH_M, PH_U,
+    3, PH_I, PH_M_, PH_I,
+    3, PH_A, PH_J, PH_E,
+    3, PH_A, PH_J, PH_A,
+    3, PH_I, PH_J, PH_E,
+    3, PH_U, PH_J, PH_U,
+    4, PH_O, PH_PRIMARY_STRESS, PH_V, PH_A,
+    4, PH_E, PH_V, PH_O, PH_PRIMARY_STRESS,
     0
   };
 
 static const uint8_t seqlist5[] =
   {
-    2, 5, 10,
-    3, 1, 53, 10,
-    2, 3, 10,
-    2, 5, 40,
-    2, 5, 15,
-    3, 1, 53, 15,
-    2, 3, 15,
+    2, PH_I, PH_J,
+    3, PH_O, PH_PRIMARY_STRESS, PH_J,
+    2, PH_E, PH_J,
+    2, PH_I, PH_X,
+    2, PH_I, PH_M,
+    3, PH_O, PH_PRIMARY_STRESS, PH_M,
+    2, PH_E, PH_M,
     0
   };
 
@@ -160,7 +161,7 @@ static int test_list(const uint8_t *ptr, const uint8_t *lst)
 {
   const uint8_t *item;
   for (item = lst; item[0] && memcmp(ptr, item + 1, item[0]); item += item[0] + 1);
-  return (item[0] != 0) && (ptr[item[0]] > 42) && (ptr[item[0]] < 53);
+  return (item[0] != 0) && (ptr[item[0]] > PH_TERMINATOR) && (ptr[item[0]] < PH_PRIMARY_STRESS);
 }
 
 /* Shift clause transcription one point left */
@@ -172,8 +173,8 @@ static void shift(uint8_t *buf)
       buf[i] = buf[i + 1];
       i++;
     }
-  while ((buf[i] < 44) || (buf[i] > 52));
-  buf[i] = 43;
+  while ((buf[i] < PH_COMMA) || (buf[i] > PH_MINUS));
+  buf[i] = PH_SPACE;
 }
 
 /*
@@ -187,7 +188,7 @@ static uint8_t *transcription_advance(uint8_t *transcription, uint8_t *point)
       size_t length = (point < (transcription + TRANSCRIPTION_BUFFER_SIZE)) ? (transcription + TRANSCRIPTION_BUFFER_SIZE - point) : 0;
       if (length)
         memmove(transcription + TRANSCRIPTION_START, point, length);
-      memset(transcription + TRANSCRIPTION_START + length, 43, TRANSCRIPTION_BUFFER_SIZE - TRANSCRIPTION_START - length);
+      memset(transcription + TRANSCRIPTION_START + length, PH_SPACE, TRANSCRIPTION_BUFFER_SIZE - TRANSCRIPTION_START - length);
     }
   return transcription + TRANSCRIPTION_START;
 }
@@ -231,7 +232,7 @@ static void synth(uint8_t *transcription, ttscb_t *ttscb)
             {
               if (flags & 1)
                 {
-                  *sptr = 50;
+                  *sptr = PH_OPEN_BRACKET;
                   synth_clause(transcription, ttscb, 0);
                   tptr = transcription_advance(transcription, tptr);
                   count = 0;
@@ -248,7 +249,7 @@ static void synth(uint8_t *transcription, ttscb_t *ttscb)
             }
           else if (test_list(tptr, seqlist3) &&
                    (tptr > (transcription + TRANSCRIPTION_START)) &&
-                   (*(tptr - 1) == 43))
+                   (*(tptr - 1) == PH_SPACE))
             {
               sptr = --tptr;
               shift(sptr);
@@ -256,9 +257,9 @@ static void synth(uint8_t *transcription, ttscb_t *ttscb)
               continue;
             }
         }
-      if (*tptr != 43)
+      if (*tptr != PH_SPACE)
         {
-          if ((*tptr > 43) && (*tptr < 53))
+          if ((*tptr > PH_SPACE) && (*tptr < PH_PRIMARY_STRESS))
             {
               synth_clause(transcription, ttscb, ttscb->transcription_state.clause_type);
               break;
@@ -281,16 +282,16 @@ static void synth(uint8_t *transcription, ttscb_t *ttscb)
           uint8_t k;
           if ((!test_list(tptr - 3, seqlist4)) && (!test_list(tptr - 2, seqlist5)))
             sptr = tptr;
-          next = memchr(tptr + 1, 43, perspective);
+          next = memchr(tptr + 1, PH_SPACE, perspective);
           if (next)
             perspective = (++next) - tptr;
           else next = tptr + perspective + 1;
           for (k = 1; k <= perspective; k++)
-            if ((tptr[k] > 43) && (tptr[k] < 53))
+            if ((tptr[k] > PH_SPACE) && (tptr[k] < PH_PRIMARY_STRESS))
               break;
           if ((k > perspective) && !test_list(next, seqlist1))
             {
-              *sptr = 50;
+              *sptr = PH_OPEN_BRACKET;
               synth_clause(transcription, ttscb, 0);
               tptr = transcription_advance(transcription, sptr + 1) - 1;
               count = 0;

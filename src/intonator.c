@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "phonemes.h"
 #include "transcription.h"
 #include "soundscript.h"
 #include "modulation.h"
@@ -265,9 +266,9 @@ static int search_breakpoint(uint8_t *transcription, int start_index)
   for (i = start_index; i < TRANSCRIPTION_BUFFER_SIZE; i++)
     {
       rc = transcription[i];
-      if (rc != 43)
+      if (rc != PH_SPACE)
         {
-          if (rc > 43)
+          if (rc > PH_SPACE)
             return -1;
           break;
         }
@@ -275,7 +276,7 @@ static int search_breakpoint(uint8_t *transcription, int start_index)
   for (i++; i < TRANSCRIPTION_BUFFER_SIZE; i++)
     {
       rc = transcription[i];
-      if (rc > 42)
+      if (rc > PH_TERMINATOR)
         return rc;
     }
   return -1;
@@ -338,10 +339,10 @@ void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
       bp = search_breakpoint(transcription, i);
       if (bp < 0)
         break;
-      if (bp != 54)
+      if (bp != PH_SECONDARY_STRESS)
         nspeechmarks++;
       while (((++i) < TRANSCRIPTION_BUFFER_SIZE) &&
-             ((transcription[i] >= 53) || (transcription[i] < 43)));
+             ((transcription[i] >= PH_PRIMARY_STRESS) || (transcription[i] < PH_SPACE)));
     }
 
   for (i = 0; i < NSTAGES; i++)
@@ -379,19 +380,19 @@ void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
                   st4 = 1;
                 }
               bp = search_breakpoint(transcription, i);
-              m = ((bp != 53) && (bp != 54)) ? 1 : 2;
+              m = ((bp != PH_PRIMARY_STRESS) && (bp != PH_SECONDARY_STRESS)) ? 1 : 2;
             }
 
           if (m < 3)
             {
-              if ((m < 2) && (transcription[i] > 5))
+              if ((m < 2) && (transcription[i] > PH_I))
                 {
                   j = setstage(soundscript, j, stage);
                   continue;
                 }
-              else if ((m > 1) && ((transcription[i] > 5) || (transcription[i + 1] != 53)))
+              else if ((m > 1) && ((transcription[i] > PH_I) || (transcription[i + 1] != PH_PRIMARY_STRESS)))
                 {
-                  if (transcription[i] != 54)
+                  if (transcription[i] != PH_SECONDARY_STRESS)
                     j = setstage(soundscript, j, stage);
                   continue;
                 }
@@ -415,11 +416,11 @@ void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
           if (m > 2)
             {
               uint8_t l = transcription[i];
-              if (l < 53)
+              if (l < PH_PRIMARY_STRESS)
                 {
-                  if (l < 43)
+                  if (l < PH_SPACE)
                     j = setstage(soundscript, j, stage + 3);
-                  else if (l != 43)
+                  else if (l != PH_SPACE)
                     break;
                   else
                     {
@@ -427,7 +428,7 @@ void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
                       bp = search_breakpoint(transcription, i + 1);
                       if (bp < 0)
                         break;
-                      else if (bp != 54)
+                      else if (bp != PH_SECONDARY_STRESS)
                         {
                           nspeechmarks--;
                           m = 0;
