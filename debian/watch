@@ -1,0 +1,4 @@
+version=4
+opts="repack,compression=xz,filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%ru-tts-$1.tar.gz%" \
+https://github.com/poretsky/ru_tts/tags \
+(?:.*?/)?v?(\d[\d.]*)\.tar\.gz
