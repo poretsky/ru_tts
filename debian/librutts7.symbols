@@ -1,0 +1,5 @@
+librutts.so.7 librutts7 #MINVER#
+* Build-Depends-Package: librutts-dev
+ RU_TTS_7@RU_TTS_7 6.2.0
+ ru_tts_config_init@RU_TTS_7 6.2.0
+ ru_tts_transfer@RU_TTS_7 6.2.0

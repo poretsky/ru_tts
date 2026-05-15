@@ -1,0 +1,7 @@
+Version: 5
+
+Template: Github
+Owner: poretsky
+Project: ru_tts
+Repack: yes
+Compression: xz
