@@ -24,6 +24,7 @@
 #define DEC_SEP_POINT 1 /* Use point as a decimal separator */
 #define DEC_SEP_COMMA 2 /* Use comma as a decimal separator */
 #define USE_ALTERNATIVE_VOICE 4
+#define USE_LEGACY_RATE_ALGO 8 /* Use legacy linear interpolation speech rate algorithm; default is adaptive powf-based crossfade */
 
 
 /* BEGIN_C_DECLS should be used at the beginning of C declarations,
