@@ -121,7 +121,7 @@ void build_utterance(uint8_t *transcription, soundscript_t *script)
                               put_sound(script, a + 143, 2);
                               put_sound(script, a + 145, 3);
                             }
-                          else if ((a < PH_X) || (a == PH_X_) || (c > PH_V))
+                          else if ((a < PH_X) || (a == PH_X_) || (c > PH_I))
                             put_sound(script, a + 145, 2);
                           else put_sound(script, a + soundset4[c], 2);
                         }

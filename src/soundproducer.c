@@ -218,6 +218,9 @@ void make_sound(soundscript_t *script, sink_t *consumer, int rate_factor, int us
               while (l > ax)
                 {
                   k = script->icb[stage].stretch;
+                  /* Prevent zero from wrapping to UINT16_MAX in the do/while counter. */
+                  if (!k)
+                    k = 1;
                   do
                     {
                       sink_put(consumer, script->voice->samples[sidx++]);
@@ -241,6 +244,9 @@ void make_sound(soundscript_t *script, sink_t *consumer, int rate_factor, int us
                 {
                   uint16_t next_pattern_offset;
                   k = script->icb[stage].stretch;
+                  /* Prevent zero from wrapping to UINT16_MAX in the do/while counter. */
+                  if (!k)
+                    k = 1;
                   j = ((uint16_t)(script->sounds[i + 1].id)) & 0xFF;
                   next_pattern_offset = script->voice->sound_offsets[j + 1];
                   j = script->voice->sound_offsets[j];
