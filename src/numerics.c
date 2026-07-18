@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "phonemes.h"
 #include "numerics.h"
 #include "transcription.h"
 #include "sink.h"
@@ -28,91 +29,91 @@
 /* Predefined transcriptions */
 static const uint8_t primary[] = /* 0..9 */
   {
-    4, 16, 1, 53, 17,
-    5, 2, 24, 5, 53, 16,
-    4, 21, 6, 2, 53,
-    4, 27, 13, 5, 53,
-    7, 33, 3, 27, 4, 53, 13, 3,
-    4, 29, 2, 53, 30,
-    5, 36, 3, 53, 38, 30,
-    4, 38, 3, 53, 15,
-    6, 6, 1, 53, 38, 3, 15,
-    6, 24, 3, 53, 11, 2, 30
+    4, PH_N, PH_O, PH_PRIMARY_STRESS, PH_L_,
+    5, PH_A, PH_D_, PH_I, PH_PRIMARY_STRESS, PH_N,
+    4, PH_D, PH_V, PH_A, PH_PRIMARY_STRESS,
+    4, PH_T, PH_R_, PH_I, PH_PRIMARY_STRESS,
+    7, PH_CH, PH_E, PH_T, PH_Y, PH_PRIMARY_STRESS, PH_R_, PH_E,
+    4, PH_P_, PH_A, PH_PRIMARY_STRESS, PH_T_,
+    5, PH_SH, PH_E, PH_PRIMARY_STRESS, PH_S_, PH_T_,
+    4, PH_S_, PH_E, PH_PRIMARY_STRESS, PH_M,
+    6, PH_V, PH_O, PH_PRIMARY_STRESS, PH_S_, PH_E, PH_M,
+    6, PH_D_, PH_E, PH_PRIMARY_STRESS, PH_V_, PH_A, PH_T_
   };
 static const uint8_t secondary[] = /* 10..19 */
   {
-    6, 24, 3, 53, 38, 2, 30,
-    9, 2, 24, 5, 53, 16, 2, 32, 2, 30,
-    9, 21, 11, 3, 16, 2, 53, 32, 2, 30,
-    9, 27, 13, 5, 16, 2, 53, 32, 2, 30,
-    11, 33, 3, 27, 4, 53, 8, 16, 2, 32, 2, 30,
-    9, 29, 2, 27, 16, 2, 53, 32, 2, 30,
-    9, 36, 3, 35, 16, 2, 53, 32, 2, 30,
-    9, 38, 3, 15, 16, 2, 53, 32, 2, 30,
-    11, 6, 2, 38, 3, 15, 16, 2, 53, 32, 2, 30,
-    11, 24, 3, 11, 2, 27, 16, 2, 53, 32, 2, 30
+    6, PH_D_, PH_E, PH_PRIMARY_STRESS, PH_S_, PH_A, PH_T_,
+    9, PH_A, PH_D_, PH_I, PH_PRIMARY_STRESS, PH_N, PH_A, PH_C, PH_A, PH_T_,
+    9, PH_D, PH_V_, PH_E, PH_N, PH_A, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_,
+    9, PH_T, PH_R_, PH_I, PH_N, PH_A, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_,
+    11, PH_CH, PH_E, PH_T, PH_Y, PH_PRIMARY_STRESS, PH_R, PH_N, PH_A, PH_C, PH_A, PH_T_,
+    9, PH_P_, PH_A, PH_T, PH_N, PH_A, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_,
+    9, PH_SH, PH_E, PH_S, PH_N, PH_A, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_,
+    9, PH_S_, PH_E, PH_M, PH_N, PH_A, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_,
+    11, PH_V, PH_A, PH_S_, PH_E, PH_M, PH_N, PH_A, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_,
+    11, PH_D_, PH_E, PH_V_, PH_A, PH_T, PH_N, PH_A, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_
   };
 static const uint8_t tens[] = /* 20..90 */
   {
-    7, 21, 6, 2, 53, 32, 2, 30,
-    7, 27, 13, 5, 53, 32, 2, 30,
-    6, 35, 1, 53, 8, 2, 28,
-    8, 29, 2, 24, 3, 38, 2, 53, 27,
-    9, 36, 3, 12, 24, 3, 38, 2, 53, 27,
-    9, 38, 3, 53, 15, 24, 3, 38, 2, 27,
-    11, 6, 1, 53, 38, 3, 15, 24, 3, 38, 2, 27,
-    10, 24, 3, 11, 2, 16, 1, 53, 35, 27, 2
+    7, PH_D, PH_V, PH_A, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_,
+    7, PH_T, PH_R_ , PH_I, PH_PRIMARY_STRESS, PH_C, PH_A, PH_T_,
+    6, PH_S, PH_O, PH_PRIMARY_STRESS, PH_R, PH_A, PH_K,
+    8, PH_P_, PH_A, PH_D_, PH_E, PH_S_, PH_A, PH_PRIMARY_STRESS, PH_T,
+    9, PH_SH, PH_E, PH_Z_, PH_D_, PH_E, PH_S_, PH_A, PH_PRIMARY_STRESS, PH_T,
+    9, PH_S_, PH_E, PH_PRIMARY_STRESS, PH_M, PH_D_, PH_E, PH_S_, PH_A, PH_T,
+    11, PH_V, PH_O, PH_PRIMARY_STRESS, PH_S_, PH_E, PH_M, PH_D_, PH_E, PH_S_, PH_A, PH_T,
+    10, PH_D_, PH_E, PH_V_, PH_A, PH_N, PH_O, PH_PRIMARY_STRESS, PH_S, PH_T, PH_A
   };
 static const uint8_t hundreds[] = /* 100..900 */
   {
-    4, 35, 27, 1, 53,
-    7, 21, 11, 3, 53, 38, 30, 5,
-    7, 27, 13, 5, 53, 35, 27, 2,
-    10, 33, 3, 27, 4, 53, 13, 3, 35, 27, 2,
-    7, 29, 2, 27, 35, 1, 53, 27,
-    7, 36, 3, 35, 35, 1, 53, 27,
-    7, 38, 3, 15, 35, 1, 53, 27,
-    9, 6, 2, 38, 3, 15, 35, 1, 53, 27,
-    9, 24, 3, 11, 2, 27, 35, 1, 53, 27
+    4, PH_S, PH_T, PH_O, PH_PRIMARY_STRESS,
+    7, PH_D, PH_V_, PH_E, PH_PRIMARY_STRESS, PH_S_, PH_T_, PH_I,
+    7, PH_T, PH_R_, PH_I, PH_PRIMARY_STRESS, PH_S, PH_T, PH_A,
+    10, PH_CH, PH_E, PH_T, PH_Y, PH_PRIMARY_STRESS, PH_R_, PH_E, PH_S, PH_T, PH_A,
+    7, PH_P_, PH_A, PH_T, PH_S, PH_O, PH_PRIMARY_STRESS, PH_T,
+    7, PH_SH, PH_E, PH_S, PH_S, PH_O, PH_PRIMARY_STRESS, PH_T,
+    7, PH_S_, PH_E, PH_M, PH_S, PH_O, PH_PRIMARY_STRESS, PH_T,
+    9, PH_V, PH_A, PH_S_, PH_E, PH_M, PH_S, PH_O, PH_PRIMARY_STRESS, PH_T,
+    9, PH_D_, PH_E, PH_V_, PH_A, PH_T, PH_S, PH_O, PH_PRIMARY_STRESS, PH_T
   };
 static const uint8_t periods[] =
   {
-    6, 27, 4, 53, 38, 2, 33,
-    7, 18, 5, 17, 5, 1, 53, 16,
-    8, 18, 5, 17, 5, 2, 53, 8, 27,
-    8, 27, 13, 5, 17, 5, 1, 53, 16
+    6, PH_T, PH_Y, PH_PRIMARY_STRESS, PH_S_, PH_A, PH_CH,
+    7, PH_M_, PH_I, PH_L_, PH_I, PH_O, PH_PRIMARY_STRESS, PH_N,
+    8, PH_M_, PH_I, PH_L_, PH_I, PH_A, PH_PRIMARY_STRESS, PH_R, PH_T,
+    8, PH_T, PH_R_, PH_I, PH_L_, PH_I, PH_O, PH_PRIMARY_STRESS, PH_N
   };
 static const uint8_t fractions[] =
   {
-    6, 24, 3, 38, 2, 53, 27,
-    4, 35, 1, 53, 27,
-    7, 27, 4, 53, 38, 2, 33, 16,
-    13, 24, 3, 38, 2, 30, 5, 27, 4, 53, 38, 2, 33, 16,
-    10, 35, 27, 1, 27, 4, 53, 38, 2, 33, 16,
-    8, 18, 5, 17, 5, 1, 53, 16, 16,
-    14, 24, 3, 38, 2, 30, 5, 18, 5, 17, 5, 1, 53, 16, 16,
-    11, 35, 27, 1, 18, 5, 17, 5, 1, 53, 16, 16,
-    9, 18, 5, 17, 5, 2, 53, 8, 27, 16,
-    15, 24, 3, 38, 2, 30, 5, 18, 5, 17, 5, 2, 53, 8, 27, 16,
-    12, 35, 27, 1, 18, 5, 17, 5, 2, 53, 8, 27, 16,
-    9, 27, 13, 5, 17, 5, 1, 53, 16, 16,
-    15, 24, 3, 38, 2, 30, 5, 27, 13, 5, 17, 5, 1, 53, 16, 16,
-    12, 35, 27, 1, 27, 13, 5, 17, 5, 1, 53, 16, 16
+    6, PH_D_, PH_E, PH_S_, PH_A, PH_PRIMARY_STRESS, PH_T,
+    4, PH_S, PH_O, PH_PRIMARY_STRESS, PH_T,
+    7, PH_T, PH_Y, PH_PRIMARY_STRESS, PH_S_, PH_A, PH_CH, PH_N,
+    13, PH_D_, PH_E, PH_S_, PH_A, PH_T_, PH_I, PH_T, PH_Y, PH_PRIMARY_STRESS, PH_S_, PH_A, PH_CH, PH_N,
+    10, PH_S, PH_T, PH_O, PH_T, PH_Y, PH_PRIMARY_STRESS, PH_S_, PH_A, PH_CH, PH_N,
+    8, PH_M_, PH_I, PH_L_, PH_I, PH_O, PH_PRIMARY_STRESS, PH_N, PH_N,
+    14, PH_D_, PH_E, PH_S_, PH_A, PH_T_, PH_I, PH_M_, PH_I, PH_L_, PH_I, PH_O, PH_PRIMARY_STRESS, PH_N, PH_N,
+    11, PH_S, PH_T, PH_O, PH_M_, PH_I, PH_L_, PH_I, PH_O, PH_PRIMARY_STRESS, PH_N, PH_N,
+    9, PH_M_, PH_I, PH_L_, PH_I, PH_A, PH_PRIMARY_STRESS, PH_R, PH_T, PH_N,
+    15, PH_D_, PH_E, PH_S_, PH_A, PH_T_, PH_I, PH_M_, PH_I, PH_L_, PH_I, PH_A, PH_PRIMARY_STRESS, PH_R, PH_T, PH_N,
+    12, PH_S, PH_T, PH_O, PH_M_, PH_I, PH_L_, PH_I, PH_A, PH_PRIMARY_STRESS, PH_R, PH_T, PH_N,
+    9, PH_T, PH_R_, PH_I, PH_L_, PH_I, PH_O, PH_PRIMARY_STRESS, PH_N, PH_N,
+    15, PH_D_, PH_E, PH_S_, PH_A, PH_T_, PH_I, PH_T, PH_R_, PH_I, PH_L_, PH_I, PH_O, PH_PRIMARY_STRESS, PH_N, PH_N,
+    12, PH_S, PH_T, PH_O, PH_T, PH_R_, PH_I, PH_L_, PH_I, PH_O, PH_PRIMARY_STRESS, PH_N, PH_N
   };
 static const uint8_t suffixes[] =
   {
-    2, 4, 40,
-    3, 2, 10, 2,
-    2, 2, 34
+    2, PH_Y, PH_X,
+    3, PH_A, PH_J, PH_A,
+    2, PH_A, PH_F
   };
 static const uint8_t one_int[] =
   {
-    2, 21, 16, 2, 53, 43,
-    32, 3, 53, 14, 2, 10, 2, 43
+    PH_A, PH_D, PH_N, PH_A, PH_PRIMARY_STRESS, PH_SPACE,
+    PH_C, PH_E, PH_PRIMARY_STRESS, PH_L, PH_A, PH_J, PH_A, PH_SPACE
   };
-static const uint8_t one_o[] = { 2, 21, 16, 1, 53, 43 };
-static const uint8_t two_e[] = { 21, 11, 3, 53, 43 };
-static const uint8_t n_ints[] = { 32, 3, 53, 14, 4, 40 };
+static const uint8_t one_o[] = { PH_A, PH_D, PH_N, PH_O, PH_PRIMARY_STRESS, PH_SPACE };
+static const uint8_t two_e[] = { PH_D, PH_V_, PH_E, PH_PRIMARY_STRESS, PH_SPACE };
+static const uint8_t n_ints[] = { PH_C, PH_E, PH_PRIMARY_STRESS, PH_L, PH_Y, PH_X };
 
 
 /* Local subroutines */
@@ -129,7 +130,7 @@ static void transcribe_digit(sink_t *consumer, char digit, char following)
 {
   put_transcription(consumer, primary, digit - '0');
   if (following != ' ')
-    sink_put(consumer, 43);
+    sink_put(consumer, PH_SPACE);
 }
 
 /* Return true if specified character may be treated as decimal point. */
@@ -159,8 +160,8 @@ void process_number(input_t *input, sink_t *consumer)
       uint8_t n;
 
       flags &= ~NON_ZERO;
-      if (sink_last(consumer) != 43)
-        sink_put(consumer, 43);
+      if (sink_last(consumer) != PH_SPACE)
+        sink_put(consumer, PH_SPACE);
       for (s = input->start + 1; s < input->end; s++)
         if (IS_DIGIT(s[0]))
           {
@@ -196,7 +197,7 @@ void process_number(input_t *input, sink_t *consumer)
                 {
                 case 3:
                   put_transcription(consumer, hundreds, c - '1');
-                  sink_put(consumer, 43);
+                  sink_put(consumer, PH_SPACE);
                   break;
                 case 1:
                   if (c == '1')
@@ -270,7 +271,7 @@ void process_number(input_t *input, sink_t *consumer)
                       digits--;
                     }
                   else put_transcription(consumer, tens, c - '2');
-                  sink_put(consumer, 43);
+                  sink_put(consumer, PH_SPACE);
                   break;
                 }
             }
@@ -304,15 +305,15 @@ void process_number(input_t *input, sink_t *consumer)
                             {
                               if (nc != 1)
                                 {
-                                  if (sink_last(consumer) == 27)
-                                    sink_replace(consumer, 21);
+                                  if (sink_last(consumer) == PH_T)
+                                    sink_replace(consumer, PH_D);
                                   if (nc > 1)
-                                    sink_put(consumer, 2);
+                                    sink_put(consumer, PH_A);
                                   else put_transcription(consumer, suffixes, 2);
                                 }
                             }
                           else if (nc > 0)
-                            sink_put(consumer, (nc > 1) ? 5 : 2);
+                            sink_put(consumer, (nc > 1) ? PH_I : PH_A);
                           sink_flush(consumer);
                         }
                       digits = 3;
@@ -331,7 +332,7 @@ void process_number(input_t *input, sink_t *consumer)
         break;
       else if (flags & NUMBER_FRACTION)
         {
-          sink_put(consumer, 43);
+          sink_put(consumer, PH_SPACE);
           put_transcription(consumer, fractions, n - 1);
           put_transcription(consumer, suffixes, (nc != 1) ? 0 : 1);
           break;
@@ -339,7 +340,7 @@ void process_number(input_t *input, sink_t *consumer)
       else if (((input->start + 1) < input->end) && check_dec_point(consumer, input->start[0]) && IS_DIGIT(input->start[1]))
         {
           flags |= NUMBER_FRACTION;
-          sink_put(consumer, 43);
+          sink_put(consumer, PH_SPACE);
           if (nc != 1)
             {
               sink_write(consumer, n_ints, 6);
@@ -348,7 +349,7 @@ void process_number(input_t *input, sink_t *consumer)
         }
       else
         {
-          sink_put(consumer, 43);
+          sink_put(consumer, PH_SPACE);
           break;
         }
     }

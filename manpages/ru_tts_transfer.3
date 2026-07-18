@@ -131,6 +131,10 @@ is set.
 .B USE_ALTERNATIVE_VOICE
 Use alternative (female) voice instead of the default (male)
 one. Initially this flag is not set.
+.TP
+.B USE_LEGACY_RATE_ALGO
+Use the legacy linear interpolation speech rate algorithm instead of the
+default adaptive powf-based crossfade algorithm. Initially this flag is not set.
 .PP
 It is suggested that the user provided callback function takes further
 responsibility on the generated data. It may play it immediately or

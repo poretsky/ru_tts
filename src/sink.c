@@ -57,18 +57,21 @@ void sink_put(sink_t *consumer, int8_t byte)
     sink_flush(consumer);
 }
 
-/*
- * Pass a block of data.
- *
- * Potentially may cause buffer overflow since this condition
- * is not checked during data transfer, but only afterwards.
- */
+/* Pass a block of data */
 void sink_write(sink_t *consumer, const uint8_t *block, size_t size)
 {
-  memcpy((uint8_t *)consumer->buffer + consumer->buffer_offset, block, size);
-  consumer->buffer_offset += size;
-  if (consumer->buffer_offset >= consumer->bufsize)
-    sink_flush(consumer);
+  size_t written = 0;
+  while (written < size)
+    {
+      size_t n = size - written;
+      if ((consumer->buffer_offset + n) > consumer->bufsize)
+        n = consumer->bufsize - consumer->buffer_offset;
+      memcpy((uint8_t *)consumer->buffer + consumer->buffer_offset, block + written, n);
+      consumer->buffer_offset += n;
+      if (consumer->buffer_offset >= consumer->bufsize)
+        sink_flush(consumer);
+      written += n;
+    }
 }
 
 /* Forget last byte if possible */

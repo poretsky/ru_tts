@@ -62,7 +62,7 @@ RUTTS_EXPORT void ru_tts_transfer(const ru_tts_conf_t *config,
 
   if (transcription_buffer)
     {
-      ttscb_t ttscb;
+      ttscb_t ttscb = {0};
       sink_t transcription_consumer;
 
       /* Initialize data structures */

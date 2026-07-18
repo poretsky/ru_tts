@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "soundscript.h"
 #include "voice.h"
@@ -17,6 +18,9 @@
 
 
 /* Local data */
+
+#define BASE_POWER 1.0f
+#define SPEED_SENSITIVITY 0.008f
 
 /* Control data used to generate fully synthetic sounds */
 static const int16_t synth_ctrl_data[][2] =
@@ -99,13 +103,21 @@ static uint16_t fading(sink_t *consumer, const voice_t *voice, uint16_t sidx)
   return 3;
 }
 
+static inline void sink_put_clamp(sink_t *consumer, float sample)
+{
+  if (sample > 127.0f) sample = 127.0f;
+  else if (sample < -128.0f) sample = -128.0f;
+  sink_put(consumer, (int8_t)sample);
+}
+
 
 /* Global entry point */
 
 /* Generate sound stream and feed it to the specified sink */
-void make_sound(soundscript_t *script, sink_t *consumer)
+void make_sound(soundscript_t *script, sink_t *consumer, int rate_factor, int use_new_algo)
 {
   int i;
+  float adaptive_power = BASE_POWER + ((float)rate_factor * SPEED_SENSITIVITY);
 
   sink_put(consumer, 0);
   for (i = 0; (i < script->length) && !consumer->status; i++)
@@ -125,33 +137,65 @@ void make_sound(soundscript_t *script, sink_t *consumer)
             {
               uint16_t ax = 205;
               int16_t sample_shift = (cx & 0xFF) + 8;
-              int16_t var1 = 0;
-              int16_t var2 = 0;
-              int16_t var3 = 0;
-              for (k = 0; k <= l; k++)
+              if (use_new_algo)
                 {
-                  int16_t si;
-                  int16_t tmp = ax & 0x2D;
-                  tmp ^= tmp >> 4;
-                  tmp &= 0x0F;
-                  if ((0x6996 >> tmp) & 0x01)
-                    ax |= 0x8000;
-                  ax >>= 1;
-                  tmp = ax;
-                  ax >>= 2;
-                  var3 >>= 1;
-                  var3 += var3 >> 2;
-                  if (cx >= 0)
-                    var3 += var3 >> 2;
-                  si = var3;
-                  var3 = (var2 << 1) - var1;
-                  var1 = ax;
-                  ax = (uint16_t)((((int32_t)var3) * ((int32_t)bx)) >> 15);
-                  ax += var1 - si;
-                  var3 = var2;
-                  var2 = ax;
-                  sink_put(consumer, (int8_t)(var2 >> sample_shift));
-                  ax = tmp;
+                  float v1 = 0, v2 = 0, v3 = 0;
+                  for (k = 0; k <= l; k++)
+                    {
+                      float si, res;
+                      uint16_t backup_ax;
+                      int16_t tmp = ax & 0x2D;
+                      tmp ^= tmp >> 4;
+                      tmp &= 0x0F;
+                      if ((0x6996 >> tmp) & 0x01)
+                        ax |= 0x8000;
+                      ax >>= 1;
+                      backup_ax = ax;
+                      ax >>= 2;
+                      v3 *= 0.5f;
+                      v3 += v3 * 0.25f;
+                      if (cx >= 0)
+                        v3 += v3 * 0.25f;
+                      si = v3;
+                      v3 = (v2 * 2.0f) - v1;
+                      v1 = (float)ax;
+                      res = (v3 * ((float)bx / 32768.0f)) + v1 - si;
+                      v3 = v2;
+                      v2 = res;
+                      sink_put_clamp(consumer, v2 / (float)(1 << sample_shift));
+                      ax = backup_ax;
+                    }
+                }
+              else
+                {
+                  int16_t var1 = 0;
+                  int16_t var2 = 0;
+                  int16_t var3 = 0;
+                  for (k = 0; k <= l; k++)
+                    {
+                      int16_t si;
+                      int16_t tmp = ax & 0x2D;
+                      tmp ^= tmp >> 4;
+                      tmp &= 0x0F;
+                      if ((0x6996 >> tmp) & 0x01)
+                        ax |= 0x8000;
+                      ax >>= 1;
+                      tmp = ax;
+                      ax >>= 2;
+                      var3 >>= 1;
+                      var3 += var3 >> 2;
+                      if (cx >= 0)
+                        var3 += var3 >> 2;
+                      si = var3;
+                      var3 = (var2 << 1) - var1;
+                      var1 = ax;
+                      ax = (uint16_t)((((int32_t)var3) * ((int32_t)bx)) >> 15);
+                      ax += var1 - si;
+                      var3 = var2;
+                      var2 = ax;
+                      sink_put(consumer, (int8_t)(var2 >> sample_shift));
+                      ax = tmp;
+                    }
                 }
             }
           else silence(consumer, l);
@@ -174,6 +218,9 @@ void make_sound(soundscript_t *script, sink_t *consumer)
               while (l > ax)
                 {
                   k = script->icb[stage].stretch;
+                  /* Prevent zero from wrapping to UINT16_MAX in the do/while counter. */
+                  if (!k)
+                    k = 1;
                   do
                     {
                       sink_put(consumer, script->voice->samples[sidx++]);
@@ -197,20 +244,41 @@ void make_sound(soundscript_t *script, sink_t *consumer)
                 {
                   uint16_t next_pattern_offset;
                   k = script->icb[stage].stretch;
+                  /* Prevent zero from wrapping to UINT16_MAX in the do/while counter. */
+                  if (!k)
+                    k = 1;
                   j = ((uint16_t)(script->sounds[i + 1].id)) & 0xFF;
                   next_pattern_offset = script->voice->sound_offsets[j + 1];
                   j = script->voice->sound_offsets[j];
                   sink_put(consumer, 0);
                   ax = (int16_t)(script->voice->samples[j]);
-                  do
+                  if (use_new_algo)
                     {
-                      ax -= (int16_t)(script->voice->samples[sidx]);
-                      ax = (int16_t)(((int32_t)ax) * ((int32_t)(dx++)) / ((int32_t)l));
-                      ax += (int16_t)(script->voice->samples[sidx++]);
-                      sink_put(consumer, (int8_t)ax);
-                      ax = ((++j) < next_pattern_offset) ? ((int16_t)(script->voice->samples[j])) : 0;
+                      do
+                        {
+                          float s_curr = (float)((int16_t)script->voice->samples[sidx]);
+                          float s_next = (float)ax;
+                          float p = (l > 0) ? (float)dx / (float)(dx + l) : 1.0f;
+                          float mu = powf(p, adaptive_power);
+                          sink_put_clamp(consumer, s_curr * (1.0f - mu) + s_next * mu);
+                          dx++;
+                          sidx++;
+                          ax = ((++j) < next_pattern_offset) ? ((int16_t)(script->voice->samples[j])) : 0;
+                        }
+                      while ((--k) && (--scnt));
                     }
-                  while ((--k) && (--scnt));
+                  else
+                    {
+                      do
+                        {
+                          ax -= (int16_t)(script->voice->samples[sidx]);
+                          ax = (int16_t)(((int32_t)ax) * ((int32_t)(dx++)) / ((int32_t)l));
+                          ax += (int16_t)(script->voice->samples[sidx++]);
+                          sink_put(consumer, (int8_t)ax);
+                          ax = ((++j) < next_pattern_offset) ? ((int16_t)(script->voice->samples[j])) : 0;
+                        }
+                      while ((--k) && (--scnt));
+                    }
                   if (k)
                     dx += silence(consumer, k);
                   else if (scnt > 1)
