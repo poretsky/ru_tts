@@ -94,6 +94,6 @@ extern void apply_intonation(uint8_t *transcription, soundscript_t *soundscript,
                              modulation_t *modulation, uint8_t clause_type);
 
 /* Generate sound stream and feed it to the specified sink */
-extern void make_sound(soundscript_t *script, sink_t *consumer);
+extern void make_sound(soundscript_t *script, sink_t *consumer, int rate_factor, int use_new_algo);
 
 #endif

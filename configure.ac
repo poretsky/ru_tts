@@ -2,7 +2,7 @@
 
 AC_PREREQ(2.69)
 
-AC_INIT([ru-tts], [6.2.4])
+AC_INIT([ru-tts], [6.3.3])
 AC_CONFIG_SRCDIR([src/ru_tts.c])
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_MACRO_DIRS([m4])

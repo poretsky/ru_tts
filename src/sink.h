@@ -48,12 +48,7 @@ extern void sink_flush(sink_t *consumer);
 /* Pass one byte of data */
 extern void sink_put(sink_t *consumer, int8_t byte);
 
-/*
- * Pass a block of data.
- *
- * Potentially may cause buffer overflow since this condition
- * is not checked during data transfer, but only afterwards.
- */
+/* Pass a block of data */
 extern void sink_write(sink_t *consumer, const uint8_t *block, size_t size);
 
 /* Forget last byte if possible */

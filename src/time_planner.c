@@ -12,8 +12,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "phonemes.h"
 #include "soundscript.h"
 #include "transcription.h"
+
 
 
 /* Local macros */
@@ -37,17 +39,17 @@ typedef struct
 /* Static data */
 
 /* Phoncode sets for classification */
-static const uint8_t set0[] = { 44, 45, 48, 49, 46, 47, 50, 51 };
-static const uint8_t set1[] = { 10, 15, 18, 16, 19, 8, 13, 14, 17 };
-static const uint8_t set2[] = { 6, 11, 7, 12, 9 };
-static const uint8_t set3[] = { 20, 23, 21, 24, 22, 25 };
-static const uint8_t set4[] = { 34, 37, 35, 38, 32, 36, 39, 33, 40, 41 };
-static const uint8_t set5[] = { 26, 29, 27, 30, 28, 31 };
-static const uint8_t set6[] = { 10, 14, 17, 15, 18, 16, 19, 8, 13 };
-static const uint8_t set7[] = { 6, 11, 7, 12, 9, 20, 23, 21, 24, 22, 25 };
-static const uint8_t set8[] = { 20, 23, 26, 29, 15, 18, 6, 11, 34, 37 };
-static const uint8_t set9[] = { 21, 24, 27, 30, 14, 17, 16, 19, 7, 12, 35, 38, 36, 39, 32, 33, 9 };
-static const uint8_t set10[] = { 22, 25, 28, 31, 40, 41 };
+static const uint8_t set0[] = { PH_COMMA, PH_PERIOD, PH_QUESTION, PH_EXCLAMATION, PH_SEMICOLON, PH_COLON, PH_OPEN_BRACKET, PH_CLOSE_BRACKET };
+static const uint8_t set1[] = { PH_J, PH_M, PH_M_, PH_N, PH_N_, PH_R, PH_R_, PH_L, PH_L_ };
+static const uint8_t set2[] = { PH_V, PH_V_, PH_Z, PH_Z_, PH_ZH };
+static const uint8_t set3[] = { PH_B, PH_B_, PH_D, PH_D_, PH_G, PH_G_ };
+static const uint8_t set4[] = { PH_F, PH_F_, PH_S, PH_S_, PH_C, PH_SH, PH_SH_, PH_CH, PH_X, PH_X_ };
+static const uint8_t set5[] = { PH_P, PH_P_, PH_T, PH_T_, PH_K, PH_K_ };
+static const uint8_t set6[] = { PH_J, PH_L, PH_L_, PH_M, PH_M_, PH_N, PH_N_, PH_R, PH_R_ };
+static const uint8_t set7[] = { PH_V, PH_V_, PH_Z, PH_Z_, PH_ZH, PH_B, PH_B_, PH_D, PH_D_, PH_G, PH_G_ };
+static const uint8_t set8[] = { PH_B, PH_B_, PH_P, PH_P_, PH_M, PH_M_, PH_V, PH_V_, PH_F, PH_F_ };
+static const uint8_t set9[] = { PH_D, PH_D_, PH_T, PH_T_, PH_L, PH_L_, PH_N, PH_N_, PH_Z, PH_Z_, PH_S, PH_S_, PH_SH, PH_SH_, PH_C, PH_CH, PH_ZH };
+static const uint8_t set10[] = { PH_G, PH_G_, PH_K, PH_K_, PH_X, PH_X_ };
 
 
 /* Local subroutines */
@@ -113,9 +115,9 @@ time_plan_ptr_t plan_time(uint8_t *transcription)
   memset(scratch, 0, sizeof(workspace_t));
 
   for (i = TRANSCRIPTION_START; i < TRANSCRIPTION_BUFFER_SIZE; i++)
-    if (transcription[i] > 5)
+    if (transcription[i] > PH_I)
       {
-        if (transcription[i] != 43)
+        if (transcription[i] != PH_SPACE)
           {
             uint8_t *found = memchr(set0, transcription[i], sizeof(set0));
 
@@ -211,13 +213,13 @@ time_plan_ptr_t plan_time(uint8_t *transcription)
                                 while (1)
                                   {
                                     phoncode_cur = transcription[++i];
-                                    if ((phoncode_cur < 6) || memchr(set6, phoncode_cur, sizeof(set6)))
+                                    if ((phoncode_cur < PH_V) || memchr(set6, phoncode_cur, sizeof(set6)))
                                       setcase = 2;
                                     else if (memchr(set7, phoncode_cur, sizeof(set7)))
                                       setcase = 3;
-                                    else if ((phoncode_cur > 25) && (phoncode_cur < 42))
+                                    else if ((phoncode_cur > PH_G_) && (phoncode_cur < PH_TERMINATOR))
                                       setcase = 4;
-                                    else if ((phoncode_cur > 43) && (phoncode_cur < 52))
+                                    else if ((phoncode_cur > PH_SPACE) && (phoncode_cur < PH_MINUS))
                                       {
                                         i = TRANSCRIPTION_START;
                                         restart = 1;
@@ -243,8 +245,8 @@ time_plan_ptr_t plan_time(uint8_t *transcription)
                                 values[5] = scratch->area[1][scratch->ndx2];
                                 for (k = 2; k < TIME_PLAN_ROWS; k++)
                                   draft[k][m] = values[k] ? (values[k] - 1) : 0;
-                                if ((phoncode_prev > 5) &&
-                                    (phoncode_prev < 43) &&
+                                if ((phoncode_prev > PH_I) &&
+                                    (phoncode_prev < PH_SPACE) &&
                                     (phoncode_prev == phoncode_cur))
                                   draft[1][m] = 5;
                                 else if ((memchr(set8, phoncode_prev, 4) && memchr(set8, phoncode_cur, sizeof(set8))) ||
@@ -267,7 +269,7 @@ time_plan_ptr_t plan_time(uint8_t *transcription)
                 scratch->flag = 1;
                 if (check_prev)
                   {
-                    if (transcription[i - 1] != 43)
+                    if (transcription[i - 1] != PH_SPACE)
                       {
                         uint8_t rank_prev;
                         uint8_t rank_cur;
@@ -300,9 +302,9 @@ time_plan_ptr_t plan_time(uint8_t *transcription)
         scratch->delta++;
         scratch->flag = 0;
         scratch->area[2][scratch->ndx1 + 1] = scratch->delta;
-        if (transcription[i + 1] != 53)
+        if (transcription[i + 1] != PH_PRIMARY_STRESS)
           {
-            if (transcription[i + 1] != 54)
+            if (transcription[i + 1] != PH_SECONDARY_STRESS)
               scratch->area[0][scratch->ndx1 + 1] = 0;
             else
               {
