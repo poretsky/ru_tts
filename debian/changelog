@@ -1,3 +1,10 @@
+ru-tts (6.3.3-0noble1) noble; urgency=medium
+
+  * New upstream release.
+  * Enhanced speech rate boosting algorithm.
+
+ -- Igor B. Poretsky <poretsky@mlbox.ru>  Sat, 18 Jul 2026 17:58:49 +0300
+
 ru-tts (6.2.4-0noble1) noble; urgency=medium
 
   * Initial release for Ubuntu Noble.
