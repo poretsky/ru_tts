@@ -9,7 +9,7 @@ AM_CFLAGS = -Wall -Wno-unused-result -O2
 ru_tts_SOURCES = ru_tts.c
 ru_tts_LDADD = librutts.la
 
-librutts_la_LDFLAGS = -version-info 7:6:0
+librutts_la_LDFLAGS = -version-info 7:7:0
 
 if HAVE_VSCRIPT
 librutts_la_LDFLAGS += $(VSCRIPT_LDFLAGS),@srcdir@/ru_tts.vscript
