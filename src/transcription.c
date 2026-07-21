@@ -508,7 +508,14 @@ void process_text(const char *text, sink_t *consumer)
               process_number(&input, consumer);
               if (check_clause_termination(&input, consumer))
                 transcription->flags |= CLAUSE_START;
-              else sink_flush(consumer);
+              else
+                {
+                  sink_flush(consumer);
+                  /* process_number() leaves input.start on the separator and
+                     the loop below skips it. Mark the following word as a new
+                     lexical unit so its explicit stress is detected. */
+                  transcription->flags |= CLAUSE_START;
+                }
               last_char = ' ';
               if (input.start[0] != ' ')
                 input.start--;
